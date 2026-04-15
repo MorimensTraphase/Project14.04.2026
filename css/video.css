@@ -2,181 +2,156 @@
 
 /* 1. Сброс стилей и база */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Это критично для ровных сеток */
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    color: #fff;
-    background-color: #03011a;
-    overflow-x: hidden;
-    /* Убираем лишние отступы, которые могут мешать центровке */
-    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: #fff;
+    background-color: #03011a; /* Глубокий темный фон под дизайн на скрине */
+    overflow-x: hidden;
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none;
 }
 
 img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
-/* 2. Оболочка и Контейнер — ТУТ ПРАВКИ ДЛЯ РАСТЯГИВАНИЯ */
+/* 2. Оболочка и Контейнер */
 .wrapper {
-    background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
-    width: 100%;
-    /* Flexbox делает так, чтобы футер был внизу, а контент в центре */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
+    width: 100%;
+    min-height: 100vh;
 }
 
 .container {
-    /* min(100% - 2rem, 1300px) отлично подходит для ТВ, не дает контенту расплыться слишком широко */
-    width: min(100% - 2rem, 1300px);
-    margin: 0 auto;
-    padding: 0 1rem;
+    width: min(100% - 2rem, 1300px);
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
-/* 3. ШАПКА И МЕНЮ (Без изменений дизайна) */
+/* 3. ШАПКА И МЕНЮ (Тот самый дизайн со скрина) */
 header {
-    padding: 2rem 0;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    flex-shrink: 0; /* Шапка не сжимается */
+    padding: 2rem 0;
+    display: flex;
+    flex-wrap: nowrap; /* Чтобы шапка не разваливалась */
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 header .logo {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    white-space: nowrap;
-    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    white-space: nowrap;
+    font-weight: 700;
 }
 
 header nav ul {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: clamp(1rem, 2vw, 2.5rem);
-    list-style: none;
-    align-items: center;
+    display: flex;
+    flex-wrap: nowrap; /* ГАРАНТИЯ, что меню будет в одну линию */
+    gap: clamp(1rem, 2vw, 2.5rem); /* Расстояние между кнопками */
+    list-style: none;
+    align-items: center;
 }
 
 header nav ul li {
-    white-space: nowrap;
+    white-space: nowrap; /* Запрет переноса слов типа "Interesting Facts" */
 }
 
 header nav ul li a {
-    color: beige;
-    font-weight: 700;
-    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-    transition: all 0.3s ease;
-    padding: 5px 0;
-    position: relative;
+    color: beige;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    transition: all 0.3s ease;
+    padding: 5px 0;
+    position: relative;
 }
 
-header nav ul li a:hover, 
+/* Эффекты меню (Синее свечение) */
+header nav ul li a:hover, 
 header nav ul li.active a {
-    color: #3498db;
-    text-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
-    border-bottom: 2px solid #3498db;
+    color: #3498db;
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+    border-bottom: 2px solid #3498db;
 }
 
-/* 4. СЕТКА И ГЛАВНЫЙ КОНТЕНТ — ТУТ ПРАВКИ ДЛЯ ЦЕНТРОВКИ */
+/* 4. СЕТКА КАРТОЧЕК (Для фактов и видео) */
 .hero {
-    padding: 40px 0;
-    /* Это свойство заставляет блок занимать ВСЁ свободное место на странице */
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Центрирует текст по вертикали на главной */
+    padding: 40px 0;
 }
 
 .builds {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    padding: 20px 0;
-    width: 100%;
+    display: grid;
+    /* 3 колонки на ПК, 1 на телефоне — всё само подстроится */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 20px 0;
 }
 
-/* Стиль карточки */
+/* Стиль карточки (универсальный) */
 .build {
-    background: rgba(20, 20, 40, 0.4);
-    border: 1px solid rgba(52, 152, 219, 0.2);
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
+    background: rgba(20, 20, 40, 0.4);
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
 }
 
 .build:hover {
-    transform: translateY(-8px);
-    border-color: #3498db;
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(-8px);
+    border-color: #3498db;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+/* Картинки на странице фактов */
 .build img {
-    border-radius: 10px;
-    margin-bottom: 1.2rem;
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    width: 100%;
+    height: 200px; /* Фикс высоты, чтобы сетка была ровной */
+    object-fit: cover; /* Фото не будут сплющенными */
 }
 
+/* Плеер на странице видео */
 .video-box {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 1.2rem;
-    background: #000;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 пропорция */
+    height: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    background: #000;
 }
 
 .video-box iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border: 0;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: 0;
 }
 
+/* Текст внутри карточек */
 .build p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin: 1rem 0;
-    color: #e0e0e0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+    color: #e0e0e0;
 }
 
-/* Футер (чтобы всегда был внизу) */
-.footer {
-    flex-shrink: 0; /* Футер не сжимается */
-}
-
-/* 5. АДАПТИВНОСТЬ */
+/* 5. АДАПТИВНОСТЬ (Для телефонов) */
 @media (max-width: 850px) {
-    header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-}
-
-/* Дополнительно для очень больших ТВ (4K+) */
-@media (min-width: 2000px) {
-    .container {
-        max-width: 1800px; /* Увеличиваем макс-ширину для ТВ, чтобы не было слишком пусто */
-    }
-    .builds {
-        grid-template-columns: repeat(4, 1fr); /* На ТВ можно 4 карточки в ряд */
-    }
-}
+    header {
+        flex-direction: column; /* Лого над меню */
+        gap: 1rem;
+        text-align: center;  
