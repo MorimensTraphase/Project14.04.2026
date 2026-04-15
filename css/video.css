@@ -1,173 +1,132 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,700&display=swap');
 
-/* 1. ГЛОБАЛЬНЫЕ СТИЛИ */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     color: #fff;
-    overflow-x: hidden;
-    line-height: 1.6;
 }
 
 a {
     text-decoration: none;
-    color: inherit;
 }
 
 img {
-    max-width: 100%;
+    max-width: 100%; /* НЕ 120% !!! */
     height: auto;
     display: block;
 }
 
-/* 2. СТРУКТУРА */
 .wrapper {
     background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
     width: 100%;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .container {
-    width: min(100% - 2rem, 1200px);
+    width: min(100% - 2rem, 1300px); /* раньше было 1300px */
     margin: 0 auto;
+    padding: 0 1rem; /* добавь внутренние отступы */
 }
 
-/* 3. ШАПКА И НАВИГАЦИЯ */
 header {
     padding: 2rem 0;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 header .logo {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: 700;
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+}
+
+header nav {
+    width: auto; /* убираем 40% */
 }
 
 header nav ul {
     display: flex;
+    flex-wrap: nowrap;
+    gap: clamp(0.5rem, 2vw, 1.2rem);
+    justify-content: flex-end;
     list-style: none;
-    gap: clamp(0.5rem, 2vw, 1.5rem);
     align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
 header nav ul li {
-    white-space: nowrap;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
 header nav ul li a {
     color: beige;
-    font-weight: 500;
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
-    padding: 5px 0;
-    transition: 0.3s;
-    border-bottom: 2px solid transparent;
+    position: relative;
+    z-index: 10;
+    font-weight: 700;
 }
 
-/* Состояния меню */
-header nav ul li.active a {
-    color: #3498db;
-    border-bottom: 2px solid #3498db;
+.hero img {
+    margin-top: 12px;
 }
 
-header nav ul li a:hover {
-    color: #D17338;
-    border-bottom: 2px solid #D17338;
+/* Оранжевая полоска при наведении (десктоп) */
+header nav ul li:not(.active) a:hover {
+    border-bottom: 5px solid #D17338;
 }
 
-/* 4. КОНТЕНТНАЯ СЕТКА (Факты, Видео, Квиз) */
+/* На телефоне — при нажатии (активное состояние) */
+header nav ul li:not(.active) a:active,
+header nav ul li:not(.active) a:focus-visible,
+header nav ul li:not(.active) a:focus {
+    border-bottom: 5px solid #D17338;
+    outline: none; /* убираем синий фокус-рамку, если не нужна */
+}
+
+/* Чтобы эффект был заметнее и держался чуть дольше */
+header nav ul li a {
+    transition: border-bottom 0.2s ease;
+}
+
 .hero {
-    padding: 2rem 0 4rem;
-    flex-grow: 1;
+    padding: 20px 0;
 }
 
 .builds {
     display: grid;
-    /* Сетка сама подстраивается: минимум 300px на карточку */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
 }
 
-/* Стиль отдельной карточки */
 .build {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(52, 152, 219, 0.2);
-    border-radius: 15px;
+    background: rgba(20, 20, 40, 0.4);
+    border-radius: 12px;
     padding: 1.5rem;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.build:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: #3498db;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-}
-
-/* Картинки и Видео внутри карточек */
-.build img, .video-box {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 1.2rem;
+    text-align: center;
 }
 
 .build img {
-    height: 220px;
-    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 
-.video-box {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
-    overflow: hidden;
-    background: #000;
-}
-
-.video-box iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border: 0;
-}
-
-/* Текст */
-.build h3 { margin-bottom: 0.5rem; color: #3498db; }
-.build p { font-size: 0.95rem; color: #ccc; }
-
-/* 5. АДАПТИВНОСТЬ */
-@media (max-width: 900px) {
-    header {
-        flex-direction: column;
-        gap: 1.5rem;
-        padding: 1.5rem 0;
-    }
-}
-
-@media (max-width: 600px) {
-    header nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-    }
-    
-    .builds {
-        grid-template-columns: 1fr; /* На совсем маленьких — строго в один ряд */
-    }
+.build p {
+    font-size: clamp(1.1rem, 3vw, 1.6rem); /* раньше 33px — слишком много */
+    line-height: 1.6;
+    margin: 1.2rem 0;
 }
