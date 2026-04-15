@@ -132,6 +132,50 @@ header nav ul li a {
     margin: 1.2rem 0;
 }
 
+/* Основной контейнер для всех видео */
+.builds {
+    display: grid; /* Включаем Grid! Это самое важное */
+    grid-template-columns: repeat(3, 1fr); /* Создаем 3 колонки равной ширины */
+    gap: 20px; /* Расстояние между карточками */
+    padding: 20px 0;
+    justify-content: center; /* Центрируем сетку */
+    align-items: start; /* Выравниваем карточки по верху */
+}
 
+/* Сама карточка с видео и текстом */
+.build {
+    background: rgba(20, 20, 35, 0.8); /* Фон карточки, чтобы текст читался */
+    border: 1px solid rgba(52, 152, 219, 0.3); /* Тонкая синяя рамочка */
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.3s ease-in-out; /* Плавная анимация при наведении */
+    box-sizing: border-box; /* Чтобы padding не ломал сетку */
+}
+
+/* Эффект при наведении на карточку (чтобы на ТВ было видно, что выбрано) */
+.build:hover {
+    transform: translateY(-5px); /* Легкий прыжок */
+    border-color: #3498db; /* Яркая синяя рамка */
+}
+
+/* Контейнер для плеера YouTube (чтобы он был 16:9) */
+.video-box {
+    position: relative;
+    padding-bottom: 56.25%; /* Пропорции 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.video-box iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
  
 
