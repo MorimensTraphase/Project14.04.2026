@@ -148,13 +148,17 @@ header nav ul li.active a {
         text-align: center;
         
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
+    width: 100%;
+    min-height: 100vh; /* Гарантирует высоту на весь экран */
+    display: flex;         /* ВКЛЮЧАЕМ ЭТО */
+    flex-direction: column; /* ВКЛЮЧАЕМ ЭТО */
 }
 
 .hero {
-    flex: 1;
-    display: flex;
-    align-items: center; /* Центровка контента по высоте доски */
+    padding: 40px 0;
+    flex: 1;               /* ЗАСТАВЛЯЕТ РАСТЯНУТЬСЯ */
+    display: flex;         /* ВКЛЮЧАЕМ ЭТО */
+    flex-direction: column; 
+    justify-content: center; /* ЦЕНТРИРУЕТ ПО ВЕРТИКАЛИ */
 }
