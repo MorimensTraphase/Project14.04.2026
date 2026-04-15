@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Culture Quiz</title>
+    <link rel="stylesheet" href="css/video.css">
+    <style>
+        .quiz-container { text-align: center; padding: 20px; }
+        .options-grid { display: grid; gap: 10px; margin-top: 20px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #3498db;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .option-btn:hover { background: #3498db; }
+        #result-text { margin-top: 20px; font-weight: bold; min-height: 24px; }
+        .next-btn {
+            margin-top: 20px;
+            background: #D17338;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            display: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="container">
+            <span class="logo">CultureQuiz</span>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="video.html">Videos</a></li>
+                    <li class="active"><a href="quiz.html">Quiz</a></li>
+                    <li><a href="repleyi.html">Information</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="hero container">
+            <div class="builds" style="display: flex; justify-content: center;">
+                <div class="build" style="max-width: 600px; width: 100%;">
+                    <div class="quiz-container">
+                        <h2 id="question">Loading question...</h2>
+                        <div id="options" class="options-grid"></div>
+                        <div id="result-text"></div>
+                        <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Question</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "What do British people typically add to their tea?",
+                a: ["Lemon", "Milk", "Salt", "Honey"],
+                correct: 1
+            },
+            {
+                q: "What is 'Pierogi' in Poland?",
+                a: ["A type of dance", "A famous city", "Traditional dumplings", "A winter hat"],
+                correct: 2
+            },
+            {
+                q: "What does the Polish word 'Dres' mean?",
+                a: ["A dress", "A tracksuit", "A drawer", "A dream"],
+                correct: 1
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const qData = questions[currentQ];
+            document.getElementById("question").innerText = qData.q;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            document.getElementById("result-text").innerText = "";
+            document.getElementById("next-btn").style.display = "none";
+
+            qData.a.forEach((opt, index) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(index) {
+            const correct = questions[currentQ].correct;
+            const res = document.getElementById("result-text");
+            if(index === correct) {
+                res.innerText = "Correct! 🎉";
+                res.style.color = "#2ecc71";
+                score++;
+            } else {
+                res.innerText = "Wrong! The answer was: " + questions[currentQ].a[correct];
+                res.style.color = "#e74c3c";
+            }
+            document.getElementById("next-btn").style.display = "inline-block";
+            const buttons = document.querySelectorAll(".option-btn");
+            buttons.forEach(b => b.disabled = true);
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if(currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".quiz-container").innerHTML = 
+                    `<h2>Quiz Finished!</h2><h3>Your score: ${score}/${questions.length}</h3>` +
+                    `<button class="next-btn" style="display:block" onclick="location.reload()">Try Again</button>`;
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
