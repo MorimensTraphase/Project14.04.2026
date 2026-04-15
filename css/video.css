@@ -1,144 +1,175 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,700&display=swap');
 
- *{
+/* 1. Сброс стилей и база */
+* {
     margin: 0;
     padding: 0;
- }
+    box-sizing: border-box; /* Важно: паддинги не ломают ширину */
+}
 
- html, body {
-    margin: 0;
-    padding: 0;
- }
-
- body {
+body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     color: #fff;
- }
+    overflow-x: hidden; /* Защита от горизонтальной прокрутки */
+}
 
- a {
+a {
     text-decoration: none;
- }
+}
 
- img {
-    max-width: 100%;          /* НЕ 120% !!! */
+img {
+    max-width: 100%;
     height: auto;
     display: block;
 }
 
- .wrapper {
-    background:linear-gradient(90deg,rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
+/* 2. Фон и Контейнеры */
+.wrapper {
+    background: linear-gradient(90deg, rgba(10, 11, 13, 1) 8%, rgba(5, 3, 41, 1) 78%);
     width: 100%;
     min-height: 100vh;
- }
-
- .container {
-    width: min(100% - 2rem, 1300px);   /* раньше было 1300px */
-    margin: 0 auto;
-    padding: 0 1rem;                   /* добавь внутренние отступы */
 }
 
- header {
+.container {
+    width: min(100% - 2rem, 1300px);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* 3. ШАПКА И МЕНЮ (Исправлено) */
+header {
     padding: 2rem 0;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Не даем шапке разваливаться */
     justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 header .logo {
-    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    white-space: nowrap;
+    flex-shrink: 1;
 }
 
 header nav {
-    width: auto;              /* убираем 40% */
+    flex-shrink: 0; /* Меню не должно сжиматься */
 }
 
 header nav ul {
     display: flex;
-    flex-wrap: nowrap;
-    gap: clamp(0.5rem, 2vw, 1.2rem);
-    justify-content: flex-end;
+    flex-wrap: nowrap; /* Ссылки всегда в одну линию */
+    gap: clamp(0.5rem, 1.5vw, 1.2rem);
     list-style: none;
-    justify-content: flex-end;
     align-items: center;
-    padding: 0;
-    margin: 0;
 }
 
 header nav ul li {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0;
-    margin: 0;
+    white-space: nowrap; /* Текст внутри ссылки не переносится */
 }
 
- header nav ul li a {
-    color: beige;
-    position: relative;
-    z-index: 10;
-    font-weight: 700;
- }
-
- .hero img {
-  margin-top: 12px; 
-}
-
-/* Оранжевая полоска при наведении (десктоп) */
-header nav ul li:not(.active) a:hover {
-    border-bottom: 5px solid #D17338;
-}
-
-/* На телефоне — при нажатии (активное состояние) */
-header nav ul li:not(.active) a:active,
-header nav ul li:not(.active) a:focus-visible,
-header nav ul li:not(.active) a:focus {
-    border-bottom: 5px solid #D17338;
-    outline: none; /* убираем синий фокус-рамку, если не нужна */
-}
-
-/* Чтобы эффект был заметнее и держался чуть дольше */
 header nav ul li a {
-    transition: border-bottom 0.2s ease;
+    color: beige;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    transition: border-bottom 0.2s ease, color 0.3s;
+    padding-bottom: 5px;
 }
 
+/* Эффекты меню */
+header nav ul li.active a {
+    border-bottom: 3px solid #3498db;
+    color: #fff;
+}
+
+header nav ul li:not(.active) a:hover {
+    border-bottom: 3px solid #D17338;
+}
+
+/* 4. СЕТКА КАРТОЧЕК (Факты и Видео) */
 .hero {
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 .builds {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: clamp(1.5rem, 4vw, 3rem);
+    /* Умная сетка: сама решает 3, 2 или 1 колонка в зависимости от места */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 25px;
+    padding: 20px 0;
 }
 
+/* Стиль карточки */
 .build {
-    background: rgba(20, 20, 40, 0.4);
+    background: rgba(20, 20, 35, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    padding: 20px;
     border-radius: 12px;
-    padding: 1.5rem;
     text-align: center;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.build:hover {
+    transform: translateY(-8px);
+    border-color: #3498db;
+    background: rgba(30, 30, 50, 0.9);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Картинки в фактах */
 .build img {
     border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    margin-bottom: 15px;
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Чтобы картинки были одного размера */
 }
 
+/* Текст в фактах */
 .build p {
-    font-size: clamp(1.1rem, 3vw, 1.6rem);   /* раньше 33px — слишком много */
-    line-height: 1.6;
-    margin: 1.2rem 0;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.5;
+    margin-top: 10px;
+    color: #e0e0e0;
 }
 
+/* 5. ВИДЕО ПЛЕЕР (Настройки для video.html) */
+.video-box {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #000;
+}
 
- /* Специально для очень больших экранов */
-@media (min-width: 1900px) {
-    :root {
-        font-size: 18px; /* Немного увеличиваем базовый размер шрифта */
+.video-box iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* 6. АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column; /* На телефоне лого сверху, меню снизу */
+        text-align: center;
     }
-    .container {
-        max-width: 1400px; /* Можно чуть расширить контейнер для ТВ */
+    
+    header nav ul {
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .builds {
+        grid-template-columns: 1fr; /* По одной карточке в ряд */
     }
 }
