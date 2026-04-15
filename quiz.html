@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Quiz</title>
+    <title>Culture & Folklore Quizzes</title>
     <link rel="stylesheet" href="css/video.css">
     <style>
         .quiz-container { text-align: center; padding: 20px; }
         .options-grid { display: grid; gap: 10px; margin-top: 20px; }
+        
         .option-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #3498db;
@@ -17,19 +18,65 @@
             border-radius: 8px;
             transition: 0.3s;
             font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
         }
-        .option-btn:hover { background: #3498db; }
-        #result-text { margin-top: 20px; font-weight: bold; min-height: 24px; }
+        .option-btn:hover:not(:disabled) { background: #3498db; transform: translateY(-2px); }
+        .option-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Меню выбора */
+        .quiz-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .menu-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #3498db;
+            padding: 40px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-card:hover { 
+            background: rgba(52, 152, 219, 0.3); 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .menu-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #fff; }
+        .menu-card p { font-size: 0.9rem; opacity: 0.8; }
+
+        #result-text { margin-top: 20px; font-weight: bold; min-height: 24px; font-size: 1.2rem; }
+        
         .next-btn {
             margin-top: 20px;
             background: #D17338;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 30px;
             color: white;
-            border-radius: 5px;
+            border-radius: 30px;
             display: none;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
         }
+        
+        #progress { margin-bottom: 15px; font-size: 0.9rem; opacity: 0.7; letter-spacing: 1px; }
+        .back-btn { 
+            background: transparent; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            color: #fff; 
+            padding: 8px 20px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
@@ -49,133 +96,83 @@
 
         <main class="hero container">
             <div class="builds" style="display: flex; justify-content: center;">
-                <div class="build" style="max-width: 600px; width: 100%;">
-                    <div class="quiz-container">
-                        <h2 id="question">Loading question...</h2>
+                <div class="build" style="max-width: 850px; width: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center;">
+                    
+                    <div id="quiz-selection" class="quiz-container">
+                        <h2 style="font-size: 2rem; margin-bottom: 10px;">Select Quiz Topic</h2>
+                        <p style="opacity: 0.7;">Test your knowledge about UK and Poland</p>
+                        <div class="quiz-menu">
+                            <div class="menu-card" onclick="startQuiz('general')">
+                                <h3>🌍 General Culture</h3>
+                                <p>Food, modern life, and fun facts</p>
+                            </div>
+                            <div class="menu-card" onclick="startQuiz('folklore')">
+                                <h3>🐉 Folklore & Legends</h3>
+                                <p>Ancient spirits, dragons and myths</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-game" class="quiz-container" style="display: none; width: 100%;">
+                        <button class="back-btn" onclick="location.reload()">← Switch Topic</button>
+                        <div id="progress"></div>
+                        <h2 id="question" style="font-size: 1.6rem; margin-bottom: 20px;"></h2>
                         <div id="options" class="options-grid"></div>
                         <div id="result-text"></div>
-                        <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Question</button>
+                        <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Question →</button>
                     </div>
+
                 </div>
             </div>
         </main>
     </div>
 
-   <script>
-        const questions = [
-            {
-                q: "What do British people typically add to their tea?",
-                a: ["Lemon", "Milk", "Salt", "Honey"],
-                correct: 1
-            },
-            {
-                q: "What is 'Pierogi' in Poland?",
-                a: ["A type of dance", "A famous city", "Traditional dumplings", "A winter hat"],
-                correct: 2
-            },
-            {
-                q: "What does the Polish word 'Dres' mean?",
-                a: ["A dress", "A tracksuit", "A drawer", "A dream"],
-                correct: 1
-            }, // Запятая добавлена
-            {
-                q: "What is the formal greeting in England?",
-                a: ["Good morning", "Bonjour", "Heil", "Siema"],
-                correct: 0 // Исправил индекс (Good morning - это 0) и убрал странные варианты
-            },
-            {
-                q: "In England, what is the traditional name for Sausages and Mashed Potatoes?",
-                a: ["Fish and Chips", "Bangers and Mash", "Shepherd's Pie", "Full English"],
-                correct: 1
-            },
-            {
-                q: "Which Polish city is famous for its Dragon and royal castle Wawel?",
-                a: ["Warsaw", "Gdansk", "Krakow", "Wroclaw"],
-                correct: 2
-            },
-            {
-                q: "What is the English word for the Polish 'Pierniki'?",
-                a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"],
-                correct: 1
-            },
-            {
-                q: "How many cups of tea do the British drink every day in total?",
-                a: ["10 million", "50 million", "165 million", "500 million"],
-                correct: 2
-            },
-            {
-                q: "Which of these is British?",
-                a: ["Epstein island", "Sky Tower", "Buckingham Palace", "Notre-Dame de Paris"],
-                correct: 2
-            },
-            {
-                q: "What is a 'False Friend' in linguistics?",
-                a: ["A bad translator", "A word that looks similar but has different meanings", "A slang word", "A grammatical error"],
-                correct: 1
-            },
-            {
-        q: "Which of these is a famous British 'Double-Decker'?",
-        a: ["A sandwich", "A red bus", "A type of tea", "A royal guard"],
-        correct: 1
-    },
-    {
-        q: "In which country is 'Tłusty Czwartek' (Fat Thursday) a big celebration?",
-        a: ["England", "USA", "Poland", "Germany"],
-        correct: 2
-    },
-    {
-        q: "What is 'Fish and Chips' usually wrapped in traditionally?",
-        a: ["Newspaper", "Plastic bag", "Banana leaf", "Aluminum foil"],
-        correct: 0
-    },
-    {
-        q: "Which Polish city has a famous 'Dragon's Den' (Smocza Jama)?",
-        a: ["Warsaw", "Gdansk", "Krakow", "Poznan"],
-        correct: 2
-    },
-    {
-        q: "What do the British call the 'Underground' train system in London?",
-        a: ["The Metro", "The Subway", "The Tube", "The Tunnel"],
-        correct: 2
-    },
-    {
-        q: "What is the main ingredient of the Polish 'Bigos'?",
-        a: ["Potatoes", "Cabbage and meat", "Fish", "Bread"],
-        correct: 1
-    },
-    {
-        q: "At what time is the traditional British 'Afternoon Tea' usually served?",
-        a: ["8:00 AM", "12:00 PM", "4:00 PM", "10:00 PM"],
-        correct: 2
-    },
-    {
-        q: "Which of these is a popular Polish street food?",
-        a: ["Zapiekanka", "Hot dog", "Taco", "Sushi"],
-        correct: 0
-    },
-    {
-        q: "What is the name of the British National Anthem?",
-        a: ["God Save the King", "Rule Britannia", "London Calling", "Hello Goodbye"],
-        correct: 0
-    },
-    {
-        q: "What color are the post boxes in the UK?",
-        a: ["Yellow", "Blue", "Green", "Red"],
-        correct: 3
-    }
-];
+    <script>
+        const allQuizzes = {
+            general: [
+                { q: "What do British people typically add to their tea?", a: ["Lemon", "Milk", "Salt", "Honey"], correct: 1 },
+                { q: "What is 'Pierogi' in Poland?", a: ["A type of dance", "A famous city", "Traditional dumplings", "A winter hat"], correct: 2 },
+                { q: "What does the Polish word 'Dres' mean?", a: ["A dress", "A tracksuit", "A drawer", "A dream"], correct: 1 },
+                { q: "In England, what is 'Bangers and Mash'?", a: ["Fish and Chips", "Sausages and Mashed Potatoes", "A dessert", "Full English"], correct: 1 },
+                { q: "What is the English word for the Polish 'Pierniki'?", a: ["Pancakes", "Gingerbread", "Donuts", "Cookies"], correct: 1 },
+                { q: "How many cups of tea do the British drink every day?", a: ["10 million", "50 million", "165 million", "500 million"], correct: 2 },
+                { q: "What is 'Zapiekanka' in Poland?", a: ["Popular street food", "Traditional soup", "Type of cake", "A drink"], correct: 0 },
+                { q: "What do the British call the 'Underground' in London?", a: ["The Metro", "The Subway", "The Tube", "The Tunnel"], correct: 2 },
+                 { q: "What do the British call the 'Underground' in London?", a: ["Notre-Dame de Paris", "Epstein Island", "Buckingham Palace", "Sky Tower"], correct: 2 },
+                { q: "What is a 'False Friend' in linguistics?", a: ["A bad friend", "A word that looks similar but means something else", "Slang", "Grammar error"], correct: 1 }
+            ],
+            folklore: [
+                { q: "Which legendary British outlaw lived in Sherwood Forest?", a: ["King Arthur", "Robin Hood", "Jack the Giant Killer", "William Wallace"], correct: 1 },
+                { q: "Which city is famous for the Dragon (Smok Wawelski)?", a: ["Warsaw", "Gdansk", "Krakow", "Poznan"], correct: 1 },
+                { q: "What is the mythical sword of King Arthur called?", a: ["Sting", "Excalibur", "Mjölnir", "Glamdring"], correct: 1 },
+                { q: "In Warsaw, there is a monument of a creature that protects the city. What is it?", a: ["A Griffin", "A Dragon", "A Mermaid (Syrenka)", "A Basilisk"], correct: 2 },
+                { q: "Who is 'Baba Yaga' in Slavic folklore?", a: ["Kind grandma", "Forest witch in a hut on chicken legs", "Water spirit", "Warrior queen"], correct: 1 },
+                { q: "What is the British 'Cheese Rolling' tradition?", a: ["A cooking contest", "Chasing a wheel of cheese down a hill", "A dance", "Making sandwiches"], correct: 1 },
+                { q: "What is 'Śmigus-Dyngus' in Poland?", a: ["Eating donuts", "Throwing water on Wet Monday", "Painting eggs", "Singing"], correct: 1 },
+                { q: "What birds must stay in the Tower of London to prevent its fall?", a: ["Pigeons", "Eagles", "Ravens", "Owls"], correct: 2 },
+                { q: "What do Polish people eat on Fat Thursday (Tłusty Czwartek)?", a: ["Sausages", "Pierogi", "Donuts (Pączki)", "Pizza"], correct: 2 },
+                { q: "Which mythical 'flower' do people look for on Midsummer Night?", a: ["Rose", "Fern Flower (Kwiat Paproci)", "Sunflower", "Tulip"], correct: 1 }
+            ]
+        };
 
+        let currentQuestions = [];
         let currentQ = 0;
         let score = 0;
 
-        function loadQuestion() {
-            const qData = questions[currentQ];
-            const qElement = document.getElementById("question");
-            const optionsDiv = document.getElementById("options");
-            
-            if (!qData) return;
+        function startQuiz(type) {
+            currentQuestions = allQuizzes[type];
+            currentQ = 0;
+            score = 0;
+            document.getElementById("quiz-selection").style.display = "none";
+            document.getElementById("quiz-game").style.display = "block";
+            loadQuestion();
+        }
 
-            qElement.innerText = qData.q;
+        function loadQuestion() {
+            const qData = currentQuestions[currentQ];
+            document.getElementById("progress").innerText = `QUESTION ${currentQ + 1} OF ${currentQuestions.length}`;
+            document.getElementById("question").innerText = qData.q;
+            const optionsDiv = document.getElementById("options");
             optionsDiv.innerHTML = "";
             document.getElementById("result-text").innerText = "";
             document.getElementById("next-btn").style.display = "none";
@@ -190,18 +187,17 @@
         }
 
         function checkAnswer(index) {
-            const correct = questions[currentQ].correct;
+            const correct = currentQuestions[currentQ].correct;
             const res = document.getElementById("result-text");
             const buttons = document.querySelectorAll(".option-btn");
-            
             buttons.forEach(b => b.disabled = true);
 
             if(index === correct) {
-                res.innerText = "Correct! 🎉";
+                res.innerText = "Correct! ✨";
                 res.style.color = "#2ecc71";
                 score++;
             } else {
-                res.innerText = "Wrong! The answer was: " + questions[currentQ].a[correct];
+                res.innerText = "Wrong! Correct answer: " + currentQuestions[currentQ].a[correct];
                 res.style.color = "#e74c3c";
             }
             document.getElementById("next-btn").style.display = "inline-block";
@@ -209,17 +205,16 @@
 
         function nextQuestion() {
             currentQ++;
-            if(currentQ < questions.length) {
+            if(currentQ < currentQuestions.length) {
                 loadQuestion();
             } else {
-                document.querySelector(".quiz-container").innerHTML = 
-                    `<h2>Quiz Finished!</h2><h3>Your score: ${score}/${questions.length}</h3>` +
-                    `<button class="next-btn" style="display:block; margin: 20px auto;" onclick="location.reload()">Try Again</button>`;
+                let rank = score > 7 ? "Culture Master! 🏆" : "Well Done! 👍";
+                document.getElementById("quiz-game").innerHTML = 
+                    `<h2 style="font-size: 2rem; color: #3498db;">${rank}</h2>` +
+                    `<p style="font-size: 1.5rem; margin: 20px 0;">Final Score: ${score} / ${currentQuestions.length}</p>` +
+                    `<button class="next-btn" style="display:block; margin: 0 auto;" onclick="location.reload()">Back to Menu</button>`;
             }
         }
-
-        // Запускаем квиз
-        loadQuestion();
     </script>
 </body>
 </html>
