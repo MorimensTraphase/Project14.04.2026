@@ -5,11 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mini Games</title>
-    <link rel="stylesheet" href="css/video.css">
+    <link rel="stylesheet" href="css/main.css"> 
+    <style>
+        /* Стили для игры (можно вынести в отдельный файл или оставить тут) */
+        .game-section { padding: 50px 0; color: white; text-align: center; }
+        .draggables { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
+        .drag-item { padding: 12px 25px; background: #ffcc00; color: #000; border-radius: 8px; cursor: grab; font-weight: bold; font-size: 1.1rem; }
+        .drop-zones { display: flex; gap: 40px; justify-content: center; margin-top: 50px; }
+        .zone { width: 300px; height: 200px; border: 3px dashed #777; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; background: rgba(255,255,255,0.05); }
+        .zone.hover { border-color: #fff; background: rgba(255,255,255,0.15); }
+        .zone h3 { margin-bottom: 10px; pointer-events: none; }
+        .correct { background: #4caf50 !important; color: white !important; }
+    </style>
 </head>
 
 <body>
-    
     <div class="wrapper">
         <header class="container">
             <span class="logo">Mini Games</span>
@@ -18,10 +28,77 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="sborki.html">Interesting Facts</a></li>
                     <li><a href="video.html">Videos</a></li>
-                     <li><a href="quiz.html">Quizzes</a></li>
-                     <li class="active"><a href="games.html">Mini Games</a></li>
+                    <li><a href="quiz.html">Quizzes</a></li>
+                    <li class="active"><a href="games.html">Mini Games</a></li>
                     <li><a href="repleyi.html">Information</a></li>
                 </ul>
             </nav>
         </header>
+
+        <main class="container">
+            <section class="game-section">
+                <h1>Sort the Symbols</h1>
+                <p>Drag the items to their home country!</p>
+
+                <div class="draggables" id="items-box">
+                    <div class="drag-item" draggable="true" id="item1" data-target="uk">Big Ben 🕰️</div>
+                    <div class="drag-item" draggable="true" id="item2" data-target="pl">Pierogi 🥟</div>
+                    <div class="drag-item" draggable="true" id="item3" data-target="uk">Double Decker 🚌</div>
+                    <div class="drag-item" draggable="true" id="item4" data-target="pl">Żubr 🦬</div>
+                    <div class="drag-item" draggable="true" id="item5" data-target="uk">Royal Guard 💂</div>
+                </div>
+
+                <div class="drop-zones">
+                    <div class="zone" id="uk">
+                        <h3>🇬🇧 UK</h3>
+                    </div>
+                    <div class="zone" id="pl">
+                        <h3>🇵🇱 Poland</h3>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer container">
+            <p>&copy; 2026 English Language Project | Created by Herman</p>
+        </footer>
     </div>
+
+    <script>
+        const items = document.querySelectorAll('.drag-item');
+        const zones = document.querySelectorAll('.zone');
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.id);
+            });
+        });
+
+        zones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('hover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('hover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('hover');
+                const id = e.dataTransfer.getData('text');
+                const draggable = document.getElementById(id);
+                
+                if (draggable.dataset.target === zone.id) {
+                    zone.appendChild(draggable);
+                    draggable.classList.add('correct');
+                    draggable.setAttribute('draggable', 'false');
+                } else {
+                    alert('Wrong place! Try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
