@@ -147,6 +147,11 @@ header nav ul li.active a {
     cursor: pointer;
 }
 
+.lobby-title {
+    margin-bottom: 50px; /* Регулируйте число, чтобы изменить размер отступа */
+    display: block;      /* Гарантирует, что отступ сработает правильно */
+}
+
 .ui-game-card:hover {
     transform: translateY(-10px);
     border-color: #ffcc00;
