@@ -208,6 +208,21 @@ header nav ul li.active a {
 
 .zone .drag-item {
     margin-top: 5px;
+    .game-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    width: 250px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.game-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-10px);
+    border-color: #ffcc00;
+}
+.game-card h3 { color: #ffcc00; margin-bottom: 10px; }
     background: #4caf50; /* Зеленый цвет для угаданных */
     color: white;
     cursor: default;
