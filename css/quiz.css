@@ -1,1 +1,162 @@
+/* --- LAYOUT --- */
+.quiz-layout-wrapper {
+    display: flex; 
+    justify-content: center; 
+    padding: 40px 0;
+}
 
+.quiz-card-container {
+    max-width: 900px; 
+    width: 100%; 
+    background: rgba(0,0,0,0.4); 
+    border-radius: 25px; 
+    padding: 40px;
+    text-align: center;
+}
+
+/* --- SELECTION SCREEN --- */
+.selection-title {
+    font-size: 2.2rem; 
+    margin-bottom: 40px; 
+    color: #3498db;
+}
+
+.quiz-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.menu-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #3498db;
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.card-folklore { border-color: #9b59b6; }
+.card-landmarks { border-color: #2ecc71; }
+.card-history { border-color: #f1c40f; }
+
+/* --- GAME ENGINE --- */
+.game-engine {
+    display: none;
+}
+
+.btn-back {
+    background: none; 
+    border: 1px solid #555; 
+    color: #ccc; 
+    cursor: pointer; 
+    padding: 5px 10px; 
+    border-radius: 10px; 
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.question-counter {
+    margin-bottom: 10px; 
+    opacity: 0.6; 
+    font-size: 0.9rem;
+}
+
+/* --- PROGRESS BAR --- */
+.progress-container {
+    width: 100%;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #3498db;
+    transition: width 0.4s ease;
+}
+
+/* --- OPTIONS --- */
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.option-btn {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #444;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.2s;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: #3498db;
+    border-color: #3498db;
+}
+
+.option-btn:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* --- RESULTS & BUTTONS --- */
+#result-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    min-height: 1.5em;
+}
+
+.result-correct { color: #2ecc71; }
+.result-wrong { color: #e74c3c; }
+
+.next-btn {
+    padding: 12px 25px;
+    background: #3498db;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.next-btn:hover {
+    background: #2980b9;
+}
+
+/* --- FINAL SCREEN --- */
+.final-rank {
+    font-size: 2.5rem; 
+    color: #3498db;
+}
+
+.final-score {
+    font-size: 1.5rem; 
+    margin: 20px 0;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 600px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+}
