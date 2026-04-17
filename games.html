@@ -9,45 +9,7 @@
 </head>
 
 <body>
-    <script>
-    const items = document.querySelectorAll('.drag-item');
-    const zones = document.querySelectorAll('.zone');
-
-    items.forEach(item => {
-        item.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', e.target.id);
-        });
-    });
-
-    zones.forEach(zone => {
-        zone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            zone.classList.add('hover');
-        });
-
-        zone.addEventListener('dragleave', () => {
-            zone.classList.remove('hover');
-        });
-
-        zone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            zone.classList.remove('hover');
-            
-            const id = e.dataTransfer.getData('text');
-            const draggable = document.getElementById(id);
-            const country = draggable.dataset.country;
-
-            // Проверяем, совпадает ли id зоны с data-country элемента
-            if (zone.id === country) {
-                zone.appendChild(draggable);
-                draggable.setAttribute('draggable', 'false'); // Больше нельзя тащить
-                alert('Correct! 🎉');
-            } else {
-                alert('Try again! ❌');
-            }
-        });
-    });
-</script>
+    
     <div class="wrapper">
         <header class="container">
             <span class="logo">Mini Games</span>
@@ -62,25 +24,4 @@
                 </ul>
             </nav>
         </header>
-
-        <div class="game-container">
-    <h2 style="text-align: center;">Sort the Words!</h2>
-    <p style="text-align: center;">Drag the word to the correct country:</p>
-    
-    <div id="draggables">
-        <div class="drag-item" draggable="true" id="item1" data-country="uk">Fish and Chips</div>
-        <div class="drag-item" draggable="true" id="item2" data-country="pl">Pierogi</div>
-        <div class="drag-item" draggable="true" id="item3" data-country="uk">Big Ben</div>
-        <div class="drag-item" draggable="true" id="item4" data-country="pl">Żubr</div>
-        <div class="drag-item" draggable="true" id="item5" data-country="uk">Double Decker</div>
     </div>
-
-    <div class="drop-zones">
-        <div class="zone" id="uk">
-            <h3>🇬🇧 UNITED KINGDOM</h3>
-        </div>
-        <div class="zone" id="pl">
-            <h3>🇵🇱 POLAND</h3>
-        </div>
-    </div>
-</div>
