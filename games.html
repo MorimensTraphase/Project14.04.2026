@@ -4,117 +4,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mini Games</title>
+    <title>Mini Games - Sorting Master</title>
     
     <link rel="stylesheet" href="css/video.css"> 
 
     <style>
-        /* --- ОФОРМЛЕНИЕ ИГРОВОЙ СЕКЦИИ --- */
+        /* --- ОБЩИЕ СТИЛИ --- */
         .game-section {
-            padding: 60px 0;
+            padding: 40px 0;
             color: #ffffff;
             text-align: center;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
 
-        /* --- ЛОББИ (ГЛАВНОЕ МЕНЮ ИГР) --- */
+        /* --- ЛОББИ --- */
         .game-lobby-container {
-            display: block; /* Показываем меню при загрузке */
-            transition: all 0.5s ease-in-out;
+            display: block;
+            transition: all 0.5s ease;
         }
 
-        .lobby-title {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .game-selection-wrapper {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        /* Стиль карточки игры в меню */
         .ui-game-card {
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 25px;
             padding: 40px;
             width: 280px;
-            transition: transform 0.4s, background 0.3s;
+            margin: 0 auto;
+            transition: 0.3s;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Эффект при наведении на карточку */
         .ui-game-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-15px); /* Карточка всплывает */
+            transform: translateY(-10px);
             border-color: #ffcc00;
+            background: rgba(255, 255, 255, 0.12);
         }
 
         /* --- ИГРОВОЙ ЭКРАН --- */
         #sorting-game-engine {
-            display: none; /* Скрыто, пока не нажмем кнопку 'Start' */
+            display: none;
             opacity: 0;
             transition: opacity 0.6s ease;
         }
 
-        /* Контейнер для карточек, которые нужно сортировать */
+        /* Сейф с карточками */
         .item-source-vault {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin: 40px 0;
+            margin: 30px 0;
             flex-wrap: wrap;
-            min-height: 150px;
-            padding: 30px;
+            min-height: 120px;
+            padding: 25px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 20px;
         }
 
-        /* Стиль самих перетаскиваемых карточек (слов) */
+        /* Карточки */
         .drag-item {
-            padding: 14px 22px;
+            padding: 12px 20px;
             background: linear-gradient(145deg, #ffcc00, #e6b800);
             color: #1a1a1a;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: grab;
             font-weight: 800;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            touch-action: none; /* Отключает стандартный скролл при касании, чтобы работал Drag-and-Drop */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            touch-action: none;
         }
 
-        /* Стиль корзин (UK и Poland) */
+        /* --- КОРЗИНЫ (СТРОГО В РЯД) --- */
+        .target-drop-zones {
+            display: flex;
+            flex-direction: row;      /* Только в ряд */
+            flex-wrap: nowrap;        /* Запрет переноса */
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
         .culture-bin {
-            width: 400px;
-            min-height: 280px;
-            height: auto;
+            flex: 1;                  /* Равномерная ширина */
+            min-width: 300px;         /* Минимальная ширина, чтобы не сжимались в ноль */
+            max-width: 500px;         /* Чтобы не были слишком огромными */
+            min-height: 350px;
             border: 4px dashed #555555;
             border-radius: 25px;
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap;          /* Карточки внутри пусть переносятся */
             align-content: flex-start;
             justify-content: center;
-            gap: 12px;
-            padding: 25px;
+            gap: 10px;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.02);
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        /* Подсветка корзины, когда над ней держат карточку */
         .culture-bin.drag-over-active {
-            border-color: #ffffff;
+            border-color: #ffcc00;
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* --- КНОПКИ УПРАВЛЕНИЯ --- */
+        .culture-bin h3 {
+            width: 100%;
+            margin-bottom: 15px;
+            pointer-events: none;
+        }
+
+        /* --- КНОПКИ --- */
         .action-button {
-            padding: 16px 35px;
-            font-size: 1.1rem;
+            padding: 14px 30px;
+            font-size: 1rem;
             font-weight: bold;
             color: #ffffff;
             background-color: #007bff;
@@ -125,17 +125,30 @@
             margin: 10px;
         }
 
-        .btn-reset { background-color: #6c757d; } /* Серый цвет для сброса */
-        .btn-check { background-color: #28a745; } /* Зеленый для проверки */
+        .btn-reset { background-color: #6c757d; }
+        .btn-check { background-color: #28a745; }
 
-        /* Цвета после проверки */
-        .status-correct { background: #28a745 !important; color: white !important; }
-        .status-wrong { background: #dc3545 !important; color: white !important; }
+        /* Эффекты проверки */
+        .status-correct { background: #28a745 !important; color: white !important; border: 2px solid white; }
+        .status-wrong { background: #dc3545 !important; color: white !important; border: 2px solid white; }
 
         .result-score-display {
-            margin-top: 35px;
+            margin-top: 30px;
             font-size: 2rem;
             color: #ffcc00;
+            font-weight: bold;
+        }
+
+        /* Мобильная адаптация: если экран совсем узкий, разрешаем перенос, иначе будет некрасиво */
+        @media (max-width: 700px) {
+            .target-drop-zones {
+                flex-direction: column;
+                align-items: center;
+            }
+            .culture-bin {
+                width: 90%;
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -164,7 +177,7 @@
                     <div class="game-selection-wrapper">
                         <div class="ui-game-card" onclick="initiateSortingGame()">
                             <h3>🧩 Sorting Master</h3>
-                            <p>Распределите символы между Великобританией и Польшей.</p>
+                            <p>Divide symbols between UK and Poland.</p>
                             <button class="action-button">Play Now</button>
                         </div>
                     </div>
@@ -210,86 +223,77 @@
     </div>
 
     <script>
-        /* --- ПЕРЕМЕННЫЕ --- */
-        const allGameNodes = document.querySelectorAll('.drag-item'); // Все карточки
-        const dropContainers = document.querySelectorAll('.culture-bin'); // Корзины
-        const mainVault = document.getElementById('global-items-container'); // Стартовый ящик
+        const allGameNodes = document.querySelectorAll('.drag-item');
+        const dropContainers = document.querySelectorAll('.culture-bin');
+        const mainVault = document.getElementById('global-items-container');
 
-        /* --- НАВИГАЦИЯ (ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ) --- */
         function initiateSortingGame() {
-            // Прячем меню, показываем игру
             document.getElementById('game-lobby-screen').style.display = 'none';
             const engine = document.getElementById('sorting-game-engine');
             engine.style.display = 'block';
             setTimeout(() => { engine.style.opacity = '1'; }, 50);
-            scrambleElements(); // Перемешиваем при старте
+            scrambleElements();
         }
 
         function returnToLobby() {
-            // Возвращаемся в меню
             document.getElementById('game-lobby-screen').style.display = 'block';
             document.getElementById('sorting-game-engine').style.display = 'none';
-            performSystemReset(); // Сбрасываем игру
+            performSystemReset();
         }
 
-        /* --- ФУНКЦИЯ РАНДОМА (ПЕРЕМЕШИВАНИЕ) --- */
         function scrambleElements() {
             const fragments = Array.from(mainVault.children);
             for (let i = fragments.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                mainVault.appendChild(fragments[j]); // Переставляем местами
+                mainVault.appendChild(fragments[j]);
             }
         }
 
-        /* --- ЛОГИКА ПЕРЕТАСКИВАНИЯ (ДЛЯ МЫШКИ И ТАЧСКРИНА) --- */
         allGameNodes.forEach(node => {
-            // Старт перетаскивания (мышь)
             node.addEventListener('dragstart', (event) => {
                 event.dataTransfer.setData('text', event.target.id);
             });
 
-            // Старт касания (палец)
             node.addEventListener('touchstart', function(event) {
-                window.activeDraggingNode = this; // Запоминаем, что тащим
+                window.activeDraggingNode = this;
                 this.style.opacity = '0.7';
             }, {passive: true});
 
-            // Конец касания (палец)
             node.addEventListener('touchend', function(event) {
                 this.style.opacity = '1';
                 const touch = event.changedTouches[0];
-                // Находим, над каким элементом сейчас палец
                 const elementUnderPoint = document.elementFromPoint(touch.clientX, touch.clientY);
                 const targetZone = elementUnderPoint ? elementUnderPoint.closest('.culture-bin') : null;
                 
                 if (targetZone) {
-                    targetZone.appendChild(this); // Если это корзина — кладем туда
+                    targetZone.appendChild(this);
                 }
                 window.activeDraggingNode = null;
             });
 
-            // Отключаем скролл экрана, когда тащим пальцем карточку
             node.addEventListener('touchmove', (e) => { if(window.activeDraggingNode) e.preventDefault(); }, {passive: false});
         });
 
-        // Работа с корзинами
         dropContainers.forEach(container => {
-            container.addEventListener('dragover', (e) => e.preventDefault()); // Разрешаем сброс
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                container.classList.add('drag-over-active');
+            });
+            container.addEventListener('dragleave', () => container.classList.remove('drag-over-active'));
             container.addEventListener('drop', (event) => {
                 event.preventDefault();
+                container.classList.remove('drag-over-active');
                 const elementID = event.dataTransfer.getData('text');
                 const draggedElement = document.getElementById(elementID);
-                container.appendChild(draggedElement); // Перемещаем карточку в корзину
+                container.appendChild(draggedElement);
             });
         });
 
-        /* --- ПРОВЕРКА ОЧКОВ --- */
         document.getElementById('final-validation-btn').onclick = function() {
             let score = 0;
             allGameNodes.forEach(node => {
                 const currentParent = node.parentElement;
                 if (currentParent.classList.contains('culture-bin')) {
-                    // Если ID корзины совпадает с целью (data-target) карточки
                     if (node.dataset.target === currentParent.id) {
                         node.classList.add('status-correct');
                         score++;
@@ -298,21 +302,19 @@
                     }
                 }
             });
-            document.getElementById('visual-score-output').innerText = "Score: " + score + " / 16";
+            document.getElementById('visual-score-output').innerText = "Final Score: " + score + " / 16";
         };
 
-        /* --- СБРОС ИГРЫ --- */
         function performSystemReset() {
             allGameNodes.forEach(node => {
                 node.classList.remove('status-correct', 'status-wrong');
-                mainVault.appendChild(node); // Возвращаем в стартовый ящик
+                mainVault.appendChild(node);
             });
             document.getElementById('visual-score-output').innerText = "";
-            scrambleElements(); // Снова перемешиваем
+            scrambleElements();
         }
 
         document.getElementById('system-reset-btn').onclick = performSystemReset;
-
     </script>
 </body>
 </html>
