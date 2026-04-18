@@ -1,208 +1,211 @@
-/* Основные цвета и переменные для игры */
+/* Базовые настройки и шрифты */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
 :root {
-    --gold: #ffcc00;
-    --dark-bg: #1e1e1e;
-    --card-bg: #2a2a2a;
-    --text-white: #ffffff;
-    --border-color: #444;
+    --bg-dark: #0a0a0c;
+    --panel-bg: rgba(25, 25, 30, 0.95);
+    --accent-gold: #ffcc00;
+    --text-main: #e0e0e0;
+    --glass-border: rgba(255, 255, 255, 0.08);
 }
 
-/* Секция игры */
+body {
+    background: radial-gradient(circle at top center, #1a1a2e 0%, var(--bg-dark) 100%);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Общий контейнер игры */
 .game-section {
-    text-align: center;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    color: var(--text-white);
+    max-width: 1100px;
+    margin: 40px auto;
     padding: 20px;
+    text-align: center;
 }
 
-/* Баланс */
+/* Красивая панель баланса */
 .stats-bar {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 12px;
-    display: inline-block;
-    margin: 20px 0;
-    border: 1px solid var(--gold);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    padding: 15px 40px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,204,0,0.1);
+    margin-bottom: 40px;
 }
 
-.stats-bar h2 { margin: 0; font-size: 1.5rem; }
+.stats-bar h2 {
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #fff, var(--accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-/* Главная монета */
+/* Монета (Кликер) */
 .main-coin {
-    font-size: 100px;
+    font-size: 120px;
     cursor: pointer;
     user-select: none;
     display: inline-block;
-    transition: transform 0.05s active;
-    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.2));
-    margin: 30px 0;
+    filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.2));
+    transition: transform 0.05s cubic-bezier(0.1, 0, 0.1, 1);
+    margin: 40px 0;
 }
 
 .main-coin:active {
-    transform: scale(0.9);
+    transform: scale(0.85) rotate(-5deg);
 }
 
-/* Кнопки управления */
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
+/* Кнопки */
 .action-button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-    color: white;
+    transition: 0.3s all;
 }
 
 .action-button:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
-/* Сетка инвентаря */
+/* ИНВЕНТАРЬ - ГРИД СЕТКА */
 .inventory-section {
-    margin-top: 40px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 20px;
+    background: var(--panel-bg);
+    border-radius: 24px;
+    padding: 30px;
+    margin-top: 60px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
 }
 
+/* КАРТОЧКА ПРЕДМЕТА */
 .item-card {
-    background: var(--card-bg);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-5px);
+    border-color: currentColor; /* Использует цвет редкости */
+}
+
+/* Цветная полоска редкости */
+.item-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 5px;
+    background: currentColor;
+    box-shadow: 0 0 15px currentColor;
 }
 
 .btn-sell {
-    background: #e74c3c;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
+    background: rgba(231, 76, 60, 0.15);
+    color: #ff7675;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    padding: 6px 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    width: 100%;
     cursor: pointer;
-    margin-top: 8px;
-    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-/* КАЗИНО / КЕЙСЫ (Оверлей) */
+.btn-sell:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/* КАЗИНО / КЕЙСЫ ОВЕРЛЕЙ */
 .casino-overlay {
-    position: fixed;
-    top: 0; left: 0; 
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.85);
 }
 
 .casino-content {
-    background: #1a1a1a;
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid var(--gold);
-    position: relative;
-    text-align: center;
+    background: #121216;
+    border: 1px solid rgba(255,204,0,0.3);
+    border-radius: 32px;
+    box-shadow: 0 0 100px rgba(255,204,0,0.1);
 }
 
-.close-btn {
-    position: absolute;
-    right: 15px; top: 10px;
-    font-size: 30px;
-    color: #888;
-    cursor: pointer;
-    background: none; border: none;
-}
-
-/* РУЛЕТКА */
+/* РУЛЕТКА (РЕВОРК) */
 .roulette-wrapper {
-    position: relative;
-    width: 100%;
-    height: 120px;
     background: #000;
-    margin: 20px 0;
-    overflow: hidden;
-    border: 2px solid #333;
+    height: 140px;
+    border: 2px solid #222;
+    margin: 30px 0;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }
 
 .selector {
-    position: absolute;
-    left: 50%; top: 0;
-    width: 4px; height: 100%;
-    background: var(--gold);
-    z-index: 10;
-    transform: translateX(-50%);
-}
-
-.reel-horizontal {
-    display: flex;
-    position: absolute;
-    height: 100%;
-    align-items: center;
+    background: var(--accent-gold);
+    width: 3px;
+    box-shadow: 0 0 20px var(--accent-gold);
 }
 
 .reel-item-horizontal {
-    min-width: 120px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    background: #222;
-    margin: 0 3px;
-    border-radius: 5px;
+    background: #1a1a1f;
+    border: 1px solid #333;
+    border-radius: 12px;
+    margin: 0 5px;
+    width: 120px;
 }
 
-/* Список кейсов */
+/* СЕТКА КЕЙСОВ */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 12px;
-    max-height: 250px;
-    overflow-y: auto;
-    margin-top: 20px;
-    padding-right: 5px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
 }
 
 .case-card {
-    background: #333;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
+    background: #1a1a1f;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 16px;
     transition: 0.2s;
 }
 
-.case-card:hover { background: #444; }
+.case-card:hover {
+    border-color: var(--accent-gold);
+    transform: scale(1.02);
+    background: #25252b;
+}
 
-.case-icon { font-size: 1.8rem; display: block; }
-.case-name { font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: block; }
-.case-price { color: var(--gold); font-size: 0.75rem; }
+.case-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.case-price { font-weight: 800; color: var(--accent-gold); }
 
 /* Анимации */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(2deg); }
+    75% { transform: rotate(-2deg); }
+    100% { transform: rotate(0deg); }
 }
-.shake { animation: shake 0.3s; }
-
-@keyframes win {
-    0% { box-shadow: 0 0 0px var(--gold); }
-    50% { box-shadow: 0 0 30px var(--gold); }
-    100% { box-shadow: 0 0 0px var(--gold); }
-}
-.win-flash { animation: win 0.5s ease-out; }
+.shake { animation: shake 0.1s infinite; }
