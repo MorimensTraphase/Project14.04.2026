@@ -214,3 +214,32 @@
     display: none;
     white-space: nowrap;
 }
+/* Настраиваем ширину всей полосы прокрутки */
+.case-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Фон дорожки, по которой едет ползунок */
+.case-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 5px;
+}
+
+/* Сам ползунок (бегунок) */
+.case-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffcc00, #f39c12); /* Под цвет твоих кейсов */
+    border-radius: 10px;
+    border: 2px solid #111; /* Небольшой отступ, чтобы выглядело аккуратнее */
+}
+
+/* Цвет при наведении */
+.case-grid::-webkit-scrollbar-thumb:hover {
+    background: #ffdb4d;
+}
+
+/* Для Firefox (у него меньше возможностей кастомизации) */
+.case-grid {
+    scrollbar-width: thin;
+    scrollbar-color: #ffcc00 #111;
+}
