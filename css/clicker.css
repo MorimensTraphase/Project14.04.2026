@@ -1,0 +1,128 @@
+/* --- ОСНОВНАЯ ЗОНА КЛИКЕРА --- */
+.clicker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.main-coin {
+    font-size: clamp(6rem, 15vw, 10rem);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.3));
+}
+
+.main-coin:hover {
+    transform: scale(1.05);
+}
+
+.main-coin:active {
+    transform: scale(0.9);
+}
+
+/* --- ИНВЕНТАРЬ --- */
+.inventory-section {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.item-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #444;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.item-card:hover {
+    border-color: #00ed9a;
+    transform: translateY(-5px);
+}
+
+.item-emoji {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* --- СЕКРЕТНОЕ КАЗИНО (ОКНО) --- */
+.casino-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.casino-content {
+    background: #0a0a0a;
+    border: 3px solid #ffcc00;
+    border-radius: 30px;
+    padding: 50px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
+    position: relative;
+}
+
+.slot-display {
+    font-size: 3.5rem;
+    background: #000;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 25px 0;
+    border: 2px inset #333;
+    font-family: monospace;
+    color: #ffcc00;
+    text-shadow: 0 0 10px #ffcc00;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.close-btn:hover { color: #fff; }
+
+/* Кнопка продажи */
+.btn-sell {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+.btn-sell:hover { background: #c0392b; }
