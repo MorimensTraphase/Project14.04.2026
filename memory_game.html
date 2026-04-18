@@ -26,8 +26,9 @@
             <section class="game-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
                     <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Exit</a>
-                    <div class="result-score-display" id="stat-line" style="margin-top:0; font-size: 1.2rem;">Pairs: 0/8 | Moves: 0</div>
-                </div>
+                   <div class="result-score-display" id="stat-line">
+                   Pairs: <span id="match-count">0</span>/8 | Moves: <span id="move-count">0</span>
+                  </div>
 
                 <div class="game-board" id="board"></div>
 
