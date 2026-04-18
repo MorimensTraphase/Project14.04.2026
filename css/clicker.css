@@ -1,221 +1,251 @@
-/* Основные переменные под стиль сайта */
+/* Устанавливаем шрифт будущего */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap');
+
 :root {
-    --accent-gold: #ffcc00;
-    --bg-dark: #0f0f13;
-    --panel-bg: rgba(30, 30, 35, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --text-color: #f0f0f0;
+    /* Цветовая палитра Неона */
+    --bg-dark: #050509;
+    --bg-panel: rgba(10, 10, 16, 0.7);
+    --neon-cyan: #0ff;
+    --neon-blue: #0088ff;
+    --neon-purple: #9d00ff;
+    --neon-gold: #ffcc00;
+    --text-main: #c0c0c0;
+    --glass-border: rgba(0, 255, 255, 0.1);
 }
 
-/* Настройки для главной секции */
-.game-section {
-    padding: 40px 0;
-    text-align: center;
-    color: var(--text-color);
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 10% 10%, rgba(157, 0, 255, 0.1) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(0, 255, 255, 0.08) 0px, transparent 50%);
+    color: var(--text-main);
+    font-family: 'Rajdhani', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
 }
 
+/* Стилизация заголовков */
 .game-section h1 {
-    font-size: 2.8rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    background: linear-gradient(to bottom, #fff, var(--accent-gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+    margin-bottom: 5px;
 }
 
-/* Панель баланса */
+/* Панель Баланса */
 .stats-bar {
-    background: var(--panel-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    padding: 12px 35px;
-    border-radius: 60px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--neon-cyan);
+    padding: 10px 40px;
+    border-radius: 5px; /* Уходим от кругов к углам */
     display: inline-block;
-    margin-bottom: 40px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    position: relative;
 }
+
+/* Эффект "уголков" на панели */
+.stats-bar::before, .stats-bar::after {
+    content: '';
+    position: absolute;
+    width: 10px; height: 10px;
+    border: 2px solid var(--neon-cyan);
+}
+.stats-bar::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.stats-bar::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
 .stats-bar h2 {
     margin: 0;
-    color: var(--accent-gold);
-    font-size: 1.8rem;
-    letter-spacing: 1px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 5px #fff;
 }
 
-/* Стилизация кликера */
+/* Кликер */
 .main-coin {
-    font-size: 140px;
+    font-size: 130px;
     cursor: pointer;
     user-select: none;
     display: inline-block;
-    filter: drop-shadow(0 0 40px rgba(255, 204, 0, 0.15));
-    transition: transform 0.05s cubic-bezier(0.1, 0, 0.1, 1);
+    filter: drop-shadow(0 0 20px var(--neon-gold));
+    transition: transform 0.05s ease, filter 0.2s;
 }
 
 .main-coin:active {
-    transform: scale(0.88) rotate(-5deg);
+    transform: scale(0.9) rotate(-3deg);
+    filter: drop-shadow(0 0 40px var(--neon-gold));
 }
 
-/* Кнопки управления */
-.button-group .action-button {
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 15px 32px;
-    border-radius: 14px;
-    font-size: 1.1rem;
-    font-weight: 600;
+/* Кнопки */
+.action-button {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 28px;
+    border-radius: 0; /* Острые углы */
+    border: 1px solid transparent;
     cursor: pointer;
     transition: 0.3s;
-    margin: 0 10px;
 }
 
 .action-button:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transform: translateY(-2px);
 }
 
-/* ИНВЕНТАРЬ (Интерфейс активов) */
+/* Инвентарь */
 .inventory-section {
-    margin-top: 60px;
-    background: rgba(15, 15, 20, 0.8);
-    border-radius: 32px;
-    padding: 35px;
+    margin-top: 50px;
+    background: rgba(5, 5, 10, 0.8);
     border: 1px solid var(--glass-border);
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
 }
 
 .inventory-section h3 {
     text-align: left;
-    font-size: 1.6rem;
-    margin-bottom: 25px;
-    padding-left: 15px;
-    border-left: 5px solid var(--accent-gold);
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px var(--neon-cyan);
 }
 
-/* Сетка инвентаря */
-.items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 20px;
-}
-
-/* Карточка предмета */
+/* Карточка предмета (Неон версия) */
 .item-card {
-    background: #1c1c24;
+    background: rgba(20, 20, 30, 0.6);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 25px 15px;
+    border-radius: 4px;
+    padding: 20px;
     position: relative;
-    transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    color: var(--text-main); /* Базовый цвет текста */
 }
 
+/* При наведении карточка "загорается" цветом редкости */
 .item-card:hover {
-    transform: translateY(-8px);
-    background: #25252f;
-    border-color: currentColor; /* Цвет от JS */
-    box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+    transform: scale(1.03);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: currentColor; /* Берет цвет от style="color:..." в HTML */
+    box-shadow: 0 0 20px currentColor;
 }
 
-/* Линия редкости под карточкой */
-.item-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 100%; height: 5px;
-    background: currentColor;
-    box-shadow: 0 -2px 15px currentColor;
-}
-
-.item-card strong {
-    margin: 15px 0 5px;
-    font-size: 1.1rem;
-    color: #fff;
-}
-
-.item-card small {
-    color: var(--accent-gold);
-    font-weight: 800;
-    font-size: 1rem;
-}
+/* Название и цена */
+.item-card strong { color: #fff; display: block; margin-top: 10px; font-size: 1.1rem; }
+.item-card small { color: var(--neon-gold); font-weight: bold; }
 
 /* Кнопка продажи */
 .btn-sell {
-    background: rgba(231, 76, 60, 0.1);
-    border: 1px solid rgba(231, 76, 60, 0.3);
-    color: #ff7675;
-    padding: 10px;
-    width: 90%;
-    border-radius: 10px;
-    margin-top: 18px;
+    background: transparent;
+    border: 1px solid #ff4757;
+    color: #ff4757;
+    padding: 8px;
+    width: 100%;
+    margin-top: 15px;
     cursor: pointer;
-    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
     text-transform: uppercase;
     font-size: 0.8rem;
     transition: 0.2s;
 }
 
 .btn-sell:hover {
-    background: #e74c3c;
-    color: white;
+    background: #ff4757;
+    color: #000;
+    box-shadow: 0 0 10px #ff4757;
 }
 
-/* КАЗИНО (КЕЙСЫ) */
+/* =========================================
+   ОВЕРЛЕЙ КЕЙСОВ (Sci-Fi Неон)
+   ========================================= */
 .casino-overlay {
-    backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(15px);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .casino-content {
-    background: #0d0d12;
-    border: 1px solid var(--accent-gold);
-    border-radius: 40px;
-    box-shadow: 0 0 80px rgba(255, 204, 0, 0.1);
+    background: #08080c;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 0;
+    padding: 40px;
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
 }
 
+.close-btn {
+    color: var(--neon-cyan);
+    opacity: 0.7;
+    transition: 0.2s;
+}
+.close-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
+
+/* Рулетка */
 .roulette-wrapper {
     background: #000;
-    height: 150px;
-    border-radius: 20px;
-    border: 2px solid #222;
-    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    height: 140px;
+    border: 1px solid #222;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
 
 .selector {
-    background: var(--accent-gold);
-    box-shadow: 0 0 25px var(--accent-gold);
+    background: var(--neon-cyan);
+    box-shadow: 0 0 15px var(--neon-cyan);
 }
 
+/* Предметы в рулетке */
 .reel-item-horizontal {
-    background: #16161c;
-    border: 1px solid #2a2a32;
-    margin: 0 6px;
-    border-radius: 18px;
+    background: #111;
+    border: 1px solid #333;
+    margin: 0 5px;
     width: 120px;
+    border-radius: 2px;
 }
 
-/* Сетка кейсов */
+/* СЕТКА КЕЙСОВ В ОКНЕ (Минимализм) */
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Карточка Кейса */
 .case-card {
-    background: #181820;
-    border-radius: 22px;
-    padding: 25px;
-    transition: 0.2s;
+    background: rgba(20, 20, 30, 0.8);
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: 0;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-align: center;
 }
 
 .case-card:hover {
-    border-color: var(--accent-gold);
-    background: #22222b;
-    transform: scale(1.05);
+    border-color: var(--neon-purple);
+    background: rgba(157, 0, 255, 0.05);
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
 }
 
-.case-price { color: var(--accent-gold); font-weight: 900; }
-
-/* Анимации */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
+.case-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
 }
-.shake { animation: shake 0.3s; }
+
+.case-name {
+    font-family: 'Orbitron', sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.case-price {
+    color: var(--neon-gold);
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: block;
+    margin-top: 5px;
+}
