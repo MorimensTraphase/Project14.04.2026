@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=3.7799">
+    <link rel="stylesheet" href="css/clicker.css?v=3.7999">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -245,18 +245,7 @@
             items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 120; // Строго как в CSS
-                const winIndex = 80; // Индекс выпавшего предмета в массиве (например, 80-й из 100)
-               const containerWidth = document.querySelector('.roulette-wrapper').offsetWidth;
-
-              // Расчет:
-              // (winIndex * itemWidth) — доезжаем до начала нужного предмета
-             // (itemWidth / 2) — доезжаем до его середины
-            // (containerWidth / 2) — вычитаем половину ширины окна, чтобы середина предмета стала в центр
-           const finalOffset = (winIndex * itemWidth) + (itemWidth / 2) - (containerWidth / 2);
-
-            // Применяем:
-           reel.style.transform = `translateX(-${finalOffset}px)`;
+                const itemWidth = 118; // 100px ширина + 8px отступы
                 const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
