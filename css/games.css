@@ -417,3 +417,25 @@
         padding: 20px;
     }
 }
+/* Стиль для секретной карточки в меню */
+.secret-game {
+    border: 1px dashed #555 !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    filter: grayscale(1);
+    transition: 0.5s;
+}
+
+.secret-game:hover {
+    filter: grayscale(0);
+    border: 1px solid #ffcc00 !important;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+}
+
+.secret-game h3 {
+    letter-spacing: 5px;
+    color: #888;
+}
+
+.secret-game:hover h3 {
+    color: #ffcc00;
+}
