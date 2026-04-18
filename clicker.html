@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.2">
+    <link rel="stylesheet" href="css/clicker.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -25,7 +25,7 @@
             </nav>
         </header>
 
-       <main class="container">
+        <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
                 <br><br>
@@ -37,12 +37,12 @@
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
                     <div class="button-group" style="margin-top:20px;">
                         <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
-                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🎰 Open Cases</button>
+                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">🎰 Open Cases</button>
                     </div>
                 </div>
 
                 <div class="inventory-section">
-                    <h3>📦 Your Items</h3>
+                    <h3>📦 Your Assets</h3>
                     <div id="items-list" class="items-grid"></div>
                 </div>
 
@@ -50,6 +50,15 @@
                     <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Case Opening</h2>
+                        
+                        <div class="multi-open-selector">
+                            <span class="multi-label">Open:</span>
+                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
+                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
+                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
+                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
+                        </div>
+
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
@@ -58,8 +67,8 @@
                         <p id="casino-msg">Choose your fate!</p>
                         <div class="case-grid" id="case-list"></div>
 
-                        <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT:</h4>
+                        <div id="case-preview-section" class="case-content-preview" style="display: none;">
+                            <h4>POSSIBLE CONTENT:</h4>
                             <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
@@ -72,6 +81,7 @@
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
+        let openMultiplier = 1;
 
         const shopData = {
             c1: { n: "Stationery", cost: 50, icon: "📦", items: [
@@ -80,7 +90,7 @@
             ]},
             c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
                 {n:"Iron", e:"⛓️", p:50}, {n:"Steel", e:"🔩", p:120}, {n:"Aluminum", e:"💿", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Bronze", e:"🥉", p:1000}, {n:"Copper", e:"🥉", p:2000},
-                {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Platinum", e:"💍", p:25000}, {n:"Ruby", e:"🔻", p:60000}, {n:"Emerald", e:"❇️", p:150000}, {n:"Diamond", e:"💎", p:500000}
+                {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
             ]},
             c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
                 {n:"Cable", e:"🔌", p:500}, {n:"Mouse", e:"🖱️", p:1200}, {n:"Keys", e:"⌨️", p:2800}, {n:"Disc", e:"💿", p:6000}, {n:"Camera", e:"📷", p:15000}, {n:"Phone", e:"📱", p:35000},
@@ -115,11 +125,16 @@
                 {n:"Glitch", e:"👾", p:2000000000000}, {n:"Matrix", e:"📺", p:6000000000000}, {n:"Infinit", e:"♾️", p:15000000000000}, {n:"Eternity", e:"🕰️", p:40000000000000}, {n:"Victory", e:"🚩", p:100000000000000}, {n:"Glow", e:"🌟", p:999999999999999}
             ]},
             c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
-                {n:"Trash", e:"🗑️", p:1}, 
                 {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
             ]}
         };
-        
+
+        function setMulti(num) {
+            openMultiplier = num;
+            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m' + num).classList.add('active');
+        }
+
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
@@ -144,43 +159,11 @@
 
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
-            const previewSection = document.getElementById('case-preview-section');
-            if (!box || !previewSection) return;
-
-            previewSection.style.display = 'block';
-            const items = shopData[id].items;
-            const isImpossible = (id === 'c11');
-            const failChance = isImpossible ? 99 : 50;
-
-            let contentHtml = `
-                <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.6;">
-                    <div class="preview-item" style="border-bottom: 3px solid #666; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">💨</div>
-                    <div style="color: #888; font-size: 0.75rem; font-weight: bold;">${failChance}%</div>
-                </div>
-            `;
-
-            contentHtml += items.map((it, idx) => {
+            document.getElementById('case-preview-section').style.display = 'block';
+            box.innerHTML = shopData[id].items.map((it, idx) => {
                 const r = getRarityData(idx, it.isUniverse);
-                let chance = 0;
-                if (isImpossible) {
-                    if (it.isUniverse) chance = 1;
-                } else {
-                    const pool = 50;
-                    if (idx >= 11) chance = pool * 0.02;
-                    else if (idx >= 9) chance = pool * 0.08;
-                    else if (idx >= 7) chance = pool * 0.15;
-                    else if (idx >= 5) chance = pool * 0.25;
-                    else if (idx < 5) chance = (pool * 0.50) / 5;
-                }
-                if (chance === 0 && !it.isUniverse) return '';
-                return `
-                    <div class="preview-item-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
-                        <div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:1.5rem;">${it.e}</div>
-                        <div style="color: ${r.color}; font-size: 0.75rem; font-weight: bold;">${chance.toFixed(isImpossible ? 0 : 1)}%</div>
-                    </div>
-                `;
+                return `<div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div>`;
             }).join('');
-            box.innerHTML = contentHtml;
         }
 
         function generateCaseButtons() {
@@ -195,29 +178,44 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            const cost = shopData[id].cost;
-            if (coins < cost) { 
-                alert("Not enough ⭐!"); 
-                return; 
+            const cost = shopData[id].cost * openMultiplier;
+            if (coins < cost) { alert("Not enough ⭐!"); return; }
+
+            if (openMultiplier === 1) {
+                spin(id);
+            } else {
+                multiSpin(id);
             }
-            spin(id);
         }
 
         function calculateWinner(id) {
             const box = shopData[id];
             const luck = Math.random() * 100;
+
             if (id === 'c11') {
-                if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
-                const subLuck = Math.random() * 100;
-                let isU = subLuck >= 99;
-                let item = isU ? box.items[1] : box.items[0];
-                return {...item, ...getRarityData(isU ? 11 : 0, isU), fail: false};
+                if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
+                const item = box.items[0];
+                return {...item, ...getRarityData(11, true), fail: false};
             } else {
                 if (luck < 50) return {n: "Empty", e: "💨", p: 0, fail: true};
                 const r = Math.random() * 100;
                 let idx = (r > 98) ? 11 : (r > 90) ? 9 : (r > 75) ? 7 : (r > 50) ? 5 : Math.floor(Math.random()*5);
                 return {...box.items[idx], ...getRarityData(idx), fail: false};
             }
+        }
+
+        function multiSpin(id) {
+            coins -= (shopData[id].cost * openMultiplier);
+            let wins = [];
+            for(let i=0; i<openMultiplier; i++) {
+                let res = calculateWinner(id);
+                if(!res.fail) {
+                    inventory.push(res);
+                    wins.push(res.e);
+                }
+            }
+            document.getElementById('casino-msg').innerText = wins.length > 0 ? `Won: ${wins.join(' ')}` : "All empty... 💨";
+            render(); save();
         }
 
         function spin(id) {
