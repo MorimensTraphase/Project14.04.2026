@@ -243,3 +243,87 @@ body {
     cursor: pointer;
 }
 .close-btn:hover { color: #fff; }
+/* --- СТИЛИ ДЛЯ МУЛЬТИКЕЙСОВ --- */
+.multi-open-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.multi-label {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.multi-btn {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #eee;
+    padding: 6px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+.multi-btn:hover {
+    background: #252525;
+    border-color: #ffcc00;
+}
+
+.multi-btn.active {
+    background: #ffcc00;
+    color: #000;
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+}
+
+/* --- СТИЛИ ПРЕДПРОСМОТРА ПРЕДМЕТОВ --- */
+.case-content-preview {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #222;
+}
+
+.preview-title {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.items-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.preview-item {
+    width: 48px;
+    height: 48px;
+    background: #050505;
+    border: 1px solid #222;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    border-bottom: 3px solid #444; /* Цвет будет меняться в JS */
+    transition: transform 0.2s;
+}
+
+.preview-item:hover {
+    transform: scale(1.1);
+}
+
+.cases-title {
+    color: #ffcc00;
+    margin-top: 0;
+}
