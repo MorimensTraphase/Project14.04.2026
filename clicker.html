@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Money Clicker - Casino Edition</title>
+    <title>Hidden Page</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="css/clicker.css">
@@ -27,7 +27,7 @@
 
         <main class="container">
             <section class="game-section">
-                <h1>💵 Money Tycoon</h1>
+                <h1>🎰 Casino</h1>
                 <p>Click the cash to build your empire!</p>
 
                 <div class="clicker-container">
@@ -65,126 +65,117 @@
             </section>
         </main>
     </div>
-    
-<script>
-    // Переменные игры
-let coins = 0;
-let inventory = [];
 
-// База данных призов
-const prizes = [
-    { name: "Penny", emoji: "🥉", sellPrice: 10 },
-    { name: "Wallet", emoji: "👛", sellPrice: 150 },
-    { name: "Briefcase", emoji: "💼", sellPrice: 1200 },
-    { name: "Gold Bar", emoji: "🧱", sellPrice: 6000 },
-    { name: "Diamond", emoji: "💎", sellPrice: 20000 },
-    { name: "Oil Rig", emoji: "⛽", sellPrice: 150000 }
-];
+    <script>
+        // Инициализация данных
+        let coins = 0;
+        let inventory = [];
 
-// --- ФУНКЦИИ СОХРАНЕНИЯ ---
+        // База призов
+        const prizes = [
+            { name: "Penny", emoji: "🥉", sellPrice: 10 },
+            { name: "Wallet", emoji: "👛", sellPrice: 150 },
+            { name: "Briefcase", emoji: "💼", sellPrice: 1200 },
+            { name: "Gold Bar", emoji: "🧱", sellPrice: 6000 },
+            { name: "Diamond", emoji: "💎", sellPrice: 20000 },
+            { name: "Oil Rig", emoji: "⛽", sellPrice: 150000 }
+        ];
 
-// Сохранить данные
-function saveGame() {
-    localStorage.setItem('moneyTycoon_coins', coins);
-    localStorage.setItem('moneyTycoon_inventory', JSON.stringify(inventory));
-}
+        // --- СОХРАНЕНИЕ ---
+        function saveGame() {
+            localStorage.setItem('moneyTycoon_coins', coins);
+            localStorage.setItem('moneyTycoon_inventory', JSON.stringify(inventory));
+        }
 
-// Загрузить данные
-function loadGame() {
-    const savedCoins = localStorage.getItem('moneyTycoon_coins');
-    const savedInventory = localStorage.getItem('moneyTycoon_inventory');
+        function loadGame() {
+            const savedCoins = localStorage.getItem('moneyTycoon_coins');
+            const savedInventory = localStorage.getItem('moneyTycoon_inventory');
 
-    if (savedCoins !== null) {
-        coins = parseInt(savedCoins);
-    }
-    if (savedInventory !== null) {
-        inventory = JSON.parse(savedInventory);
-    }
-    updateUI();
-}
+            if (savedCoins !== null) coins = parseInt(savedCoins);
+            if (savedInventory !== null) inventory = JSON.parse(savedInventory);
+            
+            updateUI();
+        }
 
-// --- ЛОГИКА ИГРЫ ---
+        // --- ЛОГИКА ---
+        function mineCoin() {
+            coins++;
+            updateUI();
+            saveGame();
+        }
 
-function mineCoin() {
-    coins++;
-    updateUI();
-    saveGame(); // Сохраняем после каждого клика
-}
+        function toggleCasino() {
+            const casino = document.getElementById('casino-overlay');
+            casino.style.display = (casino.style.display === 'none' || casino.style.display === '') ? 'flex' : 'none';
+        }
 
-function toggleCasino() {
-    const casino = document.getElementById('casino-overlay');
-    casino.style.display = (casino.style.display === 'none' || casino.style.display === '') ? 'flex' : 'none';
-}
+        function spinSlots() {
+            if (coins < 50) {
+                const msg = document.getElementById('casino-msg');
+                msg.innerText = "Need more cash! 💵";
+                msg.style.color = "#e74c3c";
+                return;
+            }
 
-function spinSlots() {
-    if (coins < 50) {
-        const msg = document.getElementById('casino-msg');
-        msg.innerText = "Need more cash! 💵";
-        msg.style.color = "#e74c3c";
-        return;
-    }
+            coins -= 50;
+            updateUI();
+            
+            const msg = document.getElementById('casino-msg');
+            const slotDisplay = document.getElementById('slot-machine');
+            
+            msg.innerText = "Spinning...";
+            msg.style.color = "#ffcc00";
+            slotDisplay.innerText = "⏳ | ⏳ | ⏳";
 
-    coins -= 50;
-    updateUI();
-    
-    const msg = document.getElementById('casino-msg');
-    const slotDisplay = document.getElementById('slot-machine');
-    
-    msg.innerText = "Spinning...";
-    msg.style.color = "#ffcc00";
-    slotDisplay.innerText = "⏳ | ⏳ | ⏳";
+            setTimeout(() => {
+                const rand = Math.random() * 100;
+                let wonItem;
 
-    setTimeout(() => {
-        const rand = Math.random() * 100;
-        let wonItem;
+                if (rand > 99.5) wonItem = prizes[5]; // Oil Rig (0.5%)
+                else if (rand > 96) wonItem = prizes[4]; // Diamond (3.5%)
+                else if (rand > 85) wonItem = prizes[3]; // Gold
+                else if (rand > 65) wonItem = prizes[2]; // Briefcase
+                else if (rand > 35) wonItem = prizes[1]; // Wallet
+                else wonItem = prizes[0]; // Penny
 
-        if (rand > 99) wonItem = prizes[5];
-        else if (rand > 95) wonItem = prizes[4];
-        else if (rand > 85) wonItem = prizes[3];
-        else if (rand > 65) wonItem = prizes[2];
-        else if (rand > 35) wonItem = prizes[1];
-        else wonItem = prizes[0];
+                inventory.push(wonItem);
+                slotDisplay.innerText = `${wonItem.emoji} | ${wonItem.emoji} | ${wonItem.emoji}`;
+                msg.innerText = `Won: ${wonItem.name}!`;
+                msg.style.color = "#00ed9a";
+                
+                updateUI();
+                saveGame();
+            }, 800);
+        }
 
-        inventory.push(wonItem);
-        slotDisplay.innerText = `${wonItem.emoji} | ${wonItem.emoji} | ${wonItem.emoji}`;
-        msg.innerText = `Won: ${wonItem.name}!`;
-        msg.style.color = "#00ed9a";
-        
-        updateUI();
-        saveGame(); // Сохраняем после выигрыша
-    }, 800);
-}
+        function sellItem(index) {
+            const item = inventory[index];
+            coins += item.sellPrice;
+            inventory.splice(index, 1);
+            updateUI();
+            saveGame();
+        }
 
-function sellItem(index) {
-    const item = inventory[index];
-    coins += item.sellPrice;
-    inventory.splice(index, 1);
-    updateUI();
-    saveGame(); // Сохраняем после продажи
-}
+        function updateUI() {
+            document.getElementById('balance').innerText = coins;
+            const list = document.getElementById('items-list');
+            
+            if (inventory.length === 0) {
+                list.innerHTML = `<p style="opacity: 0.5;">No assets owned yet...</p>`;
+            } else {
+                list.innerHTML = inventory.map((item, index) => `
+                    <div class="item-card">
+                        <span class="item-emoji">${item.emoji}</span>
+                        <strong>${item.name}</strong><br>
+                        <small style="color: #00ed9a;">Sell: ${item.sellPrice} 💵</small><br>
+                        <button class="btn-sell" onclick="sellItem(${index})">Sell</button>
+                    </div>
+                `).join('');
+            }
+        }
 
-function updateUI() {
-    document.getElementById('balance').innerText = coins;
-    const list = document.getElementById('items-list');
-    
-    if (inventory.length === 0) {
-        list.innerHTML = `<p style="opacity: 0.5;">No assets owned yet...</p>`;
-    } else {
-        list.innerHTML = inventory.map((item, index) => `
-            <div class="item-card">
-                <span class="item-emoji">${item.emoji}</span>
-                <strong>${item.name}</strong><br>
-                <small style="color: #00ed9a;">Sell: ${item.sellPrice} 💵</small><br>
-                <button class="btn-sell" onclick="sellItem(${index})">Sell</button>
-            </div>
-        `).join('');
-    }
-}
-
-// ЗАПУСК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-window.onload = loadGame;
-        
-<script>
-        
+        // Загрузка при старте
+        window.onload = loadGame;
+    </script>
 </body>
 </html>
