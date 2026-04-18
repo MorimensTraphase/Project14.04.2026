@@ -82,75 +82,61 @@ body {
     backdrop-filter: blur(10px);
 }
 
+/* --- ОБНОВЛЕННОЕ ОКНО КАЗИНО --- */
 .casino-content {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 30px;
-    max-width: 800px;
+    padding: 20px 30px; /* Немного уменьшил внутренние отступы */
+    max-width: 700px;   /* Было 800px — теперь аккуратнее */
     width: 95%;
     text-align: center;
     position: relative;
     box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
 }
 
-/* --- РУЛЕТКА --- */
-.roulette-wrapper {
-    position: relative;
-    width: 100%;
-    height: 140px;
-    background: #050505;
-    border: 2px solid #222;
-    overflow: hidden;
-    margin: 20px 0;
-    border-radius: 12px;
-}
-
-.selector {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 3px;
-    height: 100%;
-    background: #ffcc00;
-    z-index: 100;
-    box-shadow: 0 0 15px #ffcc00;
-    transform: translateX(-50%);
-}
-
-.reel-horizontal {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    will-change: transform;
-}
-
-.reel-item-horizontal {
-    min-width: 120px;
-    max-width: 120px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.8rem;
-    background: #1a1a1a;
-    margin: 0 3px;
-    border-radius: 8px;
-    flex-shrink: 0;
-    border-bottom: 4px solid #444;
-}
-
-/* --- СЕТКА КЕЙСОВ --- */
+/* --- ОБНОВЛЕННАЯ СЕТКА КЕЙСОВ И СКРОЛЛ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    max-height: 380px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Чуть сузил карточки */
+    gap: 12px;
+    max-height: 320px;   /* Было 380px — теперь компактнее */
     overflow-y: auto;
-    padding: 15px;
-    margin-top: 20px;
+    padding: 10px 15px 10px 5px; /* Отступ справа для скролла */
+    margin-top: 15px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
+    
+    /* Стилизация скроллбара для Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+}
+
+/* --- КАСТОМНЫЙ СКРОЛЛБАР ДЛЯ CHROME/SAFARI/EDGE --- */
+.case-grid::-webkit-scrollbar {
+    width: 6px; /* Тонкая полоска */
+}
+
+.case-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02); /* Почти прозрачный фон трека */
+    border-radius: 10px;
+}
+
+.case-grid::-webkit-scrollbar-thumb {
+    background: #333; /* Темный цвет бегунка */
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.case-grid::-webkit-scrollbar-thumb:hover {
+    background: #ffcc00; /* Золотой при наведении */
+}
+
+/* --- КОРРЕКЦИЯ ПРЕДПРОСМОТРА --- */
+.case-content-preview {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #222;
 }
 
 .case-card {
