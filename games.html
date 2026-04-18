@@ -36,108 +36,103 @@
                         <div class="ui-game-card" onclick="initiateSortingGame()">
                             <h3>🧩 Sorting Master</h3>
                             <p>Divide symbols between UK and Poland.</p>
-                            <button class="action-button">Play Now</button>
+                            <button class="action-button">Start Sorting</button>
+                        </div>
+
+                        <div class="ui-game-card" onclick="window.location.href='memory.html'">
+                            <h3>🧠 Memory Match</h3>
+                            <p>Find pairs of cards with cultural symbols.</p>
+                            <button class="action-button">Train Memory</button>
+                        </div>
+
+                        <div class="ui-game-card" onclick="window.location.href='truefalse.html'">
+                            <h3>⚖️ True or False</h3>
+                            <p>Quick reaction test on cultural facts!</p>
+                            <button class="action-button">Take Challenge</button>
                         </div>
                     </div>
                 </div>
 
                 <div id="sorting-game-engine">
-                    <button onclick="returnToLobby()" class="action-button btn-reset">← Back to Menu</button>
-                    <h1>🧩 Sorting Master</h1>
-
-                    <div class="item-source-vault" id="global-items-container">
-                        <div class="drag-item" draggable="true" id="node-1" data-target="uk">Big Ben 🕰️</div>
-                        <div class="drag-item" draggable="true" id="node-2" data-target="pl">Pierogi 🥟</div>
-                        <div class="drag-item" draggable="true" id="node-3" data-target="uk">Double Decker 🚌</div>
-                        <div class="drag-item" draggable="true" id="node-4" data-target="pl">Żubr 🐂</div>
-                        <div class="drag-item" draggable="true" id="node-5" data-target="uk">Royal Guard 💂</div>
-                        <div class="drag-item" draggable="true" id="node-6" data-target="pl">Wawel Dragon 🐉</div>
-                        <div class="drag-item" draggable="true" id="node-7" data-target="uk">Red Telephone Box ☎️</div>
-                        <div class="drag-item" draggable="true" id="node-8" data-target="uk">Cricket Bat 🏏</div>
-                        <div class="drag-item" draggable="true" id="node-9" data-target="uk">Cup of Tea ☕</div>
-                        <div class="drag-item" draggable="true" id="node-10" data-target="pl">Oscypek 🧀</div>
-                        <div class="drag-item" draggable="true" id="node-11" data-target="pl">Syrenka 🧜‍♀️</div>
-                        <div class="drag-item" draggable="true" id="node-12" data-target="uk">Sherlock Holmes 🕵️</div>
-                        <div class="drag-item" draggable="true" id="node-13" data-target="uk">Stonehenge 🏛️</div>
-                        <div class="drag-item" draggable="true" id="node-14" data-target="pl">Zapiekanka 🥖</div>
-                        <div class="drag-item" draggable="true" id="node-15" data-target="pl">Fryderyk Chopin 🎹</div>
-                        <div class="drag-item" draggable="true" id="node-16" data-target="pl">Amber 💎</div>
+                    <h2 id="visual-score-output"></h2>
+                    
+                    <div class="item-source-vault" id="main-item-vault">
+                        <div class="draggable-culture-node" draggable="true" id="node-1" data-target="bin-poland">Pierogi</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-2" data-target="bin-uk">Big Ben</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-3" data-target="bin-uk">Double Decker</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-4" data-target="bin-poland">Bison</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-5" data-target="bin-uk">Cricket</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-6" data-target="bin-poland">Wawel Dragon</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-7" data-target="bin-uk">Stonehenge</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-8" data-target="bin-poland">Zapiekanka</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-9" data-target="bin-uk">Sherlock Holmes</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-10" data-target="bin-poland">Copernicus</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-11" data-target="bin-uk">Queen's Guard</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-12" data-target="bin-poland">Amber</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-13" data-target="bin-uk">Red Phone Box</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-14" data-target="bin-poland">Mazurka</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-15" data-target="bin-uk">Fish and Chips</div>
+                        <div class="draggable-culture-node" draggable="true" id="node-16" data-target="bin-poland">St. Dominic's Fair</div>
                     </div>
 
-                    <div class="target-drop-zones">
-                        <div class="culture-bin" id="uk"><h3>🇬🇧 UNITED KINGDOM</h3></div>
-                        <div class="culture-bin" id="pl"><h3>🇵🇱 POLAND</h3></div>
+                    <div class="culture-bins-layout">
+                        <div class="culture-bin" id="bin-uk">
+                            <h3>🇬🇧 United Kingdom</h3>
+                        </div>
+                        <div class="culture-bin" id="bin-poland">
+                            <h3>🇵🇱 Poland</h3>
+                        </div>
                     </div>
 
                     <div class="game-controls">
-                        <button id="final-validation-btn" class="action-button btn-check">Check Results</button>
-                        <button id="system-reset-btn" class="action-button btn-reset">Clear Board</button>
-                        <div id="visual-score-output" class="result-score-display"></div>
+                        <button class="action-button btn-reset" id="system-reset-btn">Reset Board</button>
+                        <button class="action-button btn-check" id="final-validation-btn">Check Results</button>
+                        <button class="action-button" onclick="location.reload()">Back to Menu</button>
                     </div>
                 </div>
-
             </section>
         </main>
     </div>
 
     <script>
-        const allGameNodes = document.querySelectorAll('.drag-item');
-        const dropContainers = document.querySelectorAll('.culture-bin');
-        const mainVault = document.getElementById('global-items-container');
+        const lobby = document.getElementById('game-lobby-screen');
+        const gameEngine = document.getElementById('sorting-game-engine');
+        const mainVault = document.getElementById('main-item-vault');
+        const allGameNodes = document.querySelectorAll('.draggable-culture-node');
+        const bins = document.querySelectorAll('.culture-bin');
 
+        // Функция запуска игры Сортировка
         function initiateSortingGame() {
-            document.getElementById('game-lobby-screen').style.display = 'none';
-            const engine = document.getElementById('sorting-game-engine');
-            engine.style.display = 'block';
-            setTimeout(() => { engine.style.opacity = '1'; }, 50);
-            scrambleElements();
+            lobby.style.display = 'none'; // Скрываем выбор
+            gameEngine.style.display = 'block'; // Показываем игру
+            setTimeout(() => { gameEngine.style.opacity = '1'; }, 50);
+            scrambleElements(); // Перемешиваем карточки
         }
 
-        function returnToLobby() {
-            document.getElementById('game-lobby-screen').style.display = 'block';
-            document.getElementById('sorting-game-engine').style.display = 'none';
-            performSystemReset();
-        }
-
+        // Перемешивание карточек внутри ваулта
         function scrambleElements() {
-            const fragments = Array.from(mainVault.children);
-            for (let i = fragments.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                mainVault.appendChild(fragments[j]);
+            for (let i = mainVault.children.length; i >= 0; i--) {
+                mainVault.appendChild(mainVault.children[Math.random() * i | 0]);
             }
         }
 
+        // Логика Drag and Drop
         allGameNodes.forEach(node => {
             node.addEventListener('dragstart', (event) => {
                 event.dataTransfer.setData('text', event.target.id);
             });
-
-            node.addEventListener('touchstart', function(event) {
-                window.activeDraggingNode = this;
-                this.style.opacity = '0.7';
-            }, {passive: true});
-
-            node.addEventListener('touchend', function(event) {
-                this.style.opacity = '1';
-                const touch = event.changedTouches[0];
-                const elementUnderPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-                const targetZone = elementUnderPoint ? elementUnderPoint.closest('.culture-bin') : null;
-                
-                if (targetZone) {
-                    targetZone.appendChild(this);
-                }
-                window.activeDraggingNode = null;
-            });
-
-            node.addEventListener('touchmove', (e) => { if(window.activeDraggingNode) e.preventDefault(); }, {passive: false});
         });
 
-        dropContainers.forEach(container => {
-            container.addEventListener('dragover', (e) => {
-                e.preventDefault();
+        bins.forEach(container => {
+            container.addEventListener('dragover', (event) => {
+                event.preventDefault();
                 container.classList.add('drag-over-active');
             });
-            container.addEventListener('dragleave', () => container.classList.remove('drag-over-active'));
+
+            container.addEventListener('dragleave', () => {
+                container.classList.remove('drag-over-active');
+            });
+
             container.addEventListener('drop', (event) => {
                 event.preventDefault();
                 container.classList.remove('drag-over-active');
@@ -147,6 +142,7 @@
             });
         });
 
+        // Проверка правильности ответов
         document.getElementById('final-validation-btn').onclick = function() {
             let score = 0;
             allGameNodes.forEach(node => {
@@ -163,6 +159,7 @@
             document.getElementById('visual-score-output').innerText = "Final Score: " + score + " / 16";
         };
 
+        // Сброс игры в начальное состояние
         function performSystemReset() {
             allGameNodes.forEach(node => {
                 node.classList.remove('status-correct', 'status-wrong');
