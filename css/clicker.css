@@ -13,16 +13,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
+    padding: 20px;
 }
 
 .main-coin {
-    font-size: 6rem; /* Немного уменьшил, чтобы не занимало пол-экрана */
+    font-size: 8rem; /* Вернул большой размер */
     cursor: pointer;
     user-select: none;
     transition: transform 0.1s;
     filter: drop-shadow(0 0 25px rgba(0, 237, 154, 0.4));
-    margin: 20px 0;
+    margin: 30px 0;
 }
 
 .main-coin:active {
@@ -31,91 +31,83 @@ body {
 
 /* --- ИНВЕНТАРЬ --- */
 .inventory-section {
-    width: 95%;
+    width: 100%;
     max-width: 900px;
-    margin: 10px auto;
+    margin: 20px auto;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 15px;
-    padding: 15px;
+    border-radius: 20px;
+    padding: 25px;
     border: 1px solid rgba(0, 237, 154, 0.1);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-}
-
-.item-card {
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid #333;
-    text-align: center;
-    position: relative;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
 }
 
 /* --- КАЗИНО (OVERLAY) --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
 }
 
 .casino-content {
     background: #111;
     border: 2px solid #ffcc00;
-    border-radius: 20px;
-    padding: 15px;
-    max-width: 750px;
+    border-radius: 25px;
+    padding: 20px;
+    max-width: 850px;
     width: 95%;
-    max-height: 95vh; /* Чтобы не вылезало за границы экрана */
+    max-height: 98vh; /* Почти весь экран */
     overflow-y: auto;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
 }
 
-/* --- МНОЖИТЕЛЬ (Кнопки x1, x2, x5, x10) --- */
+/* --- КНОПКИ МНОЖИТЕЛЯ --- */
 .multi-open-selector {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .multi-btn {
-    background: #222;
-    border: 1px solid #444;
-    color: #eee;
-    padding: 5px 12px;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
 .multi-btn.active {
     background: #ffcc00;
     color: #000;
     border-color: #fff;
-    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
 }
 
-/* --- РУЛЕТКА (Компактная версия) --- */
+/* --- РУЛЕТКА (ОПТИМИЗИРОВАННАЯ ВЫСОТА) --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 100px; /* Уменьшено со 140 */
+    height: 120px; /* Средний вариант для баланса */
     background: #050505;
     border: 2px solid #222;
     overflow: hidden;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    margin: 15px 0;
+    border-radius: 15px;
 }
 
 .selector {
@@ -124,78 +116,79 @@ body {
     width: 3px; height: 100%;
     background: #ffcc00;
     z-index: 100;
+    box-shadow: 0 0 15px #ffcc00;
     transform: translateX(-50%);
 }
 
-.reel-horizontal {
-    display: flex;
-    align-items: center;
-    height: 100%;
-}
-
 .reel-item-horizontal {
-    min-width: 90px; /* Уменьшено со 120 */
-    height: 90px;
+    min-width: 110px; /* Вернул массивность */
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 2.5rem;
     background: #1a1a1a;
-    margin: 0 2px;
-    border-radius: 8px;
-    flex-shrink: 0;
-    border-bottom: 3px solid #444;
+    margin: 0 4px;
+    border-radius: 12px;
+    border-bottom: 4px solid #444;
 }
 
-/* --- СЕТКА КЕЙСОВ --- */
+/* --- СЕТКА КЕЙСОВ (КРАСИВЫЙ ДИЗАЙН) --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 10px;
-    max-height: 280px; /* Ограничение высоты со скроллом */
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 15px;
+    max-height: 400px; /* Чтобы скроллилось внутри */
     overflow-y: auto;
-    padding: 5px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
 }
 
 .case-card {
-    background: #1a1a1a;
+    background: linear-gradient(145deg, #222, #111);
     border: 1px solid #333;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 15px;
+    padding: 18px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
 }
 
 .case-card:hover {
+    transform: translateY(-4px);
     border-color: #ffcc00;
-    background: #222;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
-.case-icon { font-size: 1.8rem; display: block; }
-.case-name { font-size: 0.8rem; font-weight: bold; }
-.case-price { color: #00ed9a; font-size: 0.75rem; }
+.case-icon { font-size: 2.8rem; display: block; margin-bottom: 10px; }
+.case-name { font-weight: bold; color: #eee; font-size: 1rem; }
+.case-price { color: #00ed9a; font-weight: bold; }
 
-/* --- ПРЕДПРОСМОТР (Possible Content) --- */
+/* --- ПРЕДПРОСМОТР --- */
+.case-content-preview {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 15px;
+}
+
 .items-preview-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 5px;
-    padding: 5px;
+    gap: 8px;
 }
 
 .preview-item {
-    width: 35px;
-    height: 35px;
-    background: #111;
-    border-radius: 5px;
+    width: 42px;
+    height: 42px;
+    background: #1a1a1a;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    border-bottom: 2px solid #444;
+    font-size: 1.5rem;
+    border-bottom: 3px solid #444;
 }
 
 /* --- РЕДКОСТИ --- */
@@ -203,33 +196,29 @@ body {
 .rarity-rare { border-bottom-color: #45aaf2 !important; }
 .rarity-epic { border-bottom-color: #a55eea !important; }
 .rarity-mythic { border-bottom-color: #ff4757 !important; }
-.rarity-legendary { border-bottom-color: #ffcc00 !important; box-shadow: inset 0 0 5px rgba(255,204,0,0.2); }
+.rarity-legendary { 
+    border-bottom-color: #ffcc00 !important; 
+    animation: goldGlow 2s infinite alternate; 
+}
 .rarity-universe {
-    background: linear-gradient(135deg, #0f0022, #2a0055) !important;
-    border: 1px solid #00ffff !important;
-    animation: universeShift 3s infinite;
+    background: linear-gradient(135deg, #0f0022, #2a0055, #000033) !important;
+    border: 2px solid #00ffff !important;
+    animation: universeShift 5s ease infinite;
+}
+
+/* --- АНИМАЦИИ --- */
+@keyframes goldGlow {
+    from { box-shadow: 0 0 5px rgba(255, 204, 0, 0.2); }
+    to { box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
 }
 
 @keyframes universeShift {
-    0%, 100% { box-shadow: 0 0 5px #00ffff; }
-    50% { box-shadow: 0 0 15px #00ffff; }
-}
-
-/* ВСПОМОГАТЕЛЬНОЕ */
-.btn-sell {
-    background: #e74c3c;
-    color: white; border: none;
-    width: 100%; padding: 5px;
-    border-radius: 5px; cursor: pointer;
-    font-size: 0.75rem;
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .close-btn {
-    position: absolute; top: 10px; right: 15px;
-    background: none; border: none; color: #555;
-    font-size: 1.5rem; cursor: pointer;
+    position: absolute; top: 15px; right: 20px;
+    background: none; border: none; color: #666;
+    font-size: 2rem; cursor: pointer;
 }
-
-/* Скроллбар для сетки кейсов */
-.case-grid::-webkit-scrollbar { width: 4px; }
-.case-grid::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
