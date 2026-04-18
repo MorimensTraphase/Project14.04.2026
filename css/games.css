@@ -277,39 +277,3 @@
     .card-front, .card-back { font-size: 1.5rem; }
     .game-top-bar { flex-direction: column; gap: 15px; }
 }
-
-/* --- ЦЕНТРИРОВАНИЕ MEMORY MATCH --- */
-
-/* 1. Центрируем контейнер со статистикой (PAIRS / MOVES) */
-.game-top-bar {
-    display: flex;
-    justify-content: center; /* Центрирует stats-container по горизонтали */
-    align-items: center;
-    width: 100%;
-    max-width: none;         /* Убираем ограничение, чтобы flex работал корректно */
-    margin: 0 auto 30px auto;
-}
-
-/* 2. Настройка самой секции игры для выравнивания содержимого */
-.game-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     /* Центрирует заголовок, сетку и кнопки */
-    justify-content: center;
-}
-
-/* 3. Уточнение для сетки (на случай конфликтов) */
-.memory-grid {
-    margin: 0 auto 50px auto; /* Авто-отступы по бокам гарантируют центр */
-    display: grid;
-    justify-content: center;  /* Центрирует колонки внутри грида */
-}
-
-/* 4. Центрируем кнопки управления */
-.game-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    margin-top: 20px;
-}
