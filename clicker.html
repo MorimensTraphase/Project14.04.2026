@@ -228,10 +228,12 @@
             document.getElementById('balance').innerText = coins.toLocaleString();
             const list = document.getElementById('items-list');
             list.innerHTML = inventory.map((item, i) => `
-                <div class="item-card" style="color: ${item.color || '#b0c3d9'}">
-                    <span style="font-size:3.5rem; display:block; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));">${item.e}</span>
-                    <strong>${item.n}</strong>
-                    <small>${item.p.toLocaleString()} 💵</small>
+                <div class="item-card" style="color: ${item.color || '#b0c3d9'}; box-shadow: inset 0 -4px 0 ${item.color || '#444'}">
+                    <span class="item-emoji" style="filter: drop-shadow(0 0 15px ${item.color}66);">${item.e}</span>
+                    <div style="margin-bottom: 5px;">
+                        <strong style="display:block; font-size: 0.9rem;">${item.n}</strong>
+                        <small style="color: #00ed9a; font-weight:bold;">${item.p.toLocaleString()} 💵</small>
+                    </div>
                     <button class="btn-sell" onclick="sell(${i})">Sell</button>
                 </div>
             `).join('');
