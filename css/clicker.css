@@ -200,19 +200,48 @@ body {
 .case-price { color: #00ed9a; font-weight: bold; font-size: 0.9rem; }
 
 /* --- РЕДКОСТИ (ЦВЕТА) --- */
-.rarity-common { border-bottom-color: #26de81 !important; }
-.rarity-rare { border-bottom-color: #45aaf2 !important; }
-.rarity-epic { border-bottom-color: #a55eea !important; }
-.rarity-mythic { border-bottom-color: #ff4757 !important; }
-.rarity-legendary { 
-    border-bottom-color: #ffcc00 !important; 
+/* --- РЕДКОСТИ (ЦВЕТА И КАРТИНКИ) --- */
+
+/* Используем универсальные селекторы, чтобы работало и с .rarity- , и без */
+
+.rarity-common, .common { border-bottom: 4px solid #26de81 !important; }
+
+.rarity-rare, .rare { border-bottom: 4px solid #45aaf2 !important; }
+
+.rarity-epic, .epic { border-bottom: 4px solid #a55eea !important; }
+
+.rarity-mythic, .mythic { border-bottom: 4px solid #ff4757 !important; }
+
+.rarity-legendary, .legendary { 
+    border-bottom: 4px solid #ffcc00 !important; 
     animation: goldGlow 2s infinite alternate;
 }
-.rarity-universe {
+
+.rarity-universe, .universe {
     background: linear-gradient(135deg, #0f0022, #2a0055, #000033) !important;
     border: 2px solid #00ffff !important;
-    border-bottom-color: #00ffff !important;
+    border-bottom: 4px solid #00ffff !important;
     animation: universeShift 5s ease infinite;
+}
+
+/* Фикс для отображения контента внутри предмета */
+.reel-item-horizontal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: 2.5rem;
+    position: relative;
+    z-index: 5;
+}
+
+/* Убедимся, что внутри предмета ничего не скрыто */
+.reel-item-horizontal span, 
+.reel-item-horizontal div,
+.reel-item-horizontal i {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* --- АНИМАЦИИ --- */
