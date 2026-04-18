@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Casino Tycoon</title>
+    <link rel="stylesheet" href="css/games.css"> 
+    <link rel="stylesheet" href="css/video.css">
+    <link rel="stylesheet" href="css/clicker.css?v=4.0">
+    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="container">
+            <span class="logo">Mini Games</span>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="video.html">Videos</a></li>
+                    <li><a href="quiz.html">Quizzes</a></li>
+                    <li class="active"><a href="games.html">Mini Games</a></li>
+                    <li><a href="repleyi.html">Information</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="container">
+            <section class="game-section">
+                <h1>Casino Tycoon</h1>
+                <br><br>
+                <div class="stats-bar">
+                    <h2>Balance: <span id="balance">0</span> ⭐</h2>
+                </div>
+
+                <div class="clicker-container">
+                    <div id="coin" class="main-coin" onclick="mine()">⭐</div>
+                    <div class="button-group" style="margin-top:20px;">
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
+                        <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold;">🎰 Open Cases</button>
+                    </div>
+                </div>
+
+                <div class="inventory-section">
+                    <h3>📦 Your Assets</h3>
+                    <div id="items-list" class="items-grid"></div>
+                </div>
+
+                <div id="casino-overlay" class="casino-overlay" style="display: none;">
+                    <div class="casino-content" id="casino-card">
+                        <button class="close-btn" onclick="toggleCasino()">×</button>
+                        <h2 style="color: #ffcc00;">Case Opening</h2>
+                        
+                        <div class="multi-open-selector" style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; align-items: center;">
+                            <span style="color: #888; font-size: 0.9rem;">Open:</span>
+                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
+                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
+                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
+                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
+                        </div>
+
+                        <div class="roulette-wrapper">
+                            <div class="selector"></div>
+                            <div id="reel" class="reel-horizontal"></div>
+                        </div>
+
+                        <p id="casino-msg">Choose your fate!</p>
+                        <div class="case-grid" id="case-list"></div>
+
+                        <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
+                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT:</h4>
+                            <div id="case-items-list" class="items-preview-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let coins = 0;
+        let inventory = [];
+        let isSpinning = false;
+        let openMultiplier = 1;
+
+        const shopData = {
+            c1: { n: "Stationery", cost: 50, icon: "📦", items: [
+                {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Eraser", e:"🧼", p:15}, {n:"Pen", e:"🖊️", p:25}, {n:"Brush", e:"🖌️", p:40}, {n:"Pencil", e:"✏️", p:60},
+                {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:250}, {n:"Bag", e:"🎒", p:500}, {n:"Clock", e:"⏰", p:1200}, {n:"Lamp", e:"💡", p:3000}, {n:"Gold Pen", e:"🖋️", p:10000}
+            ]},
+            c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
+                {n:"Sand", e:"⌛", p:50}, {n:"Stone", e:"🪨", p:120}, {n:"Wood", e:"🪵", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
+                {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
+            ]},
+            c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
+                {n:"Cable", e:"🔌", p:500}, {n:"Mouse", e:"🖱️", p:1200}, {n:"Keys", e:"⌨️", p:2800}, {n:"Disc", e:"💿", p:6000}, {n:"Camera", e:"📷", p:15000}, {n:"Phone", e:"📱", p:35000},
+                {n:"Tablet", e:"📟", p:80000}, {n:"Monitor", e:"🖥️", p:200000}, {n:"Laptop", e:"💻", p:450000}, {n:"Server", e:"🏢", p:1000000}, {n:"Drone", e:"🚁", p:2500000}, {n:"AI Cube", e:"🧊", p:8000000}
+            ]},
+            c4: { n: "Transport", cost: 40000, icon: "🚗", items: [
+                {n:"Wheel", e:"🎡", p:5000}, {n:"Bike", e:"🚲", p:12000}, {n:"Scooter", e:"🛴", p:25000}, {n:"Moped", e:"🛵", p:60000}, {n:"Cart", e:"🛒", p:150000}, {n:"Car", e:"🚗", p:400000},
+                {n:"SUV", e:"🚙", p:900000}, {n:"Truck", e:"🚚", p:2000000}, {n:"Bus", e:"🚌", p:5000000}, {n:"Train", e:"🚆", p:12000000}, {n:"Plane", e:"🛩️", p:30000000}, {n:"Hypercar", e:"🏎️", p:100000000}
+            ]},
+            c5: { n: "Property", cost: 250000, icon: "🏠", items: [
+                {n:"Fence", e:"🚧", p:30000}, {n:"Shed", e:"🏚️", p:75000}, {n:"Room", e:"🚪", p:180000}, {n:"Tent", e:"⛺", p:400000}, {n:"House", e:"🏠", p:1000000}, {n:"Villa", e:"🏡", p:2500000},
+                {n:"Hotel", e:"🏨", p:6000000}, {n:"Office", e:"🏢", p:15000000}, {n:"Bank", e:"🏦", p:40000000}, {n:"Castle", e:"🏰", p:100000000}, {n:"Island", e:"🏝️", p:300000000}, {n:"City", e:"🏙️", p:1000000000}
+            ]},
+            c6: { n: "Aviation", cost: 1500000, icon: "🚁", items: [
+                {n:"Propeller", e:"⚙️", p:200000}, {n:"Glider", e:"⛱️", p:500000}, {n:"Copter", e:"🚁", p:1200000}, {n:"Jet", e:"✈️", p:3000000}, {n:"Airliner", e:"🛫", p:8000000}, {n:"Stealth", e:"🛸", p:20000000},
+                {n:"Rocket", e:"🚀", p:50000000}, {n:"Shuttle", e:"🛰️", p:120000000}, {n:"Station", e:"🚉", p:300000000}, {n:"Base", e:"🌑", p:800000000}, {n:"Portal", e:"🌀", p:2000000000}, {n:"DeathStar", e:"🪐", p:10000000000}
+            ]},
+            c7: { n: "Magic", cost: 10000000, icon: "🔮", items: [
+                {n:"Dust", e:"✨", p:1000000}, {n:"Herb", e:"🌿", p:2500000}, {n:"Potion", e:"🧪", p:6000000}, {n:"Scroll", e:"📜", p:15000000}, {n:"Staff", e:"🦯", p:40000000}, {n:"Crystal", e:"🔮", p:100000000},
+                {n:"Mirror", e:"🖼️", p:250000000}, {n:"Sword", e:"⚔️", p:600000000}, {n:"Shield", e:"🛡️", p:1500000000}, {n:"Grimoire", e:"📙", p:4000000000}, {n:"Dragon", e:"🐲", p:12000000000}, {n:"HolyGrail", e:"🏆", p:50000000000}
+            ]},
+            c8: { n: "Galaxy", cost: 100000000, icon: "🌌", items: [
+                {n:"Meteor", e:"☄️", p:10000000}, {n:"Moon", e:"🌙", p:25000000}, {n:"Mars", e:"🔴", p:70000000}, {n:"Saturn", e:"🪐", p:180000000}, {n:"Sun", e:"☀️", p:500000000}, {n:"Pulsar", e:"⚡", p:1200000000},
+                {n:"BlackHole", e:"🕳️", p:3000000000}, {n:"Nebula", e:"☁️", p:8000000000}, {n:"Constel", e:"⭐", p:20000000000}, {n:"Galaxy", e:"🌀", p:60000000000}, {n:"Cluster", e:"🎆", p:200000000000}, {n:"Cosmos", e:"🌌", p:1000000000000}
+            ]},
+            c9: { n: "Mythical", cost: 2000000000, icon: "🔱", items: [
+                {n:"Relic", e:"🏺", p:250000000}, {n:"Feather", e:"🪶", p:600000000}, {n:"Eye", e:"👁️", p:1500000000}, {n:"Heart", e:"❤️", p:4000000000}, {n:"Thunder", e:"🌩️", p:10000000000}, {n:"Kraken", e:"🐙", p:25000000000},
+                {n:"Phoenix", e:"🔥", p:70000000000}, {n:"Titan", e:"🗿", p:200000000000}, {n:"Soul", e:"👻", p:500000000000}, {n:"Godly", e:"😇", p:1500000000000}, {n:"Origin", e:"🔘", p:5000000000000}, {n:"Creator", e:"👑", p:25000000000000}
+            ]},
+            c10: { n: "Ultimate", cost: 50000000000, icon: "💎", items: [
+                {n:"Light", e:"🌈", p:8000000000}, {n:"Time", e:"⏳", p:20000000000}, {n:"Void", e:"🌑", p:50000000000}, {n:"Antimat", e:"⚛️", p:120000000000}, {n:"Binary", e:"🔢", p:300000000000}, {n:"Quantum", e:"🔬", p:800000000000},
+                {n:"Glitch", e:"👾", p:2000000000000}, {n:"Matrix", e:"📺", p:6000000000000}, {n:"Infinit", e:"♾️", p:15000000000000}, {n:"Eternity", e:"🕰️", p:40000000000000}, {n:"Victory", e:"🚩", p:100000000000000}, {n:"Glow", e:"🌟", p:999999999999999}
+            ]},
+            c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
+                {n:"Trash", e:"🗑️", p:1}, 
+                {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
+            ]}
+        };
+
+        function setMulti(num) {
+            openMultiplier = num;
+            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m' + num).classList.add('active');
+        }
+
+        function mine() { coins++; render(); save(); }
+        function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
+        function load() {
+            coins = parseInt(localStorage.getItem('tycoon_v3')) || 0;
+            inventory = JSON.parse(localStorage.getItem('inv_v3')) || [];
+            render(); generateCaseButtons();
+        }
+
+        function toggleCasino() {
+            const el = document.getElementById('casino-overlay');
+            el.style.display = (el.style.display === 'none') ? 'flex' : 'none';
+        }
+
+        function getRarityData(idx, isUniverse = false) {
+            if (isUniverse) return { class: 'rarity-universe', color: '#00ffff', prefix: '🌌 DIVINE: ' };
+            if (idx >= 11) return { class: 'rarity-legendary', color: '#ffcc00', prefix: '⚡ LEGENDARY: ' };
+            if (idx >= 9)  return { class: 'rarity-mythic', color: '#ff4757', prefix: '🔥 MYTHIC: ' };
+            if (idx >= 7)  return { class: 'rarity-epic', color: '#a55eea', prefix: '🟣 EPIC: ' };
+            if (idx >= 5)  return { class: 'rarity-rare', color: '#45aaf2', prefix: '🔵 RARE: ' };
+            return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
+        }
+
+        function showPreview(id) {
+            const box = document.getElementById('case-items-list');
+            document.getElementById('case-preview-section').style.display = 'block';
+            box.innerHTML = shopData[id].items.map((it, idx) => {
+                const r = getRarityData(idx, it.isUniverse);
+                return `<div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div>`;
+            }).join('');
+        }
+
+        function generateCaseButtons() {
+            document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
+                <div class="case-card" onclick="handleOpen('${id}')" onmouseover="showPreview('${id}')">
+                    <span class="case-icon">${shopData[id].icon}</span>
+                    <span class="case-name">${shopData[id].n}</span>
+                    <span class="case-price">${shopData[id].cost.toLocaleString()} ⭐</span>
+                </div>
+            `).join('');
+        }
+
+        function handleOpen(id) {
+            if (isSpinning) return;
+            const cost = shopData[id].cost * openMultiplier;
+            if (coins < cost) { alert("Not enough ⭐!"); return; }
+
+            if (openMultiplier === 1) {
+                spin(id);
+            } else {
+                multiSpin(id);
+            }
+        }
+
+        function calculateWinner(id) {
+            const box = shopData[id];
+            const luck = Math.random() * 100;
+            if (id === 'c11') {
+                if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
+                const subLuck = Math.random() * 100;
+                let isU = subLuck >= 99;
+                let item = isU ? box.items[1] : box.items[0];
+                return {...item, ...getRarityData(isU ? 11 : 0, isU), fail: false};
+            } else {
+                if (luck < 50) return {n: "Empty", e: "💨", p: 0, fail: true};
+                const r = Math.random() * 100;
+                let idx = (r > 98) ? 11 : (r > 90) ? 9 : (r > 75) ? 7 : (r > 50) ? 5 : Math.floor(Math.random()*5);
+                return {...box.items[idx], ...getRarityData(idx), fail: false};
+            }
+        }
+
+        function multiSpin(id) {
+            coins -= (shopData[id].cost * openMultiplier);
+            let wins = [];
+            for(let i=0; i<openMultiplier; i++) {
+                let res = calculateWinner(id);
+                if(!res.fail) {
+                    inventory.push(res);
+                    wins.push(res.e);
+                }
+            }
+            document.getElementById('casino-msg').innerText = wins.length > 0 ? `Won: ${wins.join(' ')}` : "All empty... 💨";
+            render(); save();
+        }
+
+        function spin(id) {
+            coins -= shopData[id].cost;
+            isSpinning = true;
+            render();
+            const reel = document.getElementById('reel');
+            const card = document.getElementById('casino-card');
+            const msg = document.getElementById('casino-msg');
+            const result = calculateWinner(id);
+
+            let tape = '';
+            for(let i=0; i<65; i++) {
+                let rIdx = Math.floor(Math.random() * shopData[id].items.length);
+                let rItem = shopData[id].items[rIdx];
+                let rRare = getRarityData(rIdx, rItem.isUniverse);
+                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
+            }
+            reel.innerHTML = tape;
+            reel.style.transition = 'none';
+            reel.style.transform = 'translateX(0)';
+
+            const items = reel.querySelectorAll('.reel-item-horizontal');
+            items[55].innerText = result.e;
+            items[55].className = `reel-item-horizontal ${result.class || ''}`;
+
+            setTimeout(() => {
+                const itemWidth = 118; // 100px ширина + 8px отступы
+                const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
+                reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
+                reel.style.transform = `translateX(-${stopPos}px)`;
+            }, 50);
+
+            setTimeout(() => {
+                isSpinning = false;
+                if (result.fail) {
+                    msg.innerText = "Empty Case... 💨";
+                    msg.style.color = "#ff4757";
+                } else {
+                    inventory.push(result);
+                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
+                    msg.style.color = result.color;
+                }
+                render(); save();
+            }, 4100);
+        }
+
+        function sell(i) {
+            if (inventory[i].p === Infinity) { alert("Cannot sell the Universe!"); return; }
+            coins += inventory[i].p;
+            inventory.splice(i, 1);
+            render(); save();
+        }
+
+        function render() {
+            document.getElementById('balance').innerText = coins.toLocaleString();
+            document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
+                <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
+                    <span style="font-size:3rem;">${item.e}</span>
+                    <strong style="display:block;">${item.n}</strong>
+                    <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
+                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
+                </div>
+            `).join('');
+        }
+
+        window.onload = load;
+    </script>
+</body>
+</html>
