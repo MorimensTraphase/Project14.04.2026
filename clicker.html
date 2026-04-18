@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
- 
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Money Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.7">
+    <link rel="stylesheet" href="css/clicker.css?v=1.8">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
-
 <body>
     <div class="wrapper">
         <header class="container">
@@ -18,11 +16,10 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="sborki.html">Facts</a></li>
                     <li><a href="video.html">Videos</a></li>
                     <li><a href="quiz.html">Quizzes</a></li>
-                    <li class="active"><a href="games.html">Mini Games</a></li>
-                    <li><a href="repleyi.html">Information</a></li>
+                    <li class="active"><a href="games.html">Games</a></li>
                 </ul>
             </nav>
         </header>
@@ -46,15 +43,13 @@
                 </div>
 
                 <div id="casino-overlay" class="casino-overlay" style="display: none;">
-                    <div class="casino-content" id="casino-card" style="max-width: 700px; width: 95%;">
+                    <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
                         <h2 style="color: #ffcc00;">Secret Cases</h2>
                         
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
-                            <div id="reel" class="reel-horizontal">
-                                <div class="reel-item-horizontal">❓</div>
-                            </div>
+                            <div id="reel" class="reel-horizontal"></div>
                         </div>
 
                         <p id="casino-msg">Good luck!</p>
@@ -70,65 +65,38 @@
         let inventory = [];
         let isSpinning = false;
 
-        // Данные магазинов и кейсов
+        // Данные кейсов с разрешенными на ноутах эмодзи
         const shopData = {
             c1: { n: "Starter", cost: 50, icon: "📦", items: [
-                {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Pen", e:"🖋️", p:20}, {n:"Eraser", e:"🧼", p:30}, {n:"Note", e:"📝", p:40},
+                {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Pen", e:"🖋️", p:20}, {n:"Eraser", e:"🧽", p:30}, {n:"Note", e:"📝", p:40},
                 {n:"Coin", e:"🪙", p:70}, {n:"Wallet", e:"👛", p:100}, {n:"Watch", e:"⌚", p:250}, {n:"Phone", e:"📱", p:500}, {n:"Ring", e:"💍", p:1200}
             ]},
             c2: { n: "Basic", cost: 500, icon: "💼", items: [
                 {n:"Stone", e:"🪨", p:50}, {n:"Wood", e:"🪵", p:100}, {n:"Iron", e:"⛓️", p:200}, {n:"Coal", e:"⬛", p:300}, {n:"Glass", e:"🍷", p:400},
-                {n:"Bronze", e:"🥉", p:700}, {n: "Silver", e:"🥈", p:1200}, {n:"Gold", e:"🥇", p:3000}, {n:"Ruby", e:"🧧", p:7000}, {n:"Saphire", e:"🧿", p:15000}
+                {n:"Bronze", e:"🥉", p:700}, {n: "Silver", e:"🥈", p:1200}, {n:"Gold", e:"🥇", p:3000}, {n:"Ruby", e:"💎", p:7000}, {n:"Saphire", e:"🔮", p:15000}
             ]},
             c3: { n: "Gamer", cost: 5000, icon: "⌨️", items: [
-                {n:"Cable", e:"🔌", p:500}, {n:"Case", e:"📦", p:1000}, {n:"Fan", e:"🌀", p:2000}, {n:"RAM", e:"📏", p:3000}, {n:"SSD", e:"💾", p:4000},
-                {n:"CPU", e:"🧠", p:7000}, {n:"Mouse", e:"🖱️", p:12000}, {n:"Keyboard", e:"⌨️", p:25000}, {n:"GPU", e:"📟", p:60000}, {n:"Setup", e:"🖥️", p:150000}
-            ]},
-            c4: { n: "Street", cost: 25000, icon: "🚗", items: [
-                {n:"Tire", e:"🛞", p:2000}, {n:"Fuel", e:"⛽", p:5000}, {n:"Helmet", e:"🪖", p:10000}, {n:"Seat", e:"💺", p:15000}, {n:"Radio", e:"📻", p:20000},
-                {n:"Scooter", e:"🛴", p:35000}, {n:"Bike", e:"🚲", p:70000}, {n:"Motor", e:"🏍️", p:150000}, {n:"Cart", e:"🛒", p:400000}, {n:"Truck", e:"🚚", p:1000000}
-            ]},
-            c5: { n: "Luxury", cost: 100000, icon: "💎", items: [
-                {n:"Wine", e:"🍾", p:10000}, {n:"Cigar", e:"🚬", p:25000}, {n:"Perfume", e:"🧪", p:40000}, {n:"Suit", e:"👔", p:60000}, {n:"Shoes", e:"👞", p:80000},
-                {n:"Limo", e:"🚘", p:150000}, {n:"Piano", e:"🎹", p:300000}, {n:"Painting", e:"🖼️", p:800000}, {n:"Statue", e:"🗿", p:2000000}, {n:"Crown", e:"👑", p:5000000}
-            ]},
-            c6: { n: "Sea", cost: 500000, icon: "🛥️", items: [
-                {n:"Hook", e:"🪝", p:50000}, {n:"Net", e:"🕸️", p:100000}, {n:"Oar", e:"🛶", p:200000}, {n:"Anchor", e:"⚓", p:300000}, {n:"Sail", e:"⛵", p:400000},
-                {n:"Boat", e:"🚤", p:700000}, {n:"Yacht", e:"🛥️", p:1500000}, {n:"Ship", e:"🚢", p:4000000}, {n:"Sub", e:"🤿", p:10000000}, {n:"Atlantis", e:"🔱", p:30000000}
-            ]},
-            c7: { n: "Tech", cost: 1000000, icon: "🤖", items: [
-                {n:"Battery", e:"🔋", p:100000}, {n:"Tool", e:"🛠️", p:200000}, {n:"Laser", e:"🔦", p:400000}, {n:"Drone", e:"🚁", p:600000}, {n:"Radar", e:"📡", p:800000},
-                {n:"Robot", e:"🤖", p:1500000}, {n:"Server", e:"🖥️", p:4000000}, {n:"Super PC", e:"🔮", p:10000000}, {n:"Cyborg", e:"🦾", p:25000000}, {n:"AI Hub", e:"🧠", p:70000000}
-            ]},
-            c8: { n: "Space", cost: 5000000, icon: "🚀", items: [
-                {n:"Dust", e:"🌪️", p:500000}, {n:"Rock", e:"☄️", p:1000000}, {n:"Tank", e:"🧪", p:2000000}, {n:"Suit", e:"👨‍🚀", p:3000000}, {n:"Flag", e:"🏁", p:4000000},
-                {n:"Rover", e:"🚜", p:8000000}, {n:"Sputnik", e:"🛰️", p:20000000}, {n:"Shuttle", e: "🚀", p:50000000}, {n:"Base", e:"🏗️", p:150000000}, {n:"Moon", e:"🌑", p:500000000}
-            ]},
-            c9: { n: "Godly", cost: 8000000, icon: "✨", items: [
-                {n:"Sand", e:"⏳", p:1000000}, {n:"Water", e:"💧", p:2000000}, {n:"Air", e:"🌬️", p:3000000}, {n:"Fire", e:"🔥", p:5000000}, {n:"Life", e:"🌱", p:7000000},
-                {n:"Sun", e:"☀️", p:15000000}, {n:"Galaxy", e:"🌀", p:50000000}, {n:"Portal", e:"🕳️", p:200000000}, {n:"God", e:"✨", p:800000000}, {n:"All", e:"🌌", p:2000000000}
+                {n:"Cable", e:"🔌", p:500}, {n:"Case", e:"📦", p:1000}, {n:"Fan", e:"🌀", p:2000}, {n:"RAM", e:"📏", p:3000}, {n:"Disk", e:"💾", p:4000},
+                {n:"CPU", e:"🧠", p:7000}, {n:"Mouse", e:"🖱️", p:12000}, {n:"Keys", e:"⌨️", p:25000}, {n:"GPU", e:"📟", p:60000}, {n:"PC", e:"🖥️", p:150000}
             ]},
             c10: { n: "All-In", cost: 10000000, icon: "🔥", items: [
-                {n:"TRASH", e:"🗑️", p:100, color: "#555"},
-                {n:"Jackpot", e:"💰", p:50000000}, {n:"Empire", e:"🏢", p:100000000}, {n:"Planet", e:"🌍", p:250000000}, 
+                {n:"TRASH", e:"🗑️", p:100}, {n:"Jackpot", e:"💰", p:50000000}, {n:"Empire", e:"🏢", p:100000000}, {n:"Planet", e:"🌍", p:250000000}, 
                 {n:"Star", e:"🌟", p:500000000}, {n:"Void", e:"🌑", p:1000000000}, {n:"Matrix", e:"📟", p:2000000000}, 
-                {n:"Reality", e:"🔮", p:5000000000}, {n:"Infinity", e:"♾️", p:10000000000}, {n:"Win Game", e:"🏆", p:99999999999}
+                {n:"Reality", e:"🔮", p:5000000000}, {n:"Infinity", e:"♾️", p:10000000000}, {n:"Trophy", e:"🏆", p:99999999999}
             ]}
         };
 
         function mine() { coins++; render(); save(); }
-
+        
         function save() { 
-            localStorage.setItem('tycoon_v_cs_final', coins); 
-            localStorage.setItem('inv_v_cs_final', JSON.stringify(inventory)); 
+            localStorage.setItem('tycoon_v3', coins); 
+            localStorage.setItem('inv_v3', JSON.stringify(inventory)); 
         }
 
         function load() {
-            const c = localStorage.getItem('tycoon_v_cs_final');
-            const i = localStorage.getItem('inv_v_cs_final');
-            if (c) coins = parseInt(c);
-            if (i) inventory = JSON.parse(i);
-            render();
+            coins = parseInt(localStorage.getItem('tycoon_v3')) || 0;
+            inventory = JSON.parse(localStorage.getItem('inv_v3')) || [];
+            render(); 
             generateCaseButtons();
         }
 
@@ -138,8 +106,7 @@
         }
 
         function generateCaseButtons() {
-            const container = document.getElementById('case-list');
-            container.innerHTML = Object.keys(shopData).map(id => `
+            document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
                 <div class="case-card" onclick="spin('${id}')">
                     <span class="case-icon">${shopData[id].icon}</span>
                     <span class="case-name">${shopData[id].n} Case</span>
@@ -149,178 +116,78 @@
         }
 
         function spin(id) {
-            if (isSpinning) return;
-            const box = shopData[id];
-            if (coins < box.cost) return;
-
-            coins -= box.cost;
+            if (isSpinning || coins < shopData[id].cost) return;
+            coins -= shopData[id].cost;
             isSpinning = true;
             render();
 
             const reel = document.getElementById('reel');
-            const card = document.getElementById('casino-card');
             const msg = document.getElementById('casino-msg');
+            const box = shopData[id];
             
+            // Логика выпадения (шансы)
+            const r = Math.random() * 100;
+            let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
+            let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
+            let result = {...box.items[idx], color: color};
+
+            // Генерация ленты для прокрутки
+            let tape = '';
+            for(let i=0; i<60; i++) {
+                let randIdx = Math.floor(Math.random() * box.items.length);
+                let randColor = randIdx > 8 ? "#eb4b4b" : randIdx > 6 ? "#d32ee6" : randIdx > 4 ? "#4b69ff" : "#b0c3d9";
+                tape += `
+                    <div class="reel-item-horizontal">
+                        <span class="emoji-display">${box.items[randIdx].e}</span>
+                        <div class="rarity-bar" style="color:${randColor}; background-color: currentColor;"></div>
+                    </div>`;
+            }
+            reel.innerHTML = tape;
             reel.style.transition = 'none';
             reel.style.transform = 'translateX(0)';
-            
-            let result;
-            const luck = Math.random() * 100;
-            if (luck < 50) {
-                result = {n: "Empty", e: "💨", p: 0, fail: true, color: "#555"};
-            } else {
-                if (id === 'c10') {
-                    result = (Math.random() * 100 < 90) ? {...box.items[0], color: "#555"} : {...box.items[Math.floor(Math.random()*9)+1], color: "#eb4b4b"};
-                } else {
-                    const r = Math.random() * 100;
-                    let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
-                    let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
-                    result = {...box.items[idx], color: color};
-                }
-            }
 
-            let tapeHTML = '';
-            for(let i=0; i<60; i++) {
-                const randomItem = box.items[Math.floor(Math.random()*box.items.length)];
-                tapeHTML += `<div class="reel-item-horizontal">${randomItem.e}</div>`;
-            }
-            reel.innerHTML = tapeHTML;
-
+            // Установка финального приза
             const items = reel.querySelectorAll('.reel-item-horizontal');
-            items[55].innerHTML = result.e;
-            items[55].style.borderBottomColor = result.color || '#444';
-            items[55].style.background = `radial-gradient(circle, ${result.color}22 0%, transparent 70%)`;
+            items[55].querySelector('.emoji-display').innerText = result.e;
+            items[55].querySelector('.rarity-bar').style.color = result.color;
 
+            // Запуск анимации
             setTimeout(() => {
-                const stopPos = (55 * 126) - (card.offsetWidth / 2) + 63;
+                const itemWidth = 126; // 120px + 6px margin
+                const centerShift = document.getElementById('casino-card').offsetWidth / 2;
+                const stopPos = (55 * itemWidth) - centerShift + (itemWidth / 2);
                 reel.style.transition = 'transform 4.5s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
             }, 50);
 
             setTimeout(() => {
                 isSpinning = false;
-                if (result.fail) {
-                    card.classList.add('shake');
-                    msg.innerText = "Empty Case! 💨";
-                    msg.style.color = "#ff4757";
-                    setTimeout(() => card.classList.remove('shake'), 400);
-                } else {
-                    inventory.push(result);
-                    card.classList.add('win-flash');
-                    msg.innerText = `YOU GOT: ${result.n}!`;
-                    msg.style.color = result.color;
-                    setTimeout(() => card.classList.remove('win-flash'), 600);
-                }
-                render();
+                inventory.push(result);
+                msg.innerText = `YOU GOT: ${result.n}!`;
+                msg.style.color = result.color;
+                render(); 
                 save();
             }, 4600);
         }
 
-        function sell(index) {
-            coins += inventory[index].p;
-            inventory.splice(index, 1);
+        function sell(i) {
+            coins += inventory[i].p;
+            inventory.splice(i, 1);
             render();
             save();
         }
 
-       // Обновленная функция рендера инвентаря
-function render() {
-    // Обновляем баланс
-    const balanceEl = document.getElementById('balance');
-    if (balanceEl) balanceEl.innerText = coins.toLocaleString();
-
-    const list = document.getElementById('items-list');
-    if (!list) return;
-
-    // Генерируем карточки предметов
-    list.innerHTML = inventory.map((item, i) => `
-        <div class="item-card" style="border-color: ${item.color || '#333'}">
-            <span style="font-size:3rem; display:block; filter: drop-shadow(0 0 8px ${item.color || 'transparent'});">
-                ${item.e}
-            </span>
-            <strong style="color: ${item.color || '#fff'}; font-size: 0.85rem; margin-top: 5px;">${item.n}</strong>
-            <small style="color: #00ed9a;">${item.p.toLocaleString()} 💵</small>
-            <button class="btn-sell" onclick="sell(${i})">Sell</button>
-        </div>
-    `).join('');
-}
-
-// Исправленная функция вращения
-function spin(id) {
-    if (isSpinning) return;
-    const box = shopData[id];
-    if (coins < box.cost) return;
-
-    coins -= box.cost;
-    isSpinning = true;
-    render();
-
-    const reel = document.getElementById('reel');
-    const card = document.getElementById('casino-card');
-    const msg = document.getElementById('casino-msg');
-    
-    // Сброс позиции ленты
-    reel.style.transition = 'none';
-    reel.style.transform = 'translateX(0)';
-    
-    // Определение результата (логика шансов из твоего кода)
-    let result;
-    const luck = Math.random() * 100;
-    if (luck < 50) {
-        result = {n: "Empty", e: "💨", p: 0, fail: true, color: "#555"};
-    } else {
-        if (id === 'c10') {
-            result = (Math.random() * 100 < 90) ? {...box.items[0], color: "#555"} : {...box.items[Math.floor(Math.random()*9)+1], color: "#eb4b4b"};
-        } else {
-            const r = Math.random() * 100;
-            let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
-            let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
-            result = {...box.items[idx], color: color};
+        function render() {
+            document.getElementById('balance').innerText = coins.toLocaleString();
+            document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
+                <div class="item-card" style="border-bottom: 4px solid ${item.color || '#333'}">
+                    <span style="font-size:3rem; filter: drop-shadow(0 0 10px ${item.color}44)">${item.e}</span>
+                    <strong style="display:block; margin-top:5px;">${item.n}</strong>
+                    <small style="color: #00ed9a;">${item.p.toLocaleString()} 💵</small>
+                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
+                </div>
+            `).join('');
         }
-    }
-
-    // Заполнение ленты
-    let tapeHTML = '';
-    for(let i=0; i<60; i++) {
-        const randomItem = box.items[Math.floor(Math.random()*box.items.length)];
-        tapeHTML += `<div class="reel-item-horizontal">${randomItem.e}</div>`;
-    }
-    reel.innerHTML = tapeHTML;
-
-    // Установка финального предмета на позицию 55
-    const items = reel.querySelectorAll('.reel-item-horizontal');
-    items[55].innerHTML = result.e;
-    items[55].style.borderBottomColor = result.color || '#444';
-
-    // Запуск анимации (120px ширина + 6px margin = 126px шаг)
-    setTimeout(() => {
-        const itemWidth = 126; 
-        const centerOffset = card.offsetWidth / 2;
-        const stopPos = (55 * itemWidth) - centerOffset + (itemWidth / 2);
-        
-        reel.style.transition = 'transform 4.5s cubic-bezier(0.1, 0, 0.1, 1)';
-        reel.style.transform = `translateX(-${stopPos}px)`;
-    }, 50);
-
-    // Окончание прокрутки
-    setTimeout(() => {
-        isSpinning = false;
-        if (result.fail) {
-            card.classList.add('shake');
-            msg.innerText = "Empty Case! 💨";
-            msg.style.color = "#ff4757";
-            setTimeout(() => card.classList.remove('shake'), 400);
-        } else {
-            inventory.push(result);
-            card.classList.add('win-flash');
-            msg.innerText = `YOU GOT: ${result.n}!`;
-            msg.style.color = result.color;
-            setTimeout(() => card.classList.remove('win-flash'), 600);
-        }
-        render();
-        save();
-    }, 4600);
-}
 
         window.onload = load;
     </script>
