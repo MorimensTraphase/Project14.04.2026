@@ -25,8 +25,6 @@
         </header>
         <main class="container">
             <section class="game-section">
-                <div id="sorting-game-engine" style="display: block; opacity: 1;">
-                    <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
                     <h1>🧠 Memory Match</h1>
                     <br><br>
                 <div class="game-top-bar">
@@ -41,14 +39,12 @@
                             <span class="stat-value" id="move-count">0</span>
                         </div>
                     </div>
-
-                    <button class="action-button btn-reset" onclick="resetGame()">Restart</button>
                 </div>
 
                 <div class="memory-grid" id="game-board"></div>
                       <div class="game-controls">
                          <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
-                        <button id="system-reset-btn" class="action-button btn-reset">Reset</button>
+                         <button class="action-button btn-reset" onclick="resetGame()">Restart</button>
                         <div id="sorting-game-engine" style="display: block; opacity: 1;">
                         <div id="visual-score-output" class="result-score-display"></div>
                     </div>
