@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Word Scramble</title>
-    <link rel="stylesheet" href="css/games.css"> 
-    <link rel="stylesheet" href="css/video.css">
+    <link rel="stylesheet" href="games.css"> 
+    <link rel="stylesheet" href="video.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body> 
@@ -41,20 +41,21 @@
                     <div class="button-group" style="margin-top: 20px;">
                         <button class="action-button" onclick="submitAnswer()">Submit Answer</button>
                     </div>
-                    <div class="game-controls">
-                         <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
-                        <div id="sorting-game-engine" style="display: block; opacity: 1;">
-                        <div id="visual-score-output" class="result-score-display"></div>
                     
                     <p id="message" style="margin-top: 20px; font-weight: bold; min-height: 24px;"></p>
+                    
+                    <div class="game-controls">
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
+                    </div>
                 </div>
 
                 <div id="result-screen" class="final-results" style="display: none;">
-                    <h2>Challenge Complete!</h2>
-                    <div class="score-big" id="final-score-display">0 / 0</div>
-                    <p id="rank-message"></p>
-                    <button class="action-button" onclick="location.reload()" style="margin-top: 20px;">Play Again</button>
-                    <div class="memory-grid" id="game-board"></div>
+                    <div class="game-container"> <h2>Challenge Complete!</h2>
+                        <div class="score-big" id="final-score-display">0 / 0</div>
+                        <p id="rank-message"></p>
+                        <button class="action-button" onclick="location.reload()" style="margin-top: 20px;">Play Again</button>
+                        <br>
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; margin-top: 10px;">Back to Menu</a>
                     </div>
                 </div>
             </section>
@@ -77,7 +78,6 @@
         let shuffledWords = [];
 
         function initGame() {
-            // Перемешиваем список слов, чтобы порядок всегда был разный
             shuffledWords = [...wordsData].sort(() => Math.random() - 0.5);
             document.getElementById("total-words").innerText = shuffledWords.length;
             showWord();
@@ -110,14 +110,14 @@
                 score++;
                 msg.innerText = "Correct! ✨";
                 msg.style.color = "#2ecc71";
+                currentIndex++;
+                setTimeout(showWord, 500); // Оптимальная задержка
             } else {
                 msg.innerText = "Wrong! It was " + correctAnswer;
                 msg.style.color = "#e74c3c";
+                currentIndex++;
+                setTimeout(showWord, 1200); // Чуть дольше при ошибке
             }
-
-            // Задержка перед следующим словом, чтобы успеть увидеть результат
-            currentIndex++;
-            setTimeout(showWord, 300);
         }
 
         function showFinalResults() {
@@ -134,7 +134,6 @@
             else rank.innerText = "Keep practicing! You can do better! 💪";
         }
 
-        // Поддержка Enter
         document.getElementById("user-guess").addEventListener("keypress", function(e) {
             if (e.key === "Enter") submitAnswer();
         });
