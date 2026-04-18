@@ -193,7 +193,7 @@
             const luck = Math.random() * 100;
 
             if (id === 'c11') {
-                if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
+                if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
                 const item = box.items[0];
                 return {...item, ...getRarityData(11, true), fail: false};
             } else {
