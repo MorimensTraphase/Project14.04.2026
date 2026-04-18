@@ -312,33 +312,106 @@
         gap: 15px;
         justify-content: center;
 
-                .word-display {
-            font-size: 3rem;
-            letter-spacing: 10px;
-            color: #ffcc00;
-            margin: 20px 0;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .word-input {
-            padding: 12px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            border: 2px solid #3498db;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            width: 280px;
-            text-align: center;
-            outline: none;
-        }
-        .hint-text { color: #aaa; font-style: italic; margin-bottom: 20px; }
-        .stats-info { margin-bottom: 20px; font-size: 1.1rem; color: #3498db; }
-        
-        /* Стили для финального экрана */
-        .final-results {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid #3498db;
-        }
-        .score-big { font-size: 4rem; color: #ffcc00; margin: 20px 0; }
+     /* --- СТИЛИ ДЛЯ WORD SCRAMBLE --- */
+
+/* Контейнер игры */
+.game-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 30px;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    backdrop-filter: blur(10px);
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+/* Отображение перемешанного слова */
+.word-display {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    letter-spacing: 12px;
+    color: #ffcc00;
+    margin: 30px 0;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+    word-break: break-all;
+}
+
+/* Поле ввода */
+.word-input {
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    border: 2px solid rgba(52, 152, 219, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.word-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Подсказка */
+.hint-text {
+    color: #bdc3c7;
+    font-style: italic;
+    font-size: 1rem;
+    margin-bottom: 25px;
+}
+
+/* Статистика (номер слова) */
+.stats-info {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #3498db;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Финальный экран (Результаты) */
+.final-results {
+    animation: fadeIn 0.8s ease forwards;
+    text-align: center;
+}
+
+.score-big {
+    font-size: 5rem;
+    font-weight: 800;
+    background: linear-gradient(to bottom, #ffcc00, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
+}
+
+#rank-message {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивность для мобилок */
+@media (max-width: 480px) {
+    .word-display {
+        letter-spacing: 5px;
+        font-size: 2.2rem;
+    }
+    .game-container {
+        padding: 20px;
+    }
+}
