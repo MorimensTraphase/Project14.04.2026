@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mini Games</title>
-    <link rel="stylesheet" href="css/games.css">   
-    <link rel="stylesheet" href="css/clicker.css?v=1.1"> 
+    <title>Money Tycoon</title>
+    <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
- 
+    <link rel="stylesheet" href="css/clicker.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 
@@ -36,7 +35,7 @@
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">💵</div>
                     <div class="button-group" style="margin-top:20px;">
-                        <button class="action-button" onclick="window.location.href='games.html'" style="background: #444;">← Back</button>
+                        <button class="action-button" onclick="window.location.href='games.html'" style="background: #444; color: white;">← Back</button>
                         <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold;">🎰 Cases</button>
                     </div>
                 </div>
@@ -71,6 +70,7 @@
         let inventory = [];
         let isSpinning = false;
 
+        // Данные магазинов и кейсов
         const shopData = {
             c1: { n: "Starter", cost: 50, icon: "📦", items: [
                 {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Pen", e:"🖋️", p:20}, {n:"Eraser", e:"🧼", p:30}, {n:"Note", e:"📝", p:40},
@@ -117,10 +117,12 @@
         };
 
         function mine() { coins++; render(); save(); }
+
         function save() { 
             localStorage.setItem('tycoon_v_cs_final', coins); 
             localStorage.setItem('inv_v_cs_final', JSON.stringify(inventory)); 
         }
+
         function load() {
             const c = localStorage.getItem('tycoon_v_cs_final');
             const i = localStorage.getItem('inv_v_cs_final');
@@ -221,18 +223,19 @@
             save();
         }
 
+        // Обновленная функция рендера для поддержки новых стилей
         function render() {
             document.getElementById('balance').innerText = coins.toLocaleString();
             const list = document.getElementById('items-list');
-           // Найди это в функции render() и замени:
-list.innerHTML = inventory.map((item, i) => `
-    <div class="item-card" style="color: ${item.color || '#444'}">
-        <span style="font-size:2rem">${item.e}</span>
-        <strong>${item.n}</strong>
-        <small>${item.p.toLocaleString()} 💵</small>
-        <button class="btn-sell" onclick="sell(${i})">Sell</button>
-    </div>
-`).join('');
+            list.innerHTML = inventory.map((item, i) => `
+                <div class="item-card" style="color: ${item.color || '#b0c3d9'}">
+                    <span style="font-size:3.5rem; display:block; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));">${item.e}</span>
+                    <strong>${item.n}</strong>
+                    <small>${item.p.toLocaleString()} 💵</small>
+                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
+                </div>
+            `).join('');
+        }
 
         window.onload = load;
     </script>
