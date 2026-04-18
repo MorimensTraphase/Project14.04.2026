@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Money Tycoon</title>
+    <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.9">
+    <link rel="stylesheet" href="css/clicker.css?v=2.0">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -16,18 +16,17 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="sborki.html">Interesting Facts</a></li>
+                    <li><a href="sborki.html">Facts</a></li>
                     <li><a href="video.html">Videos</a></li>
                     <li><a href="quiz.html">Quizzes</a></li>
-                    <li class="active"><a href="games.html">Mini Games</a></li>
-                    <li><a href="repleyi.html">Information</a></li>
+                    <li class="active"><a href="games.html">Games</a></li>
                 </ul>
             </nav>
         </header>
 
         <main class="container">
             <section class="game-section">
-                <h1>⭐ Star Tycoon</h1>
+                <h1>⭐ Casino Tycoon</h1>
                 <div class="stats-bar"><h2>Balance: <span id="balance">0</span> ⭐</h2></div>
 
                 <div class="clicker-container">
@@ -53,7 +52,7 @@
                             <div id="reel" class="reel-horizontal"></div>
                         </div>
 
-                        <p id="casino-msg">Good luck!</p>
+                        <p id="casino-msg">Ready to roll?</p>
                         <div class="case-grid" id="case-list"></div>
                     </div>
                 </div>
@@ -139,14 +138,24 @@
             render();
 
             const reel = document.getElementById('reel');
+            const card = document.getElementById('casino-card');
             const msg = document.getElementById('casino-msg');
             const box = shopData[id];
             
-            const r = Math.random() * 100;
-            let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
-            let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
-            let result = {...box.items[idx], color: color};
+            // --- ЛОГИКА ШАНСОВ 50/50 ---
+            let result;
+            const luck = Math.random() * 100;
 
+            if (luck < 50) {
+                result = {n: "Empty", e: "💨", p: 0, fail: true, color: "#555"};
+            } else {
+                const r = Math.random() * 100;
+                let idx = r > 98 ? 9 : r > 90 ? 8 : r > 75 ? 7 : r > 55 ? 6 : r > 35 ? 5 : Math.floor(Math.random()*5);
+                let color = idx > 8 ? "#eb4b4b" : idx > 6 ? "#d32ee6" : idx > 4 ? "#4b69ff" : "#b0c3d9";
+                result = {...box.items[idx], color: color, fail: false};
+            }
+
+            // Генерация ленты
             let tape = '';
             for(let i=0; i<60; i++) {
                 let randIdx = Math.floor(Math.random() * box.items.length);
@@ -161,22 +170,32 @@
             reel.style.transition = 'none';
             reel.style.transform = 'translateX(0)';
 
+            // 55-й элемент - наш результат
             const items = reel.querySelectorAll('.reel-item-horizontal');
             items[55].querySelector('.emoji-display').innerText = result.e;
             items[55].querySelector('.rarity-bar').style.color = result.color;
 
             setTimeout(() => {
                 const itemWidth = 126;
-                const stopPos = (55 * itemWidth) - (document.getElementById('casino-card').offsetWidth / 2) + (itemWidth / 2);
+                const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4.5s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
             }, 50);
 
             setTimeout(() => {
                 isSpinning = false;
-                inventory.push(result);
-                msg.innerText = `GOT: ${result.n}!`;
-                msg.style.color = result.color;
+                if (result.fail) {
+                    card.classList.add('shake');
+                    msg.innerText = "UNLUCKED: Empty Case... 💨";
+                    msg.style.color = "#ff4757";
+                    setTimeout(() => card.classList.remove('shake'), 400);
+                } else {
+                    inventory.push(result);
+                    card.classList.add('win-flash');
+                    msg.innerText = `TREASURE FOUND: ${result.n.toUpperCase()}!`;
+                    msg.style.color = result.color;
+                    setTimeout(() => card.classList.remove('win-flash'), 600);
+                }
                 render(); save();
             }, 4600);
         }
