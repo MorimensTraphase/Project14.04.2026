@@ -1,9 +1,9 @@
 /* --- LAYOUT --- */
 .quiz-layout-wrapper {
     display: flex; 
-    justify-content: center;  
+    justify-content: center; 
     padding: 40px 0;
-} 
+}
 
 .quiz-card-container {
     max-width: 900px; 
