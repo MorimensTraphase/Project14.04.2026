@@ -1,7 +1,7 @@
 /* --- ОБЩИЕ СТИЛИ И ЗОНА КЛИКЕРА --- */
 .clicker-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     align-items: center;
     padding: 40px 20px;
     background: radial-gradient(circle, rgba(0, 237, 154, 0.05) 0%, transparent 70%);
