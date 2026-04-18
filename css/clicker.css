@@ -1,4 +1,13 @@
-/* --- ОБЩИЕ СТИЛИ И ЗОНА КЛИКЕРА --- */
+/* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0a;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- ЗОНА КЛИКЕРА --- */
 .clicker-container {
     display: flex;
     flex-direction: column;
@@ -22,74 +31,83 @@
 /* --- ИНВЕНТАРЬ --- */
 .inventory-section {
     width: 100%;
-    max-width: 700px;
-    background: rgba(255, 255, 255, 0.05);
+    max-width: 900px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     padding: 25px;
-    border: 1px solid rgba(0, 237, 154, 0.2);
+    border: 1px solid rgba(0, 237, 154, 0.1);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 15px;
     margin-top: 15px;
 }
 
 .item-card {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.4);
     border-radius: 12px;
     padding: 15px;
     border: 1px solid #333;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-card:hover {
+    transform: translateY(-3px);
 }
 
 .btn-sell {
     background: #e74c3c;
     color: white;
     border: none;
-    padding: 4px 12px;
-    border-radius: 5px;
+    padding: 6px 15px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 0.8rem;
     font-weight: bold;
+    width: 100%;
 }
 
-/* --- КАЗИНО И РУЛЕТКА --- */
+/* --- КАЗИНО (OVERLAY) --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(8px);
+    z-index: 9999;
+    backdrop-filter: blur(10px);
 }
 
 .casino-content {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 40px;
-    max-width: 750px;
+    padding: 30px;
+    max-width: 800px;
     width: 95%;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
 }
 
+/* --- РУЛЕТКА --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 150px;
-    background: #000;
-    border: 2px solid #333;
+    height: 140px;
+    background: #050505;
+    border: 2px solid #222;
     overflow: hidden;
     margin: 20px 0;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 .selector {
@@ -99,7 +117,7 @@
     width: 3px;
     height: 100%;
     background: #ffcc00;
-    z-index: 10;
+    z-index: 100;
     box-shadow: 0 0 15px #ffcc00;
     transform: translateX(-50%);
 }
@@ -113,57 +131,83 @@
 
 .reel-item-horizontal {
     min-width: 120px;
+    max-width: 120px;
     height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    background: #222;
+    font-size: 2.8rem;
+    background: #1a1a1a;
     margin: 0 3px;
-    border-radius: 6px;
+    border-radius: 8px;
     flex-shrink: 0;
-    border-bottom: 4px solid #444; /* Базовый цвет */
-    transition: border-color 0.3s;
+    border-bottom: 4px solid #444;
 }
 
-/* --- КЛАССЫ РЕДКОСТЕЙ --- */
+/* --- СЕТКА КЕЙСОВ (ИСПРАВЛЕННАЯ) --- */
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 15px;
+    margin-top: 20px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+
+.case-card {
+    background: linear-gradient(145deg, #222, #111);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.case-card:hover {
+    transform: translateY(-4px);
+    border-color: #ffcc00;
+    background: #2a2a2a;
+}
+
+.case-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 4px; }
+.case-price { color: #00ed9a; font-weight: bold; font-size: 0.9rem; }
+
+/* --- РЕДКОСТИ (ЦВЕТА) --- */
 
 /* Common - Зеленый */
 .rarity-common { border-bottom-color: #26de81 !important; }
-.item-card.rarity-common { box-shadow: inset 0 0 10px rgba(38, 222, 129, 0.1); }
 
 /* Rare - Синий */
 .rarity-rare { border-bottom-color: #45aaf2 !important; }
-.item-card.rarity-rare { box-shadow: inset 0 0 10px rgba(69, 170, 242, 0.2); }
 
 /* Epic - Фиолетовый */
 .rarity-epic { border-bottom-color: #a55eea !important; }
-.item-card.rarity-epic { box-shadow: inset 0 0 15px rgba(165, 94, 234, 0.2); }
 
 /* Mythic - Красный */
 .rarity-mythic { border-bottom-color: #ff4757 !important; }
-.item-card.rarity-mythic { box-shadow: 0 0 10px rgba(255, 71, 87, 0.3); }
 
 /* Legendary - Золотой */
 .rarity-legendary { 
     border-bottom-color: #ffcc00 !important; 
-    animation: goldGlow 3s infinite alternate;
+    animation: goldGlow 2s infinite alternate;
 }
-.item-card.rarity-legendary { border: 1px solid #ffcc00; }
 
-/* Universe - Космический */
+/* Universe - Divine */
 .rarity-universe {
-    background: linear-gradient(135deg, #1a0033, #4b0082, #00008b) !important;
-    background-size: 400% 400% !important;
-    animation: universeShift 8s ease infinite !important;
+    background: linear-gradient(135deg, #0f0022, #2a0055, #000033) !important;
     border: 2px solid #00ffff !important;
     border-bottom-color: #00ffff !important;
+    animation: universeShift 5s ease infinite;
 }
 
 /* --- АНИМАЦИИ --- */
 @keyframes goldGlow {
     from { box-shadow: 0 0 5px rgba(255, 204, 0, 0.2); }
-    to { box-shadow: 0 0 20px rgba(255, 204, 0, 0.6); }
+    to { box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
 }
 
 @keyframes universeShift {
@@ -172,24 +216,30 @@
     100% { background-position: 0% 50%; }
 }
 
-/* Эффекты карточки */
 .win-flash { animation: flash 0.6s ease-out; }
 @keyframes flash {
-    0% { background: rgba(255,255,255,0.5); }
+    0% { background: rgba(255, 255, 255, 0.3); }
     100% { background: transparent; }
 }
 
-.shake { animation: shake 0.4s both; }
+.shake { animation: shake 0.4s ease-in-out; }
 @keyframes shake {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    30%, 70% { transform: translate3d(-4px, 0, 0); }
-    50% { transform: translate3d(4px, 0, 0); }
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
 }
 
-/* Скроллбар */
-.case-grid::-webkit-scrollbar { width: 8px; }
-.case-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-.case-grid::-webkit-scrollbar-thumb { 
-    background: linear-gradient(#ffcc00, #f39c12); 
-    border-radius: 10px; 
+/* СКРОЛЛБАР */
+.case-grid::-webkit-scrollbar { width: 6px; }
+.case-grid::-webkit-scrollbar-track { background: transparent; }
+.case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: none; border: none;
+    color: #666; font-size: 2rem;
+    cursor: pointer;
 }
+.close-btn:hover { color: #fff; }
