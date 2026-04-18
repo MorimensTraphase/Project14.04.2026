@@ -90,24 +90,29 @@ body {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 30px;
+    padding: 15px; /* Уменьшено с 30px */
     max-width: 800px;
     width: 95%;
+    max-height: 96vh; /* Ограничение по высоте экрана */
     text-align: center;
     position: relative;
     box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 /* --- РУЛЕТКА --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 140px;
+    height: 100px; /* Уменьшено со 140px */
     background: #050505;
     border: 2px solid #222;
     overflow: hidden;
-    margin: 20px 0;
+    margin: 10px 0; /* Уменьшено с 20px */
     border-radius: 12px;
+    flex-shrink: 0;
 }
 
 .selector {
@@ -130,13 +135,13 @@ body {
 }
 
 .reel-item-horizontal {
-    min-width: 120px;
-    max-width: 120px;
-    height: 120px;
+    min-width: 90px; /* Уменьшено со 120px */
+    max-width: 90px;
+    height: 90px; /* Уменьшено со 120px */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.8rem;
+    font-size: 2.2rem; /* Уменьшено с 2.8rem */
     background: #1a1a1a;
     margin: 0 3px;
     border-radius: 8px;
@@ -144,24 +149,25 @@ body {
     border-bottom: 4px solid #444;
 }
 
-/* --- СЕТКА КЕЙСОВ (ИСПРАВЛЕННАЯ) --- */
+/* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    max-height: 380px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Уменьшено со 160px */
+    gap: 10px; /* Уменьшено с 15px */
+    max-height: 300px; /* Уменьшено с 380px */
     overflow-y: auto;
-    padding: 15px;
-    margin-top: 20px;
+    padding: 10px;
+    margin-top: 10px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
+    flex-grow: 1;
 }
 
 .case-card {
     background: linear-gradient(145deg, #222, #111);
     border: 1px solid #333;
     border-radius: 12px;
-    padding: 15px;
+    padding: 10px; /* Уменьшено с 15px */
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -172,31 +178,19 @@ body {
     background: #2a2a2a;
 }
 
-.case-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; }
-.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 4px; }
-.case-price { color: #00ed9a; font-weight: bold; font-size: 0.9rem; }
+.case-icon { font-size: 2rem; display: block; margin-bottom: 4px; }
+.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 2px; font-size: 0.9rem; }
+.case-price { color: #00ed9a; font-weight: bold; font-size: 0.85rem; }
 
 /* --- РЕДКОСТИ (ЦВЕТА) --- */
-
-/* Common - Зеленый */
 .rarity-common { border-bottom-color: #26de81 !important; }
-
-/* Rare - Синий */
 .rarity-rare { border-bottom-color: #45aaf2 !important; }
-
-/* Epic - Фиолетовый */
 .rarity-epic { border-bottom-color: #a55eea !important; }
-
-/* Mythic - Красный */
 .rarity-mythic { border-bottom-color: #ff4757 !important; }
-
-/* Legendary - Золотой */
 .rarity-legendary { 
     border-bottom-color: #ffcc00 !important; 
     animation: goldGlow 2s infinite alternate;
 }
-
-/* Universe - Divine */
 .rarity-universe {
     background: linear-gradient(135deg, #0f0022, #2a0055, #000033) !important;
     border: 2px solid #00ffff !important;
@@ -216,114 +210,83 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-.win-flash { animation: flash 0.6s ease-out; }
-@keyframes flash {
-    0% { background: rgba(255, 255, 255, 0.3); }
-    100% { background: transparent; }
-}
-
-.shake { animation: shake 0.4s ease-in-out; }
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
 /* СКРОЛЛБАР */
-.case-grid::-webkit-scrollbar { width: 6px; }
+.case-grid::-webkit-scrollbar { width: 5px; }
 .case-grid::-webkit-scrollbar-track { background: transparent; }
 .case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 .case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
 
 .close-btn {
     position: absolute;
-    top: 15px; right: 20px;
+    top: 10px; right: 15px;
     background: none; border: none;
-    color: #666; font-size: 2rem;
+    color: #666; font-size: 1.8rem;
     cursor: pointer;
 }
-.close-btn:hover { color: #fff; }
+
 /* --- СТИЛИ ДЛЯ МУЛЬТИКЕЙСОВ --- */
 .multi-open-selector {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 10px;
     background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
+    padding: 8px;
     border-radius: 12px;
-}
-
-.multi-label {
-    font-size: 0.9rem;
-    color: #888;
 }
 
 .multi-btn {
     background: #1a1a1a;
     border: 1px solid #333;
     color: #eee;
-    padding: 6px 15px;
+    padding: 4px 12px;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s;
-    font-weight: bold;
-}
-
-.multi-btn:hover {
-    background: #252525;
-    border-color: #ffcc00;
+    font-size: 0.85rem;
 }
 
 .multi-btn.active {
     background: #ffcc00;
     color: #000;
     border-color: #fff;
-    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
 }
 
 /* --- СТИЛИ ПРЕДПРОСМОТРА ПРЕДМЕТОВ --- */
 .case-content-preview {
-    margin-top: 25px;
-    padding-top: 15px;
+    margin-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid #222;
 }
 
 .preview-title {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .items-preview-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
 }
 
 .preview-item {
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
     background: #050505;
     border: 1px solid #222;
-    border-radius: 10px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
-    border-bottom: 3px solid #444; /* Цвет будет меняться в JS */
-    transition: transform 0.2s;
-}
-
-.preview-item:hover {
-    transform: scale(1.1);
+    border-bottom: 2px solid #444;
 }
 
 .cases-title {
     color: #ffcc00;
-    margin-top: 0;
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
 }
