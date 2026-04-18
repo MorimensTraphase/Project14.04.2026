@@ -6,7 +6,6 @@
     <title>Memory Match</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
     <div class="wrapper">
@@ -28,18 +27,22 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px; max-width: 900px; margin: 0 auto;">
                     <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Exit</a>
                     
-                    <div class="result-score-display" id="stat-line">
-                        Pairs: <span id="match-count">0</span>/8 | Moves: <span id="move-count">0</span>
+                    <div class="result-score-display">
+                        <div class="stat-group">
+                            <span class="stat-label">Pairs</span>
+                            <span id="match-count" class="stat-value">0</span>
+                        </div>
+                        <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2);"></div>
+                        <div class="stat-group">
+                            <span class="stat-label">Moves</span>
+                            <span id="move-count" class="stat-value">0</span>
+                        </div>
                     </div>
                 </div>
 
-                <h1 style="margin-top: 20px;">🧠 Memory Match</h1>
-
+                <h1 style="margin-top: 30px;">🧠 Memory Match</h1>
                 <div class="game-board" id="board"></div>
-
-                <div class="game-controls">
-                    <button onclick="resetGame()" class="action-button">Restart Game</button>
-                </div>
+                <button onclick="resetGame()" class="action-button">Restart Game</button>
             </section>
         </main>
     </div>
@@ -54,7 +57,6 @@
         function createBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
-            // Создаем пары и перемешиваем
             const gameIcons = [...icons, ...icons].sort(() => Math.random() - 0.5);
 
             gameIcons.forEach(icon => {
@@ -71,7 +73,6 @@
         }
 
         function flipCard(card) {
-            // Проверки: нельзя переворачивать больше 2-х, уже открытые или совпавшие
             if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
             
             card.classList.add('flipped');
@@ -87,21 +88,17 @@
 
         function checkMatch() {
             const [c1, c2] = flippedCards;
-            
             if (c1.dataset.icon === c2.dataset.icon) {
-                // Если совпали
                 c1.classList.add('matched');
                 c2.classList.add('matched');
                 matches++;
                 flippedCards = [];
                 canFlip = true;
                 updateStats();
-                
                 if (matches === icons.length) {
-                    setTimeout(() => alert(`Victory! You found all pairs in ${moves} moves.`), 500);
+                    setTimeout(() => alert(`Victory! ${moves} moves.`), 500);
                 }
             } else {
-                // Если не совпали — переворачиваем обратно через секунду
                 setTimeout(() => {
                     c1.classList.remove('flipped');
                     c2.classList.remove('flipped');
@@ -112,20 +109,26 @@
         }
 
         function updateStats() {
-            document.getElementById('match-count').innerText = matches;
-            document.getElementById('move-count').innerText = moves;
+            const mCount = document.getElementById('match-count');
+            const vCount = document.getElementById('move-count');
+            
+            mCount.innerText = matches;
+            vCount.innerText = moves;
+
+            // Эффект "прыжка" при обновлении
+            mCount.classList.add('score-bump');
+            vCount.classList.add('score-bump');
+            setTimeout(() => {
+                mCount.classList.remove('score-bump');
+                vCount.classList.remove('score-bump');
+            }, 200);
         }
 
         function resetGame() {
-            moves = 0;
-            matches = 0;
-            flippedCards = [];
-            canFlip = true;
-            updateStats();
-            createBoard();
+            moves = 0; matches = 0; flippedCards = []; canFlip = true;
+            updateStats(); createBoard();
         }
 
-        // Инициализация при загрузке
         createBoard();
     </script>
 </body>
