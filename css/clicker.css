@@ -1,251 +1,208 @@
-/* Устанавливаем шрифт будущего */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap');
-
+/* Основные цвета и переменные для игры */
 :root {
-    /* Цветовая палитра Неона */
-    --bg-dark: #050509;
-    --bg-panel: rgba(10, 10, 16, 0.7);
-    --neon-cyan: #0ff;
-    --neon-blue: #0088ff;
-    --neon-purple: #9d00ff;
-    --neon-gold: #ffcc00;
-    --text-main: #c0c0c0;
-    --glass-border: rgba(0, 255, 255, 0.1);
+    --gold: #ffcc00;
+    --dark-bg: #1e1e1e;
+    --card-bg: #2a2a2a;
+    --text-white: #ffffff;
+    --border-color: #444;
 }
 
-body {
-    background-color: var(--bg-dark);
-    background-image: 
-        radial-gradient(at 10% 10%, rgba(157, 0, 255, 0.1) 0px, transparent 50%),
-        radial-gradient(at 90% 90%, rgba(0, 255, 255, 0.08) 0px, transparent 50%);
-    color: var(--text-main);
-    font-family: 'Rajdhani', sans-serif;
-    margin: 0;
-    overflow-x: hidden;
+/* Секция игры */
+.game-section {
+    text-align: center;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-white);
+    padding: 20px;
 }
 
-/* Стилизация заголовков */
-.game-section h1 {
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #fff;
-    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
-    margin-bottom: 5px;
-}
-
-/* Панель Баланса */
+/* Баланс */
 .stats-bar {
-    background: var(--bg-panel);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--neon-cyan);
-    padding: 10px 40px;
-    border-radius: 5px; /* Уходим от кругов к углам */
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 12px;
     display: inline-block;
-    margin-bottom: 30px;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    position: relative;
+    margin: 20px 0;
+    border: 1px solid var(--gold);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* Эффект "уголков" на панели */
-.stats-bar::before, .stats-bar::after {
-    content: '';
-    position: absolute;
-    width: 10px; height: 10px;
-    border: 2px solid var(--neon-cyan);
-}
-.stats-bar::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-.stats-bar::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+.stats-bar h2 { margin: 0; font-size: 1.5rem; }
 
-.stats-bar h2 {
-    margin: 0;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
-    text-shadow: 0 0 5px #fff;
-}
-
-/* Кликер */
+/* Главная монета */
 .main-coin {
-    font-size: 130px;
+    font-size: 100px;
     cursor: pointer;
     user-select: none;
     display: inline-block;
-    filter: drop-shadow(0 0 20px var(--neon-gold));
-    transition: transform 0.05s ease, filter 0.2s;
+    transition: transform 0.05s active;
+    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.2));
+    margin: 30px 0;
 }
 
 .main-coin:active {
-    transform: scale(0.9) rotate(-3deg);
-    filter: drop-shadow(0 0 40px var(--neon-gold));
+    transform: scale(0.9);
 }
 
-/* Кнопки */
+/* Кнопки управления */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 .action-button {
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 12px 28px;
-    border-radius: 0; /* Острые углы */
-    border: 1px solid transparent;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
     transition: 0.3s;
+    color: white;
 }
 
 .action-button:hover {
     transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
-/* Инвентарь */
+/* Сетка инвентаря */
 .inventory-section {
-    margin-top: 50px;
-    background: rgba(5, 5, 10, 0.8);
-    border: 1px solid var(--glass-border);
-    padding: 30px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
 }
 
-.inventory-section h3 {
-    text-align: left;
-    font-family: 'Orbitron', sans-serif;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 5px var(--neon-cyan);
-}
-
-/* Карточка предмета (Неон версия) */
-.item-card {
-    background: rgba(20, 20, 30, 0.6);
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    padding: 20px;
-    position: relative;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    color: var(--text-main); /* Базовый цвет текста */
-}
-
-/* При наведении карточка "загорается" цветом редкости */
-.item-card:hover {
-    transform: scale(1.03);
-    background: rgba(255, 255, 255, 0.03);
-    border-color: currentColor; /* Берет цвет от style="color:..." в HTML */
-    box-shadow: 0 0 20px currentColor;
-}
-
-/* Название и цена */
-.item-card strong { color: #fff; display: block; margin-top: 10px; font-size: 1.1rem; }
-.item-card small { color: var(--neon-gold); font-weight: bold; }
-
-/* Кнопка продажи */
-.btn-sell {
-    background: transparent;
-    border: 1px solid #ff4757;
-    color: #ff4757;
-    padding: 8px;
-    width: 100%;
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
     margin-top: 15px;
+}
+
+.item-card {
+    background: var(--card-bg);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.btn-sell {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
+    margin-top: 8px;
     font-size: 0.8rem;
-    transition: 0.2s;
 }
 
-.btn-sell:hover {
-    background: #ff4757;
-    color: #000;
-    box-shadow: 0 0 10px #ff4757;
-}
-
-/* =========================================
-   ОВЕРЛЕЙ КЕЙСОВ (Sci-Fi Неон)
-   ========================================= */
+/* КАЗИНО / КЕЙСЫ (Оверлей) */
 .casino-overlay {
-    backdrop-filter: blur(15px);
-    background: rgba(0, 0, 0, 0.9);
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .casino-content {
-    background: #08080c;
-    border: 2px solid var(--neon-cyan);
-    border-radius: 0;
-    padding: 40px;
-    box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
-}
-
-.close-btn {
-    color: var(--neon-cyan);
-    opacity: 0.7;
-    transition: 0.2s;
-}
-.close-btn:hover { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
-
-/* Рулетка */
-.roulette-wrapper {
-    background: #000;
-    height: 140px;
-    border: 1px solid #222;
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid var(--gold);
     position: relative;
-    mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-}
-
-.selector {
-    background: var(--neon-cyan);
-    box-shadow: 0 0 15px var(--neon-cyan);
-}
-
-/* Предметы в рулетке */
-.reel-item-horizontal {
-    background: #111;
-    border: 1px solid #333;
-    margin: 0 5px;
-    width: 120px;
-    border-radius: 2px;
-}
-
-/* СЕТКА КЕЙСОВ В ОКНЕ (Минимализм) */
-.case-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 30px;
-}
-
-/* Карточка Кейса */
-.case-card {
-    background: rgba(20, 20, 30, 0.8);
-    border: 1px solid var(--glass-border);
-    padding: 20px;
-    border-radius: 0;
-    cursor: pointer;
-    transition: 0.3s ease;
     text-align: center;
 }
 
-.case-card:hover {
-    border-color: var(--neon-purple);
-    background: rgba(157, 0, 255, 0.05);
-    transform: translateY(-3px);
-    box-shadow: 0 0 15px rgba(157, 0, 255, 0.3);
+.close-btn {
+    position: absolute;
+    right: 15px; top: 10px;
+    font-size: 30px;
+    color: #888;
+    cursor: pointer;
+    background: none; border: none;
 }
 
-.case-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+/* РУЛЕТКА */
+.roulette-wrapper {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background: #000;
+    margin: 20px 0;
+    overflow: hidden;
+    border: 2px solid #333;
 }
 
-.case-name {
-    font-family: 'Orbitron', sans-serif;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+.selector {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 4px; height: 100%;
+    background: var(--gold);
+    z-index: 10;
+    transform: translateX(-50%);
 }
 
-.case-price {
-    color: var(--neon-gold);
-    font-weight: bold;
-    font-size: 0.9rem;
-    display: block;
-    margin-top: 5px;
+.reel-horizontal {
+    display: flex;
+    position: absolute;
+    height: 100%;
+    align-items: center;
 }
+
+.reel-item-horizontal {
+    min-width: 120px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    background: #222;
+    margin: 0 3px;
+    border-radius: 5px;
+}
+
+/* Список кейсов */
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding-right: 5px;
+}
+
+.case-card {
+    background: #333;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.case-card:hover { background: #444; }
+
+.case-icon { font-size: 1.8rem; display: block; }
+.case-name { font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: block; }
+.case-price { color: var(--gold); font-size: 0.75rem; }
+
+/* Анимации */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+.shake { animation: shake 0.3s; }
+
+@keyframes win {
+    0% { box-shadow: 0 0 0px var(--gold); }
+    50% { box-shadow: 0 0 30px var(--gold); }
+    100% { box-shadow: 0 0 0px var(--gold); }
+}
+.win-flash { animation: win 0.5s ease-out; }
