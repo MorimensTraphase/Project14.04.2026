@@ -1,208 +1,214 @@
-/* Основные цвета и переменные для игры */
-:root {
-    --gold: #ffcc00;
-    --dark-bg: #1e1e1e;
-    --card-bg: #2a2a2a;
-    --text-white: #ffffff;
-    --border-color: #444;
-}
-
-/* Секция игры */
-.game-section {
-    text-align: center;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    color: var(--text-white);
+/* --- ОБЩИЕ СТИЛИ И ЗОНА КЛИКЕРА --- */
+.clicker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
 }
 
-/* Баланс */
-.stats-bar {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 12px;
-    display: inline-block;
-    margin: 20px 0;
-    border: 1px solid var(--gold);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.stats-bar h2 { margin: 0; font-size: 1.5rem; }
-
-/* Главная монета */
 .main-coin {
-    font-size: 100px;
+    font-size: 8rem;
     cursor: pointer;
     user-select: none;
-    display: inline-block;
-    transition: transform 0.05s active;
-    filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.2));
+    transition: transform 0.1s;
+    filter: drop-shadow(0 0 25px rgba(0, 237, 154, 0.4));
     margin: 30px 0;
 }
 
 .main-coin:active {
-    transform: scale(0.9);
+    transform: scale(0.85);
 }
 
-/* Кнопки управления */
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.action-button {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-    color: white;
-}
-
-.action-button:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
-/* Сетка инвентаря */
+/* --- ИНВЕНТАРЬ --- */
 .inventory-section {
-    margin-top: 40px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 20px;
+    width: 100%;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(0, 237, 154, 0.2);
 }
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 15px;
     margin-top: 15px;
 }
 
 .item-card {
-    background: var(--card-bg);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #333;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.item-emoji {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .btn-sell {
     background: #e74c3c;
-    border: none;
     color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 5px;
     cursor: pointer;
     margin-top: 8px;
     font-size: 0.8rem;
 }
 
-/* КАЗИНО / КЕЙСЫ (Оверлей) */
+/* --- КАЗИНО И РУЛЕТКА (CS-STYLE) --- */
 .casino-overlay {
     position: fixed;
-    top: 0; left: 0; 
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95);
-    z-index: 9999;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
 }
 
 .casino-content {
-    background: #1a1a1a;
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid var(--gold);
-    position: relative;
+    background: #111;
+    border: 2px solid #ffcc00;
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 700px;
+    width: 95%;
     text-align: center;
+    position: relative;
+    box-shadow: 0 0 40px rgba(255, 204, 0, 0.2);
 }
 
-.close-btn {
-    position: absolute;
-    right: 15px; top: 10px;
-    font-size: 30px;
-    color: #888;
-    cursor: pointer;
-    background: none; border: none;
-}
-
-/* РУЛЕТКА */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 120px;
+    height: 140px;
     background: #000;
-    margin: 20px 0;
-    overflow: hidden;
     border: 2px solid #333;
+    overflow: hidden;
+    margin: 20px 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
 }
 
+/* Золотая линия по центру */
 .selector {
     position: absolute;
-    left: 50%; top: 0;
-    width: 4px; height: 100%;
-    background: var(--gold);
+    left: 50%;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #ffcc00;
     z-index: 10;
+    box-shadow: 0 0 15px #ffcc00;
     transform: translateX(-50%);
 }
 
 .reel-horizontal {
     display: flex;
-    position: absolute;
-    height: 100%;
+    flex-direction: row;
     align-items: center;
+    will-change: transform;
 }
 
 .reel-item-horizontal {
     min-width: 120px;
-    height: 100px;
+    max-width: 120px;
+    height: 120px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     font-size: 2.5rem;
     background: #222;
-    margin: 0 3px;
-    border-radius: 5px;
+    margin-right: 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border-bottom: 4px solid #444; /* Цвет редкости */
 }
 
-/* Список кейсов */
+/* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
-    max-height: 250px;
+    max-height: 350px;
     overflow-y: auto;
-    margin-top: 20px;
-    padding-right: 5px;
+    padding: 10px;
 }
 
 .case-card {
-    background: #333;
-    padding: 10px;
-    border-radius: 8px;
+    background: linear-gradient(145deg, #2a2a2a, #111);
+    border: 1px solid #3d3d3d;
+    border-radius: 10px;
+    padding: 15px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    text-align: center;
 }
 
-.case-card:hover { background: #444; }
-
-.case-icon { font-size: 1.8rem; display: block; }
-.case-name { font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: block; }
-.case-price { color: var(--gold); font-size: 0.75rem; }
-
-/* Анимации */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
+.case-card:hover {
+    transform: translateY(-4px);
+    border-color: #ffcc00;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 }
-.shake { animation: shake 0.3s; }
 
-@keyframes win {
-    0% { box-shadow: 0 0 0px var(--gold); }
-    50% { box-shadow: 0 0 30px var(--gold); }
-    100% { box-shadow: 0 0 0px var(--gold); }
+.case-icon { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+.case-name { font-weight: bold; color: #fff; font-size: 0.85rem; display: block; }
+.case-price { color: #00ed9a; font-size: 0.8rem; font-weight: bold; }
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: none; border: none; color: #555;
+    font-size: 1.8rem; cursor: pointer;
 }
-.win-flash { animation: win 0.5s ease-out; }
+
+/* --- ЭФФЕКТЫ ПРИ ВЫПАДЕНИИ И ПРОИГРЫШЕ --- */
+
+/* Эффект вспышки при выигрыше */
+.win-flash {
+    animation: flash-animation 0.6s ease-out;
+}
+
+@keyframes flash-animation {
+    0% { background-color: rgba(255, 255, 255, 0.4); }
+    100% { background-color: transparent; }
+}
+
+/* Эффект тряски при проигрыше */
+.shake {
+    animation: shake-animation 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake-animation {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Текст BIG WIN */
+.big-win-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffcc00;
+    font-size: 4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px #ffaa00, 2px 2px 0 #000;
+    z-index: 100;
+    pointer-events: none;
+    display: none;
+    white-space: nowrap;
+}
