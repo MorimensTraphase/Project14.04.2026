@@ -191,55 +191,62 @@
         }
 
         function spin(id) {
-            coins -= shopData[id].cost;
-            isSpinning = true;
-            render();
-            const reel = document.getElementById('reel');
-            const card = document.getElementById('casino-card');
-            const msg = document.getElementById('casino-msg');
-            const result = calculateWinner(id);
+    if (isSpinning) return;
+    coins -= shopData[id].cost;
+    isSpinning = true;
+    render();
+    
+    const reel = document.getElementById('reel');
+    const card = document.getElementById('casino-card');
+    const msg = document.getElementById('casino-msg');
+    const result = calculateWinner(id);
 
-            let tape = '';
-            for(let i=0; i<80; i++) {
-                let rIdx = Math.floor(Math.random() * shopData[id].items.length);
-                let rItem = shopData[id].items[rIdx];
-                let rRare = getRarityData(rIdx, rItem.isUniverse);
-                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
-            }
-            reel.innerHTML = tape;
-            reel.style.transition = 'none';
-            reel.style.transform = 'translateX(0)';
+    // Создаем ленту
+    let tape = '';
+    const totalItems = 80; // Длинная лента для плавности
+    for(let i = 0; i < totalItems; i++) {
+        let rIdx = Math.floor(Math.random() * shopData[id].items.length);
+        let rItem = shopData[id].items[rIdx];
+        let rRare = getRarityData(rIdx, rItem.isUniverse);
+        tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
+    }
+    reel.innerHTML = tape;
+    
+    // Сброс позиции
+    reel.style.transition = 'none';
+    reel.style.transform = 'translateX(0)';
 
-            const winIdx = 60;
-            const items = reel.querySelectorAll('.reel-item-horizontal');
-            items[winIdx].innerText = result.e;
-            items[winIdx].className = `reel-item-horizontal ${result.class || ''}`;
+    // Определяем целевой индекс (например, 65-й элемент)
+    const winIdx = 65;
+    const items = reel.querySelectorAll('.reel-item-horizontal');
+    items[winIdx].innerText = result.e;
+    items[winIdx].className = `reel-item-horizontal ${result.class || ''}`;
 
-            setTimeout(() => {
-                const itemWidth = 90; 
-                const itemFullWidth = itemWidth + 10; // 90px + 10px (отступы)
-                
-                const stopPos = (winIdx * itemFullWidth) - (card.offsetWidth / 2) + (itemFullWidth / 2);
-                
-                reel.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)';
-                reel.style.transform = `translateX(-${stopPos}px)`;
-            }, 50);
+    setTimeout(() => {
+        // РАСЧЕТ: 120px (ширина) + 10px (суммарный margin 5+5) = 130px
+        const itemStep = 130; 
+        
+        // Центрирование: сдвигаем так, чтобы центр winIdx совпал с центром окна
+        const centerOffset = (card.offsetWidth / 2) - (itemStep / 2);
+        const stopPos = (winIdx * itemStep) - centerOffset;
+        
+        reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
+        reel.style.transform = `translateX(-${stopPos}px)`;
+    }, 50);
 
-            setTimeout(() => {
-                isSpinning = false;
-                msg.style.fontWeight = "bold"; 
-                if (result.fail) {
-                    msg.innerText = "Empty Case... 💨";
-                    msg.style.color = "#ff4757";
-                } else {
-                    inventory.push(result);
-                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
-                    msg.style.color = result.color;
-                }
-                render(); save();
-            }, 4100);
+    setTimeout(() => {
+        isSpinning = false;
+        if (result.fail) {
+            msg.innerText = "Empty Case... 💨";
+            msg.style.color = "#ff4757";
+        } else {
+            inventory.push(result);
+            msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
+            msg.style.color = result.color;
         }
-
+        render(); save();
+    }, 4100);
+}
         function sell(i) {
             if (inventory[i].p === Infinity) { alert("Cannot sell the Universe!"); return; }
             coins += inventory[i].p;
