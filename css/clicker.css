@@ -108,7 +108,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
-    max-height: 360px; /* Окно ниже на 40пкс от оригинала */
+    max-height: 360px;
     overflow-y: auto;
     padding: 10px 15px 10px 5px;
     margin-top: 15px;
@@ -191,16 +191,27 @@ body {
 .rarity-epic { border-color: #a55eea !important; }
 .rarity-mythic { border-color: #ff4757 !important; }
 .rarity-legendary { border-color: #ffcc00 !important; }
+
+/* Эффект для Вселенной */
 .rarity-universe { 
     border-color: #00ffff !important; 
     box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
     animation: pulse-universe 2s infinite;
 }
 
+/* Эффект для Кейса 12 (Градиент) */
+.rarity-gradient {
+    border-image: var(--item-grad) 1 !important;
+    border-style: solid !important;
+    border-width: 0 0 4px 0 !important;
+    animation: pulse-universe 2s infinite;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+}
+
 @keyframes pulse-universe {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(1.5); }
-    100% { filter: brightness(1); }
+    0% { filter: brightness(1); transform: scale(1); }
+    50% { filter: brightness(1.3); transform: scale(1.02); }
+    100% { filter: brightness(1); transform: scale(1); }
 }
 
 /* --- ПРЕДПРОСМОТР --- */
@@ -217,28 +228,27 @@ body {
     gap: 8px;
 }
 
-/* --- ПРЕДПРОСМОТР --- */
 .preview-item-wrapper {
     text-align: center;
-    width: 39px; /* Чуть шире самой иконки */
+    width: 39px;
 }
 
 .preview-icon-box {
     background: #1a1a1a;
-    width: 37px;  /* Размер 37px по вашему запросу */
-    height: 37px; /* Размер 37px по вашему запросу */
+    width: 37px;
+    height: 37px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    font-size: 1.1rem; /* Уменьшили эмодзи, чтобы не вылезал за границы */
+    font-size: 1.1rem;
     margin: 0 auto;
     transition: 0.2s;
 }
 
 .chance-label {
     display: block;
-    font-size: 0.5rem; /* Совсем мелкий шрифт для шансов */
+    font-size: 0.5rem;
     color: #888;
     margin-top: 2px;
 }
