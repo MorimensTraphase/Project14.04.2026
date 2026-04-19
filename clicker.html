@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.1">
+    <link rel="stylesheet" href="css/clicker.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -28,39 +28,39 @@
         <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
-                <br><br>
                 <div class="stats-bar">
                     <h2>Balance: <span id="balance">0</span> ⭐</h2>
                 </div>
 
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
-                    <div class="button-group" style="margin-top:20px;">
-                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
+                    <div class="button-group">
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Back</a>
                         <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold;">🎰 Open Cases</button>
                     </div>
                 </div>
 
                 <div class="inventory-section">
-                    <h3>📦 Your Items</h3>
+                    <h3>📦 Your Assets</h3>
                     <div id="items-list" class="items-grid"></div>
                 </div>
 
                 <div id="casino-overlay" class="casino-overlay" style="display: none;">
                     <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
-                        <h2 style="color: #ffcc00;">Case Opening</h2>
+                        <h2 style="color: #ffcc00; font-size: 1.2rem; margin: 5px 0;">Case Opening</h2>
                         
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
                         </div>
 
-                        <p id="casino-msg">Choose your fate!</p>
+                        <p id="casino-msg" style="font-size: 1rem; margin: 5px 0; font-weight: bold;">Choose your fate!</p>
+                        
                         <div class="case-grid" id="case-list"></div>
 
-                        <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-                            <h4 id="chance-title" style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT & CHANCES:</h4>
+                        <div id="case-preview-section" class="case-content-preview" style="display: none;">
+                            <h4 id="chance-title" style="color: #666; font-size: 0.65rem; margin-bottom: 5px;">CONTENT & CHANCES:</h4>
                             <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
@@ -144,27 +144,16 @@
 
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
-            const title = document.getElementById('chance-title');
             document.getElementById('case-preview-section').style.display = 'block';
             
             let html = '';
-            // Добавляем шанс на пустоту
             const emptyChance = (id === 'c11') ? 99 : 50;
-            html += `<div style="text-align:center;"><div style="background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem; border-bottom:3px solid #666;">💨</div><span style="font-size:0.7rem; color:#888;">${emptyChance}%</span></div>`;
+            html += `<div style="text-align:center;"><div style="background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem; border-bottom:2px solid #666;">💨</div><span style="font-size:0.6rem; color:#888; font-weight:bold;">${emptyChance}%</span></div>`;
 
-            // Добавляем предметы
             shopData[id].items.forEach((it, idx) => {
                 const r = getRarityData(idx, it.isUniverse);
-                let chance = 0;
-                if(id === 'c11') chance = 1;
-                else {
-                    if(idx >= 11) chance = 1; // 2% от 50% = 1
-                    else if(idx >= 9) chance = 5; // 10% от 50%
-                    else if(idx >= 7) chance = 7.5; // 15% от 50%
-                    else if(idx >= 5) chance = 12.5; // 25% от 50%
-                    else chance = 24; // Остаток (~48% от 50%)
-                }
-                html += `<div style="text-align:center;"><div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div><span style="font-size:0.7rem; color:${r.color}">${chance}%</span></div>`;
+                let chance = (id === 'c11') ? 1 : (idx >= 11 ? 1 : idx >= 9 ? 5 : idx >= 7 ? 7.5 : idx >= 5 ? 12.5 : 24);
+                html += `<div style="text-align:center;"><div class="preview-item" style="border-bottom: 2px solid ${r.color}; background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem;">${it.e}</div><span style="font-size:0.6rem; color:${r.color}; font-weight:bold;">${chance}%</span></div>`;
             });
             box.innerHTML = html;
         }
@@ -181,8 +170,7 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            const cost = shopData[id].cost;
-            if (coins < cost) { alert("Not enough ⭐!"); return; }
+            if (coins < shopData[id].cost) { alert("Not enough ⭐!"); return; }
             spin(id);
         }
 
@@ -225,7 +213,7 @@
             items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 126; 
+                const itemWidth = 94; 
                 const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
@@ -233,14 +221,11 @@
 
             setTimeout(() => {
                 isSpinning = false;
-                if (result.fail) {
-                    msg.innerText = "Empty Case... 💨";
-                    msg.style.color = "#ff4757";
-                } else {
-                    inventory.push(result);
-                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
-                    msg.style.color = result.color;
-                }
+                // ТЕКСТ ВЫПАДЕНИЯ ТЕПЕРЬ ЖИРНЫЙ (BOLD)
+                msg.style.fontWeight = "bold"; 
+                msg.innerText = result.fail ? "Empty Case... 💨" : `${result.prefix}${result.n.toUpperCase()}!`;
+                msg.style.color = result.fail ? "#ff4757" : result.color;
+                if (!result.fail) inventory.push(result);
                 render(); save();
             }, 4100);
         }
@@ -256,8 +241,8 @@
             document.getElementById('balance').innerText = coins.toLocaleString();
             document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
                 <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
-                    <span style="font-size:3rem;">${item.e}</span>
-                    <strong style="display:block;">${item.n}</strong>
+                    <span style="font-size:2.5rem;">${item.e}</span>
+                    <strong style="display:block; font-size: 0.8rem;">${item.n}</strong>
                     <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
                     <button class="btn-sell" onclick="sell(${i})">Sell</button>
                 </div>
