@@ -78,42 +78,61 @@ body {
     z-index: 1000;
 }
 
+/* --- КАЗИНО (УВЕЛИЧЕННОЕ ОКНО) --- */
 .casino-content {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 10px 20px;
-    max-width: 600px;
-    width: 90%;
-    max-height: 90vh;
-    overflow: hidden;
+    padding: 20px 30px;
+    max-width: 900px; /* Увеличили ширину */
+    width: 95%;
+    min-height: 80vh; /* Увеличили высоту */
     text-align: center;
     position: relative;
-    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.2);
+    display: flex;
+    flex-direction: column;
 }
 
-.close-btn {
-    position: absolute;
-    top: 10px; right: 20px;
-    background: none;
-    border: none;
-    color: #666;
-    font-size: 2rem;
-    cursor: pointer;
+/* --- РУЛЕТКА (УВЕЛИЧЕННАЯ) --- */
+.roulette-wrapper {
+    position: relative;
+    width: 100%;
+    height: 140px; /* Чуть выше */
+    overflow: hidden;
+    margin: 15px 0;
+    background: #050505;
+    border-radius: 15px;
+    border: 1px solid #222;
 }
 
+.reel-item-horizontal {
+    min-width: 120px; /* Базовая ширина */
+    width: 120px;
+    height: 110px;
+    margin: 0 5px; /* Отступы: итого 130px на один элемент */
+    flex-shrink: 0;
+    background: #1a1a1a;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.5rem;
+    border-bottom: 5px solid #333;
+    transition: border-color 0.3s;
+}
+
+/* СЕТКА КЕЙСОВ */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-    max-height: 200px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Карточки кейсов больше */
+    gap: 20px;
+    max-height: 350px;
     overflow-y: auto;
-    padding: 10px;
-    margin-top: 10px;
-    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
     border-radius: 15px;
 }
-
 .case-card {
     background: #1a1a1a;
     padding: 8px;
