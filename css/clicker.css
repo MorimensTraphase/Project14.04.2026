@@ -69,7 +69,7 @@ body {
     font-weight: bold;
 }
 
-/* --- КАЗИНО (ОКНО И ОВЕРЛЕЙ) --- */
+/* --- КАЗИНО --- */
 .casino-overlay {
     position: fixed;
     top: 0; left: 0;
@@ -86,7 +86,7 @@ body {
     border: 2px solid #ffcc00;
     border-radius: 25px;
     padding: 20px 30px;
-    max-width: 760px;
+    max-width: 740px;
     width: 92%;
     text-align: center;
     position: relative;
@@ -108,7 +108,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
-    max-height: 360px; /* Уменьшено на 20px (было 380) */
+    max-height: 360px; /* Окно ниже на 40пкс от оригинала */
     overflow-y: auto;
     padding: 10px 15px 10px 5px;
     margin-top: 15px;
@@ -119,9 +119,7 @@ body {
 }
 
 .case-grid::-webkit-scrollbar { width: 6px; }
-.case-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
 .case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-.case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
 
 .case-card {
     background: #1a1a1a;
@@ -130,7 +128,6 @@ body {
     cursor: pointer;
     border: 1px solid #333;
     transition: 0.2s;
-    font-weight: bold;
 }
 
 .case-card:hover {
@@ -139,7 +136,7 @@ body {
 }
 
 .case-icon { font-size: 2.5rem; display: block; }
-.case-name { display: block; margin: 8px 0; font-weight: bold; }
+.case-name { display: block; margin: 8px 0; }
 .case-price { color: #ffcc00; font-size: 0.9rem; }
 
 /* --- РУЛЕТКА --- */
@@ -206,6 +203,7 @@ body {
     100% { filter: brightness(1); }
 }
 
+/* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
     margin-top: 15px;
     padding-top: 10px;
@@ -219,16 +217,26 @@ body {
     gap: 8px;
 }
 
+.preview-item-wrapper {
+    text-align: center;
+    width: 50px;
+}
+
+.preview-icon-box {
+    background: #1a1a1a;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    margin: 0 auto;
+}
+
 .chance-label {
     display: block;
     font-size: 0.65rem;
     color: #888;
     margin-top: 4px;
-}
-
-.empty-chance-text {
-    font-size: 0.75rem;
-    color: #ff4757;
-    margin-top: 5px;
-    display: block;
 }
