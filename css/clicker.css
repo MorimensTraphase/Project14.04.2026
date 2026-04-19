@@ -108,7 +108,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
-    max-height: 360px;
+    max-height: 360px; /* Окно ниже на 40пкс от оригинала */
     overflow-y: auto;
     padding: 10px 15px 10px 5px;
     margin-top: 15px;
@@ -185,43 +185,22 @@ body {
     border-bottom: 4px solid #333;
 }
 
-/* --- РЕДКОСТИ И ЭФФЕКТЫ --- */
+/* --- РЕДКОСТИ --- */
 .rarity-common { border-color: #26de81 !important; }
 .rarity-rare { border-color: #45aaf2 !important; }
 .rarity-epic { border-color: #a55eea !important; }
 .rarity-mythic { border-color: #ff4757 !important; }
 .rarity-legendary { border-color: #ffcc00 !important; }
-
-/* Универсальная анимация Вселенной и Элитных предметов */
-.rarity-universe, .gradient-item { 
-    border: none !important; 
-    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2) !important;
-    animation: pulse-universe 2s infinite ease-in-out !important;
-    position: relative;
-    overflow: hidden;
+.rarity-universe { 
+    border-color: #00ffff !important; 
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.3);
+    animation: pulse-universe 2s infinite;
 }
 
 @keyframes pulse-universe {
-    0% { filter: brightness(1) saturate(1); transform: scale(1); }
-    50% { filter: brightness(1.3) saturate(1.2); transform: scale(1.02); }
-    100% { filter: brightness(1) saturate(1); transform: scale(1); }
-}
-
-/* Эффект звездной пыли для градиентов */
-.gradient-item::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.3;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.gradient-item span, .gradient-item strong, .gradient-item small {
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.5); }
+    100% { filter: brightness(1); }
 }
 
 /* --- ПРЕДПРОСМОТР --- */
@@ -238,27 +217,28 @@ body {
     gap: 8px;
 }
 
+/* --- ПРЕДПРОСМОТР --- */
 .preview-item-wrapper {
     text-align: center;
-    width: 39px;
+    width: 39px; /* Чуть шире самой иконки */
 }
 
 .preview-icon-box {
     background: #1a1a1a;
-    width: 37px;
-    height: 37px;
+    width: 37px;  /* Размер 37px по вашему запросу */
+    height: 37px; /* Размер 37px по вашему запросу */
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* Уменьшили эмодзи, чтобы не вылезал за границы */
     margin: 0 auto;
     transition: 0.2s;
 }
 
 .chance-label {
     display: block;
-    font-size: 0.5rem;
+    font-size: 0.5rem; /* Совсем мелкий шрифт для шансов */
     color: #888;
     margin-top: 2px;
 }
