@@ -97,12 +97,29 @@
     // --- ДОСТИЖЕНИЯ ---
     let unlockedAchievements = JSON.parse(localStorage.getItem('achievements_v3')) || [];
     const achievementsList = [
-        { id: 'first_click', title: 'First Step', icon: '⭐', check: () => coins >= 1 },
-        { id: 'rich', title: 'Millionaire', icon: '💰', check: () => coins >= 1000000 },
-        { id: 'collector', title: 'Collector', icon: '📦', check: () => inventory.length >= 10 },
-        { id: 'gambler', title: 'High Roller', icon: '🎰', check: () => false }, // Ручная активация
-        { id: 'god', title: 'Godlike', icon: '🌌', check: () => inventory.some(i => i.isUniverse) }
-    ];
+    // --- ОСНОВНЫЕ ---
+    { id: 'first_click', title: 'First Step', icon: '⭐', check: () => coins >= 1 },
+    { id: 'collector', title: 'Collector', icon: '📦', check: () => inventory.length >= 10 },
+    { id: 'gambler', title: 'High Roller', icon: '🎰', check: () => false }, // Вызывается в handleOpen
+    { id: 'god', title: 'Godlike', icon: '🌌', check: () => inventory.some(i => i.isUniverse) },
+
+    // --- ПО РЕДКОСТИ (Первый Эпик, Мифик, Лега) ---
+    { id: 'first_epic', title: 'Purple Power', icon: '🟣', check: () => inventory.some(i => i.class === 'rarity-epic') },
+    { id: 'first_mythic', title: 'Red Legend', icon: '🔥', check: () => inventory.some(i => i.class === 'rarity-mythic') },
+    { id: 'first_legendary', title: 'Golden Boy', icon: '👑', check: () => inventory.some(i => i.class === 'rarity-legendary') },
+
+    // --- ПО БАЛАНСУ ---
+    { id: 'coins_10k', title: 'Starting Capital', icon: '💵', check: () => coins >= 10000 },
+    { id: 'rich', title: 'Millionaire', icon: '💰', check: () => coins >= 1000000 },
+    { id: 'coins_10m', title: 'Multi-Millionaire', icon: '💎', check: () => coins >= 10000000 },
+    { id: 'coins_1b', title: 'Billionaire', icon: '🏦', check: () => coins >= 1000000000 },
+    { id: 'coins_1t', title: 'Trillionaire', icon: '🏢', check: () => coins >= 1000000000000 },
+
+    // --- ЗА ПРОДАЖУ (Эти ачивки активируем вручную в функции sell) ---
+    { id: 'sell_1m', title: 'Big Deal', icon: '🤝', check: () => false },
+    { id: 'sell_1b', title: 'Market Master', icon: '📈', check: () => false },
+    { id: 'sell_1t', title: 'Global Economy', icon: '🌍', check: () => false }
+];
 
     function showAchievement(ach) {
         if (unlockedAchievements.includes(ach.id)) return;
