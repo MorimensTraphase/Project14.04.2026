@@ -73,7 +73,7 @@ body {
     width: 100%; height: 100%;
     background: rgba(0,0,0,0.9);
     display: flex;
-    justify(content: center;
+    justify-content: center;
     align-items: center;
     z-index: 1000;
 }
@@ -82,9 +82,11 @@ body {
     background: #111;
     border: 2px solid #ffcc00;
     border-radius: 25px;
-    padding: 15px 20px; /* Уменьшены внутренние отступы */
-    max-width: 600px;    /* ОКНО СТАЛО ЕЩЕ МЕНЬШЕ (было 760px) */
+    padding: 10px 20px; /* Уменьшен padding */
+    max-width: 600px;
     width: 90%;
+    max-height: 90vh; /* Окно не выше 90% экрана */
+    overflow: hidden;
     text-align: center;
     position: relative;
     box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
@@ -92,7 +94,7 @@ body {
 
 .close-btn {
     position: absolute;
-    top: 15px; right: 20px;
+    top: 10px; right: 20px;
     background: none;
     border: none;
     color: #666;
@@ -100,58 +102,45 @@ body {
     cursor: pointer;
 }
 
-/* --- СЕТКА КЕЙСОВ И ПРОКАЧАННЫЙ СКРОЛЛ --- */
+/* --- СЕТКА КЕЙСОВ --- */
 .case-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Чуть уменьшил карточки */
-    gap: 12px;
-    max-height: 350px; /* Немного уменьшил высоту сетки */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    max-height: 220px; /* СИЛЬНО УМЕНЬШЕНА ВЫСОТА СПИСКА КЕЙСОВ */
     overflow-y: auto;
     padding: 10px;
-    margin-top: 15px;
+    margin-top: 10px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
     scrollbar-width: thin;
     scrollbar-color: #333 transparent;
 }
 
-.case-grid::-webkit-scrollbar {
-    width: 6px;
-}
-.case-grid::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 10px;
-}
-.case-grid::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-}
+.case-grid::-webkit-scrollbar { width: 6px; }
+.case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
 .case-card {
     background: #1a1a1a;
-    padding: 12px;
-    border-radius: 15px;
+    padding: 8px;
+    border-radius: 12px;
     cursor: pointer;
     border: 1px solid #333;
     transition: 0.2s;
 }
 
-.case-card:hover {
-    transform: translateY(-3px);
-    border-color: #ffcc00;
-}
-
-.case-icon { font-size: 2rem; display: block; }
-.case-name { display: block; margin: 5px 0; font-weight: bold; font-size: 0.9rem; }
-.case-price { color: #ffcc00; font-size: 0.8rem; }
+.case-card:hover { border-color: #ffcc00; }
+.case-icon { font-size: 1.8rem; display: block; }
+.case-name { display: block; margin: 3px 0; font-weight: bold; font-size: 0.85rem; }
+.case-price { color: #ffcc00; font-size: 0.75rem; }
 
 /* --- РУЛЕТКА --- */
 .roulette-wrapper {
     position: relative;
     width: 100%;
-    height: 120px; /* Уменьшена высота рулетки */
+    height: 100px; /* Уменьшена высота */
     overflow: hidden;
-    margin: 15px 0;
+    margin: 10px 0;
     background: #050505;
     border-radius: 15px;
     border: 1px solid #222;
@@ -159,11 +148,9 @@ body {
 
 .selector {
     position: absolute;
-    left: 50%;
-    top: 0;
+    left: 50%; top: 0;
     transform: translateX(-50%);
-    width: 4px;
-    height: 100%;
+    width: 4px; height: 100%;
     background: #ffcc00;
     z-index: 10;
     box-shadow: 0 0 15px #ffcc00;
@@ -177,17 +164,17 @@ body {
 }
 
 .reel-item-horizontal {
-    min-width: 100px; /* Сужены элементы рулетки */
-    width: 100px;
+    min-width: 90px;
+    width: 90px;
     flex-shrink: 0;
-    height: 80px;
+    height: 70px;
     margin: 0 2px;
     background: #1a1a1a;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     border-bottom: 3px solid #333;
 }
 
@@ -211,8 +198,8 @@ body {
 
 /* --- ПРЕДПРОСМОТР --- */
 .case-content-preview {
-    margin-top: 15px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 5px;
     border-top: 1px solid #222;
 }
 
@@ -220,5 +207,5 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 }
