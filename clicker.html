@@ -130,9 +130,22 @@
     ]},
     c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
         {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
-    ]}
-};
-        // Логика функций остается прежней (mine, save, load, render и т.д.)
+    ]},
+            
+    c12: { n: "Gradient Elite", cost: 10000000000000, icon: "🎨", items: [
+                {n:"Plasma Soul", e:"💠", p:12000000000000, g:"linear-gradient(45deg, #00dbde, #fc00ff)"},
+                {n:"Supernova", e:"💥", p:15000000000000, g:"linear-gradient(45deg, #f83600, #f9d423)"},
+                {n:"Deep Matrix", e:"🧬", p:20000000000000, g:"linear-gradient(45deg, #0ba360, #3cba92)"},
+                {n:"Ether Crystal", e:"💎", p:25000000000000, g:"linear-gradient(45deg, #00c6fb, #005bea)"},
+                {n:"Golden Singularity", e:"🔆", p:35000000000000, g:"linear-gradient(45deg, #fccb90, #d57eeb)"},
+                {n:"Cyber Core", e:"🌀", p:50000000000000, g:"linear-gradient(45deg, #30cfd0, #330867)"},
+                {n:"Astral Gate", e:"⛩️", p:75000000000000, g:"linear-gradient(45deg, #a18cd1, #fbc2eb)"},
+                {n:"Dark Matter", e:"🖤", p:100000000000000, g:"linear-gradient(45deg, #232526, #414345)"},
+                {n:"God Ray", e:"🔱", p:250000000000000, g:"linear-gradient(45deg, #ee9ae5, #5961f9)"},
+                {n:"Infinity Key", e:"🗝️", p:500000000000000, g:"linear-gradient(45deg, #434343, #000000)"}
+            ]}
+        };
+
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
@@ -159,9 +172,16 @@
             const box = document.getElementById('case-items-list');
             document.getElementById('case-preview-section').style.display = 'block';
             let itemsHtml = '';
+
             if(id === 'c11') {
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">99%</span></div>`;
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 2px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">99.9%</span></div>`;
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 2px solid #00ffff;">🌌</div><span class="chance-label">0.1%</span></div>`;
+            } else if (id === 'c12') {
+                itemsHtml += shopData[id].items.map(it => `
+                    <div class="preview-item-wrapper">
+                        <div class="preview-icon-box" style="background: ${it.g}; border: none; color: white;">${it.e}</div>
+                        <span class="chance-label">10%</span>
+                    </div>`).join('');
             } else {
                 itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">15%</span></div>`;
                 itemsHtml += shopData[id].items.map((it, idx) => {
@@ -192,9 +212,13 @@
         function calculateWinner(id) {
             const box = shopData[id];
             const luck = Math.random() * 100;
+            
             if (id === 'c11') {
-                if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
+                if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
                 return {...box.items[0], ...getRarityData(0, true), fail: false};
+            } else if (id === 'c12') {
+                const rIdx = Math.floor(Math.random() * box.items.length);
+                return {...box.items[rIdx], class: 'gradient-item', prefix: '💎 ELITE: ', fail: false};
             } else {
                 if (luck <= 1) return {...box.items[11], ...getRarityData(11), fail: false};
                 if (luck <= 4) return {...box.items[9 + Math.floor(Math.random() * 2)], ...getRarityData(9), fail: false};
@@ -218,8 +242,7 @@
             for(let i=0; i<65; i++) {
                 let rIdx = Math.floor(Math.random() * shopData[id].items.length);
                 let rItem = shopData[id].items[rIdx];
-                let rRare = getRarityData(rIdx, rItem.isUniverse);
-                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
+                tape += `<div class="reel-item-horizontal" style="${rItem.g ? 'background:'+rItem.g+';color:white;' : ''}">${rItem.e}</div>`;
             }
             reel.innerHTML = tape;
             reel.style.transition = 'none';
@@ -227,7 +250,7 @@
 
             const items = reel.querySelectorAll('.reel-item-horizontal');
             items[55].innerText = result.e;
-            items[55].className = `reel-item-horizontal ${result.class || ''}`;
+            if(result.g) items[55].style.background = result.g;
 
             setTimeout(() => {
                 const itemWidth = 126; 
@@ -243,8 +266,8 @@
                     msg.style.color = "#ff4757";
                 } else {
                     inventory.push(result);
-                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
-                    msg.style.color = result.color;
+                    msg.innerText = `${result.prefix || ''}${result.n.toUpperCase()}!`;
+                    msg.style.color = result.g ? "#fff" : (result.color || "#fff");
                 }
                 render(); save();
             }, 4100);
@@ -259,14 +282,26 @@
 
         function render() {
             document.getElementById('balance').innerText = coins.toLocaleString();
-            document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
-                <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
-                    <span style="font-size:3rem;">${item.e}</span>
-                    <strong style="display:block;">${item.n}</strong>
-                    <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
-                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
-                </div>
-            `).join('');
+            document.getElementById('items-list').innerHTML = inventory.map((item, i) => {
+                const isG = !!item.g;
+                const cardStyle = isG 
+                    ? `background: ${item.g}; border: none; color: white;` 
+                    : `border-bottom: 4px solid ${item.color || '#333'}`;
+                
+                return `
+                    <div class="item-card ${item.class || ''}" style="${cardStyle}">
+                        <span style="font-size:3rem; ${isG ? 'filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));' : ''}">${item.e}</span>
+                        <strong style="display:block; margin-top:5px;">${item.n}</strong>
+                        <small style="color: ${isG ? '#eee' : '#00ed9a'};">
+                            ${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐
+                        </small>
+                        <button class="btn-sell" onclick="sell(${i})" 
+                            style="${isG ? 'background: rgba(255,255,255,0.2); border: 1px solid white; color: white;' : ''}">
+                            Sell
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
 
         window.onload = load;
