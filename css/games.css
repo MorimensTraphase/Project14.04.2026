@@ -439,3 +439,15 @@
 .secret-game:hover h3 {
     color: #ffcc00;
 }
+/* Добавь это в конец games.css, если хочешь "живые" карточки */
+.fact-card {
+    background: linear-gradient(145deg, #1e1e2e, #252538);
+    border: 2px solid rgba(52, 152, 219, 0.3);
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fact-card:hover {
+    border-color: #3498db;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
