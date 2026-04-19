@@ -158,50 +158,44 @@
             el.style.display = (el.style.display === 'none') ? 'flex' : 'none';
         }
 
-        function getRarityData(idx, item = {}) {
-            // Если есть градиент или это Вселенная - используем общий класс "universe" для анимации
-            if (item.isUniverse || item.g) {
-                return { 
-                    class: 'rarity-universe', 
-                    color: item.g ? 'white' : '#00ffff', 
-                    prefix: item.g ? '✨ ELITE: ' : '🌌 DIVINE: ',
-                    style: item.g ? `border-image: ${item.g} 1 !important; border-bottom: 4px solid !important;` : ''
-                };
-            }
-            if (idx >= 11) return { class: 'rarity-legendary', color: '#ffcc00', prefix: '⚡ LEGENDARY: ' };
-            if (idx >= 9)  return { class: 'rarity-mythic', color: '#ff4757', prefix: '🔥 MYTHIC: ' };
-            if (idx >= 7)  return { class: 'rarity-epic', color: '#a55eea', prefix: '🟣 EPIC: ' };
-            if (idx >= 5)  return { class: 'rarity-rare', color: '#45aaf2', prefix: '🔵 RARE: ' };
-            return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
-        }
+       function getRarityData(idx, item = {}) {
+    // Если предмет из 12 кейса (с градиентом) или Вселенная
+    if (item.isUniverse || item.g) {
+        const grad = item.g || "linear-gradient(45deg, #00ffff, #005bea)";
+        const mainColor = item.isUniverse ? "#00ffff" : "white";
+        
+        return { 
+            class: 'rarity-universe', 
+            color: mainColor, 
+            prefix: item.g ? '✨ ELITE: ' : '🌌 DIVINE: ',
+            // Убираем полосу и ставим цветной бордер и тень в цвет градиента
+            style: `border: 2px solid transparent; border-image: ${grad} 1; box-shadow: inset 0 0 20px ${item.g ? 'rgba(255,255,255,0.1)' : 'rgba(0,255,255,0.2)'};`
+        };
+    }
+    // Остальные редкости
+    if (idx >= 11) return { class: 'rarity-legendary', color: '#ffcc00', prefix: '⚡ LEGENDARY: ' };
+    if (idx >= 9)  return { class: 'rarity-mythic', color: '#ff4757', prefix: '🔥 MYTHIC: ' };
+    if (idx >= 7)  return { class: 'rarity-epic', color: '#a55eea', prefix: '🟣 EPIC: ' };
+    if (idx >= 5)  return { class: 'rarity-rare', color: '#45aaf2', prefix: '🔵 RARE: ' };
+    return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
+}
 
-        function showPreview(id) {
-            const box = document.getElementById('case-items-list');
-            document.getElementById('case-preview-section').style.display = 'block';
-            let itemsHtml = '';
-            if(id === 'c11') {
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">99%</span></div>`;
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe">🌌</div><span class="chance-label">1%</span></div>`;
-            } else {
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">15%</span></div>`;
-                itemsHtml += shopData[id].items.map((it, idx) => {
-                    const r = getRarityData(idx, it);
-                    let ch = (id === 'c12') ? (idx < 5 ? "15%" : (idx < 8 ? "5%" : "1%")) : ((idx < 5) ? "50%" : (idx < 7) ? "20%" : (idx < 9) ? "10%" : "3%");
-                    return `<div class="preview-item-wrapper"><div class="preview-icon-box ${r.class}" style="${r.style || `border-bottom: 2px solid ${r.color}`}">${it.e}</div><span class="chance-label">${ch}</span></div>`;
-                }).join('');
-            }
-            box.innerHTML = itemsHtml;
-        }
-
-        function generateCaseButtons() {
-            document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
-                <div class="case-card" onclick="handleOpen('${id}')" onmouseover="showPreview('${id}')">
-                    <span class="case-icon">${shopData[id].icon}</span>
-                    <span class="case-name">${shopData[id].n}</span>
-                    <span class="case-price">${shopData[id].cost.toLocaleString()} ⭐</span>
-                </div>
-            `).join('');
-        }
+function render() {
+    document.getElementById('balance').innerText = coins.toLocaleString();
+    document.getElementById('items-list').innerHTML = inventory.map((item, i) => {
+        const isElite = item.isUniverse || item.g;
+        // Если предмет элитный, убираем border-bottom (пустая строка), иначе оставляем старую полосу
+        const borderStyle = isElite ? "" : `border-bottom: 4px solid ${item.color || '#333'};`;
+        
+        return `
+            <div class="item-card ${item.class || ''}" style="${item.style || ''} ${borderStyle}">
+                <span style="font-size:3rem;">${item.e}</span>
+                <strong style="display:block;">${item.n}</strong>
+                <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
+                <button class="btn-sell" onclick="sell(${i})">Sell</button>
+            </div>`;
+    }).join('');
+}
 
         function handleOpen(id) {
             if (isSpinning) return;
