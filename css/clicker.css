@@ -243,29 +243,50 @@ body {
     margin-top: 2px;
 }
 /* --- ЭЛИТНЫЕ ГРАДИЕНТЫ С ЭФФЕКТОМ ВСЕЛЕННОЙ --- */
-.item-card.gradient-item {
+
+.item-card.gradient-item, 
+.reel-item-horizontal.gradient-item, 
+.preview-icon-box.gradient-item {
     border: none !important;
-    /* Добавляем неоновое свечение по краям, как у Вселенной */
-    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
     overflow: hidden;
-    /* Та же анимация мерцания, что и у Вселенной */
-    animation: pulse-universe 2s infinite ease-in-out; 
+    /* Та же анимация и тени, что у Вселенной */
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3), 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    animation: pulse-universe 2s infinite ease-in-out !important;
 }
 
-/* Эффект плавающих эмодзи (как в прошлом шаге, но с усиленным свечением) */
-.item-card.gradient-item span {
-    display: inline-block;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
-    animation: floating 3s ease-in-out infinite;
-}
-
-/* Уникальная "текстура" — добавим легкий эффект шума/звезд на фон */
-.item-card.gradient-item::before {
+/* Добавляем текстуру звездной пыли поверх градиента */
+.item-card.gradient-item::before, 
+.reel-item-horizontal.gradient-item::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.3;
+    opacity: 0.4;
     pointer-events: none;
+    z-index: 1;
+}
+
+/* Свечение для эмодзи внутри (span) */
+.item-card.gradient-item span {
+    display: inline-block;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Настройка кнопки продажи для градиентов */
+.item-card.gradient-item .btn-sell {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+    z-index: 2;
+}
+
+/* Анимация левитации (если ее еще нет в файле) */
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
 }
