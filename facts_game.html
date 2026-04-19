@@ -98,24 +98,48 @@
     </div>
 
     <script>
-        const facts = [
-            { text: "Big Ben is the name of the clock tower in London.", isTrue: false }, // It's the bell
-            { text: "Poland's national animal is the White Eagle.", isTrue: true },
-            { text: "The London Underground is the oldest in the world.", isTrue: true },
-            { text: "Wawel Castle is located in Warsaw.", isTrue: false }, // Kraków
-            { text: "Poland borders 7 countries.", isTrue: true },
-            { text: "English is the only official language of the UK.", isTrue: false }, // Welsh, Gaelic etc.
-            { text: "Kraków was once the capital of Poland.", isTrue: true },
-            { text: "The British Royal family is not allowed to eat shellfish.", isTrue: true },
-            { text: "Poland is the largest producer of amber in the world.", isTrue: true },
-            { text: "Stonehenge is older than the Great Pyramids.", isTrue: true }
-        ];
+       const facts = [
+    // --- ВЕЛИКОБРИТАНИЯ ---
+    { text: "Big Ben is the name of the clock tower in London.", isTrue: false }, // Это колокол, башня называется Elizabeth Tower
+    { text: "The London Underground is the oldest in the world.", isTrue: true },
+    { text: "The British Royal family is not allowed to eat shellfish.", isTrue: true },
+    { text: "Stonehenge is older than the Great Pyramids.", isTrue: true },
+    { text: "The Queen/King needs a passport to travel abroad.", isTrue: false }, // Монарху паспорт не нужен
+    { text: "Great Britain is the same thing as the United Kingdom.", isTrue: false }, // ГБ — это остров, УК — страна
+    { text: "Winchester was the first capital of England.", isTrue: true },
+    { text: "French was the official language of England for about 300 years.", isTrue: true },
+    { text: "It is illegal to die in the Houses of Parliament.", isTrue: false }, // Это городской миф
+    { text: "London has more Indian restaurants than Mumbai.", isTrue: true },
+    { text: "The BBC stands for British Broadcasting Corporation.", isTrue: true },
+    { text: "The UK is smaller than the state of Michigan.", isTrue: true },
+    { text: "British people drink over 165 million cups of tea daily.", isTrue: true },
+    { text: "The Shard is the tallest building in Europe.", isTrue: false }, // Лахта-центр в РФ выше
+    { text: "There are no active volcanoes in the UK.", isTrue: true },
+
+    // --- ПОЛЬША ---
+    { text: "Poland's national animal is the White Eagle.", isTrue: true },
+    { text: "Wawel Castle is located in Warsaw.", isTrue: false }, // В Кракове
+    { text: "Poland borders 7 countries.", isTrue: true },
+    { text: "Kraków was once the capital of Poland.", isTrue: true },
+    { text: "Poland is the largest producer of amber in the world.", isTrue: true },
+    { text: "The world's heaviest animal, the European Bison, lives in Poland.", isTrue: true },
+    { text: "Poland has won the most 'Strongest Man' titles in the world.", isTrue: true }, // Благодаря Мариушу Пудзяновскому
+    { text: "Marie Curie (Skłodowska) was born in France.", isTrue: false }, // В Варшаве
+    { text: "The name 'Poland' comes from the tribe 'Polanie', meaning 'people living in open fields'.", isTrue: true },
+    { text: "Poland has the oldest constitution in Europe.", isTrue: true }, // Конституция 3 мая 1791
+    { text: "There is a desert in Poland.", isTrue: true }, // Пустыня Блендовска
+    { text: "Poland is the largest exporter of apples in the world.", isTrue: false }, // Обычно в топ-3, но не первая (Китай первый)
+    { text: "The most popular fast food in Poland is 'Zapiekanka'.", isTrue: true },
+    { text: "Poland was the only country in Europe not to have a 'plague' during the Black Death.", isTrue: false }, // Частично правда, но миф преувеличен
+    { text: "Nicolaus Copernicus was a Polish astronomer who 'stopped the Sun'.", isTrue: true }
+];
 
         let currentIdx = 0;
         let score = 0;
         let gameActive = false;
 
         function startGame() {
+            facts.sort(() => Math.random() - 0.5);
             score = 0;
             currentIdx = 0;
             gameActive = true;
