@@ -146,24 +146,36 @@
         }
 
         function showPreview(id) {
-            const box = document.getElementById('case-items-list');
-            document.getElementById('case-preview-section').style.display = 'block';
+    const box = document.getElementById('case-items-list');
+    document.getElementById('case-preview-section').style.display = 'block';
+    
+    let itemsHtml = '';
+    if(id === 'c11') {
+        // Иконка пустоты для последнего кейса
+        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div><span class="chance-label">99%</span></div>`;
+        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
+    } else {
+        // Иконка пустоты для обычных кейсов (50%)
+        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div><span class="chance-label">50%</span></div>`;
+        
+        itemsHtml += shopData[id].items.map((it, idx) => {
+            const r = getRarityData(idx, it.isUniverse);
+            let ch = "0.5%"; 
+            if(idx < 5) ch = "5%"; 
+            if(idx >= 5 && idx < 7) ch = "2.5%"; 
+            if(idx >= 7 && idx < 9) ch = "1.5%";
             
-            let itemsHtml = '';
-            if(id === 'c11') {
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border: 1px solid #ff4757;">💨</div><span class="chance-label">99%</span></div>`;
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
-            } else {
-                // Добавляем Пустоту как первый предмет в предпросмотре
-                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border: 1px solid #ff4757;">💨</div><span class="chance-label">50%</span></div>`;
-                itemsHtml += shopData[id].items.map((it, idx) => {
-                    const r = getRarityData(idx, it.isUniverse);
-                    let ch = "0.5%"; if(idx < 5) ch = "5%"; if(idx >= 5 && idx < 7) ch = "2.5%"; if(idx >= 7 && idx < 9) ch = "1.5%";
-                    return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid ${r.color};">${it.e}</div><span class="chance-label">${ch}</span></div>`;
-                }).join('');
-            }
-            box.innerHTML = itemsHtml;
-        }
+            return `
+                <div class="preview-item-wrapper">
+                    <div class="preview-icon-box" style="border-bottom: 3px solid ${r.color};">
+                        ${it.e}
+                    </div>
+                    <span class="chance-label">${ch}</span>
+                </div>`;
+        }).join('');
+    }
+    box.innerHTML = itemsHtml;
+}
 
         function generateCaseButtons() {
             document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
