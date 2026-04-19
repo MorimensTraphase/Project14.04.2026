@@ -242,3 +242,57 @@ body {
     color: #888;
     margin-top: 2px;
 }
+/* --- СТИЛИ ДЛЯ ЭЛИТНЫХ ПРЕДМЕТОВ (ГРАДИЕНТЫ) --- */
+
+.item-card.gradient-item {
+    border: none !important; /* Убираем стандартную рамку */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Эффект блика при наведении */
+.item-card.gradient-item:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Свечение для эмодзи внутри градиентных карточек */
+.item-card.gradient-item span {
+    display: inline-block;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7));
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Кнопка продажи внутри градиентной карточки */
+.item-card.gradient-item .btn-sell {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.item-card.gradient-item .btn-sell:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Анимация левитации для редких эмодзи */
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Специфичный стиль для превью в рулетке (если выпал градиентный предмет) */
+.reel-item-horizontal.gradient-item {
+    border: none !important;
+    box-shadow: inset 0 0 15px rgba(255,255,255,0.3);
+}
+
+/* Дополнительная плашка редкости для текста в градиентах */
+.item-card.gradient-item strong {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 0.5px;
+}
