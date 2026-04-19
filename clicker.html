@@ -72,56 +72,57 @@
         </main>
     </div>
 
-    <script>
+   <script>
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
 
+        // ПЕРЕНАСТРОЕННЫЙ БАЛАНС: Цены выше, стоимость предметов ниже
         const shopData = {
-    c1: { n: "Stationery", cost: 25, icon: "📦", items: [
-        {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Eraser", e:"🧼", p:15}, {n:"Pen", e:"🖊️", p:25}, {n:"Brush", e:"🖌️", p:40}, {n:"Pencil", e:"✏️", p:60},
-        {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:250}, {n:"Bag", e:"🎒", p:500}, {n:"Clock", e:"⏰", p:1200}, {n:"Lamp", e:"💡", p:3000}, {n:"Gold Pen", e:"🖋️", p:10000}
-    ]},
-    c2: { n: "Resource", cost: 250, icon: "⚒️", items: [
-        {n:"Sand", e:"⏳", p:50}, {n:"Iron Ore", e:"🧱", p:120}, {n:"Oil", e:"🛢️", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
-        {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
-    ]},
-    c3: { n: "Electronics", cost: 2000, icon: "📱", items: [
-        {n:"Cable", e:"🔌", p:500}, {n:"Mouse", e:"🖱️", p:1200}, {n:"Keys", e:"⌨️", p:2800}, {n:"Disc", e:"💿", p:6000}, {n:"Camera", e:"📷", p:15000}, {n:"Phone", e:"📱", p:35000},
-        {n:"Tablet", e:"📟", p:80000}, {n:"Monitor", e:"🖥️", p:200000}, {n:"Laptop", e:"💻", p:450000}, {n:"Server", e:"🏢", p:1000000}, {n:"Drone", e:"🚁", p:2500000}, {n:"AI Cube", e:"🧊", p:8000000}
-    ]},
-    c4: { n: "Transport", cost: 15000, icon: "🚗", items: [
-        {n:"Wheel", e:"🎡", p:5000}, {n:"Bike", e:"🚲", p:12000}, {n:"Scooter", e:"🛴", p:25000}, {n:"Moped", e:"🛵", p:60000}, {n:"Cart", e:"🛒", p:150000}, {n:"Car", e:"🚗", p:400000},
-        {n:"SUV", e:"🚙", p:900000}, {n:"Truck", e:"🚚", p:2000000}, {n:"Bus", e:"🚌", p:5000000}, {n:"Train", e:"🚆", p:12000000}, {n:"Plane", e:"🛩️", p:30000000}, {n:"Hypercar", e:"🏎️", p:100000000}
-    ]},
-    c5: { n: "Property", cost: 100000, icon: "🏠", items: [
-        {n:"Fence", e:"🚧", p:30000}, {n:"Shed", e:"🏚️", p:75000}, {n:"Room", e:"🚪", p:180000}, {n:"Tent", e:"⛺", p:400000}, {n:"House", e:"🏠", p:1000000}, {n:"Villa", e:"🏡", p:2500000},
-        {n:"Hotel", e:"🏨", p:6000000}, {n:"Office", e:"🏢", p:15000000}, {n:"Bank", e:"🏦", p:40000000}, {n:"Castle", e:"🏰", p:100000000}, {n:"Island", e:"🏝️", p:300000000}, {n:"City", e:"🏙️", p:1000000000}
-    ]},
-    c6: { n: "Aviation", cost: 800000, icon: "🚁", items: [
-        {n:"Propeller", e:"⚙️", p:200000}, {n:"Glider", e:"🪂", p:500000}, {n:"Copter", e:"🚁", p:1200000}, {n:"Jet", e:"✈️", p:3000000}, {n:"Airliner", e:"🛫", p:8000000}, {n:"Stealth", e:"🛸", p:20000000},
-        {n:"Rocket", e:"🚀", p:50000000}, {n:"Shuttle", e:"🛰️", p:120000000}, {n:"Station", e:"🚉", p:300000000}, {n:"Base", e:"🌑", p:800000000}, {n:"Portal", e:"🌀", p:2000000000}, {n:"DeathStar", e:"🪐", p:10000000000}
-    ]},
-    c7: { n: "Magic", cost: 5000000, icon: "🔮", items: [
-        {n:"Dust", e:"✨", p:1000000}, {n:"Herb", e:"🌿", p:2500000}, {n:"Potion", e:"🧪", p:6000000}, {n:"Scroll", e:"📜", p:15000000}, {n:"Staff", e:"🦯", p:40000000}, {n:"Crystal", e:"🔮", p:100000000},
-        {n:"Amulet", e:"📿", p:250000000}, {n:"Sword", e:"⚔️", p:600000000}, {n:"Shield", e:"🛡️", p:1500000000}, {n:"Grimoire", e:"📙", p:4000000000}, {n:"Dragon", e:"🐲", p:12000000000}, {n:"HolyGrail", e:"🏆", p:50000000000}
-    ]},
-    c8: { n: "Galaxy", cost: 40000000, icon: "🌌", items: [
-        {n:"Meteor", e:"☄️", p:10000000}, {n:"Moon", e:"🌙", p:25000000}, {n:"Mars", e:"🔴", p:70000000}, {n:"Saturn", e:"🪐", p:180000000}, {n:"Sun", e:"☀️", p:500000000}, {n:"Pulsar", e:"⚡", p:1200000000},
-        {n:"BlackHole", e:"🕳️", p:3000000000}, {n:"Nebula", e:"☁️", p:8000000000}, {n:"Constel", e:"🌠", p:20000000000}, {n:"Galaxy", e:"🌀", p:60000000000}, {n:"Cluster", e:"🎆", p:200000000000}, {n:"Cosmos", e:"🌌", p:1000000000000}
-    ]},
-    c9: { n: "Mythical", cost: 500000000, icon: "🔱", items: [
-        {n:"Relic", e:"🏺", p:250000000}, {n:"Artifact", e:"🗿", p:600000000}, {n:"Eye", e:"👁️", p:1500000000}, {n:"Heart", e:"❤️", p:4000000000}, {n:"Thunder", e:"🌩️", p:10000000000}, {n:"Kraken", e:"🐙", p:25000000000},
-        {n:"Phoenix", e:"🔥", p:70000000000}, {n:"Titan", e:"🗿", p:200000000000}, {n:"Soul", e:"👻", p:500000000000}, {n:"Godly", e:"😇", p:1500000000000}, {n:"Origin", e:"🔘", p:5000000000000}, {n:"Creator", e:"👑", p:25000000000000}
-    ]},
-    c10: { n: "Ultimate", cost: 20000000000, icon: "💎", items: [
-        {n:"Light", e:"🌈", p:8000000000}, {n:"Time", e:"⏳", p:20000000000}, {n:"Void", e:"🕳️", p:50000000000}, {n:"Antimat", e:"⚛️", p:120000000000}, {n:"Binary", e:"🔢", p:300000000000}, {n:"Quantum", e:"🔬", p:800000000000},
-        {n:"Glitch", e:"👾", p:2000000000000}, {n:"Matrix", e:"📺", p:6000000000000}, {n:"Infinit", e:"♾️", p:15000000000000}, {n:"Eternity", e:"🕰️", p:50000000000000}, {n:"Victory", e:"🚩", p:100000000000000}, {n:"Glow", e:"🌟", p:999999999999999}
-    ]},
-    c11: { n: "Impossible", cost: 100000000000000, icon: "💀", items: [
-        {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
-    ]}
-};
+            c1: { n: "Stationery", cost: 100, icon: "📦", items: [
+                {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:10}, {n:"Eraser", e:"🧼", p:15}, {n:"Pen", e:"🖊️", p:25}, {n:"Brush", e:"🖌️", p:40}, {n:"Pencil", e:"✏️", p:60},
+                {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:200}, {n:"Bag", e:"🎒", p:400}, {n:"Clock", e:"⏰", p:800}, {n:"Lamp", e:"💡", p:1500}, {n:"Gold Pen", e:"🖋️", p:3000}
+            ]},
+            c2: { n: "Resource", cost: 2000, icon: "⚒️", items: [
+                {n:"Sand", e:"⏳", p:100}, {n:"Iron Ore", e:"🧱", p:300}, {n:"Oil", e:"🛢️", p:600}, {n:"Coal", e:"⬛", p:1000}, {n:"Iron", e:"⛓️", p:2000}, {n:"Copper", e:"🥉", p:4000},
+                {n:"Silver", e:"🥈", p:8000}, {n:"Gold", e:"🥇", p:15000}, {n:"Ruby", e:"🔻", p:30000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:120000}, {n:"Crown", e:"👑", p:250000}
+            ]},
+            c3: { n: "Electronics", cost: 150000, icon: "📱", items: [
+                {n:"Cable", e:"🔌", p:5000}, {n:"Mouse", e:"🖱️", p:12000}, {n:"Keys", e:"⌨️", p:25000}, {n:"Disc", e:"💿", p:50000}, {n:"Camera", e:"📷", p:100000}, {n:"Phone", e:"📱", p:200000},
+                {n:"Tablet", e:"📟", p:400000}, {n:"Monitor", e:"🖥️", p:800000}, {n:"Laptop", e:"💻", p:1500000}, {n:"Server", e:"🏢", p:3000000}, {n:"Drone", e:"🚁", p:6000000}, {n:"AI Cube", e:"🧊", p:12000000}
+            ]},
+            c4: { n: "Transport", cost: 8000000, icon: "🚗", items: [
+                {n:"Wheel", e:"🎡", p:200000}, {n:"Bike", e:"🚲", p:500000}, {n:"Scooter", e:"🛴", p:1000000}, {n:"Moped", e:"🛵", p:2000000}, {n:"Cart", e:"🛒", p:4000000}, {n:"Car", e:"🚗", p:8000000},
+                {n:"SUV", e:"🚙", p:15000000}, {n:"Truck", e:"🚚", p:30000000}, {n:"Bus", e:"🚌", p:70000000}, {n:"Train", e:"🚆", p:150000000}, {n:"Plane", e:"🛩️", p:400000000}, {n:"Hypercar", e:"🏎️", p:1000000000}
+            ]},
+            c5: { n: "Property", cost: 500000000, icon: "🏠", items: [
+                {n:"Fence", e:"🚧", p:10000000}, {n:"Shed", e:"🏚️", p:25000000}, {n:"Room", e:"🚪", p:60000000}, {n:"Tent", e:"⛺", p:150000000}, {n:"House", e:"🏠", p:350000000}, {n:"Villa", e:"🏡", p:800000000},
+                {n:"Hotel", e:"🏨", p:2000000000}, {n:"Office", e:"🏢", p:5000000000}, {n:"Bank", e:"🏦", p:12000000000}, {n:"Castle", e:"🏰", p:25000000000}, {n:"Island", e:"🏝️", p:60000000000}, {n:"City", e:"🏙️", p:150000000000}
+            ]},
+            c6: { n: "Aviation", cost: 100000000000, icon: "🚁", items: [
+                {n:"Propeller", e:"⚙️", p:2000000000}, {n:"Glider", e:"🪂", p:5000000000}, {n:"Copter", e:"🚁", p:12000000000}, {n:"Jet", e:"✈️", p:30000000000}, {n:"Airliner", e:"🛫", p:80000000000}, {n:"Stealth", e:"🛸", p:200000000000},
+                {n:"Rocket", e:"🚀", p:500000000000}, {n:"Shuttle", e:"🛰️", p:1200000000000}, {n:"Station", e:"🚉", p:3000000000000}, {n:"Base", e:"🌑", p:8000000000000}, {n:"Portal", e:"🌀", p:20000000000000}, {n:"DeathStar", e:"🪐", p:100000000000000}
+            ]},
+            c7: { n: "Magic", cost: 50000000000000, icon: "🔮", items: [
+                {n:"Dust", e:"✨", p:1000000000000}, {n:"Herb", e:"🌿", p:2500000000000}, {n:"Potion", e:"🧪", p:6000000000000}, {n:"Scroll", e:"📜", p:15000000000000}, {n:"Staff", e:"🦯", p:40000000000000}, {n:"Crystal", e:"🔮", p:100000000000000},
+                {n:"Amulet", e:"📿", p:250000000000000}, {n:"Sword", e:"⚔️", p:600000000000000}, {n:"Shield", e:"🛡️", p:1500000000000000}, {n:"Grimoire", e:"📙", p:4000000000000000}, {n:"Dragon", e:"🐲", p:12000000000000000}, {n:"HolyGrail", e:"🏆", p:50000000000000000}
+            ]},
+            c8: { n: "Galaxy", cost: 25000000000000000, icon: "🌌", items: [
+                {n:"Meteor", e:"☄️", p:500000000000000}, {n:"Moon", e:"🌙", p:1500000000000000}, {n:"Mars", e:"🔴", p:4000000000000000}, {n:"Saturn", e:"🪐", p:10000000000000000}, {n:"Sun", e:"☀️", p:30000000000000000}, {n:"Pulsar", e:"⚡", p:80000000000000000},
+                {n:"BlackHole", e:"🕳️", p:200000000000000000}, {n:"Nebula", e:"☁️", p:500000000000000000}, {n:"Constel", e:"🌠", p:1500000000000000000}, {n:"Galaxy", e:"🌀", p:5000000000000000000}, {n:"Cluster", e:"🎆", p:20000000000000000000}, {n:"Cosmos", e:"🌌", p:100000000000000000000}
+            ]},
+            c9: { n: "Mythical", cost: 100000000000000000000, icon: "🔱", items: [
+                {n:"Relic", e:"🏺", p:2000000000000000000}, {n:"Artifact", e:"🗿", p:5000000000000000000}, {n:"Eye", e:"👁️", p:15000000000000000000}, {n:"Heart", e:"❤️", p:40000000000000000000}, {n:"Thunder", e:"🌩️", p:100000000000000000000}, {n:"Kraken", e:"🐙", p:250000000000000000000},
+                {n:"Phoenix", e:"🔥", p:700000000000000000000}, {n:"Titan", e:"🗿", p:2000000000000000000000}, {n:"Soul", e:"👻", p:5000000000000000000000}, {n:"Godly", e:"😇", p:15000000000000000000000}, {n:"Origin", e:"🔘", p:50000000000000000000000}, {n:"Creator", e:"👑", p:250000000000000000000000}
+            ]},
+            c10: { n: "Ultimate", cost: 1000000000000000000000000, icon: "💎", items: [
+                {n:"Light", e:"🌈", p:20000000000000000000000}, {n:"Time", e:"⏳", p:50000000000000000000000}, {n:"Void", e:"🕳️", p:150000000000000000000000}, {n:"Antimat", e:"⚛️", p:400000000000000000000000}, {n:"Binary", e:"🔢", p:1000000000000000000000000}, {n:"Quantum", e:"🔬", p:3000000000000000000000000},
+                {n:"Glitch", e:"👾", p:8000000000000000000000000}, {n:"Matrix", e:"📺", p:25000000000000000000000000}, {n:"Infinit", e:"♾️", p:70000000000000000000000000}, {n:"Eternity", e:"🕰️", p:200000000000000000000000000}, {n:"Victory", e:"🚩", p:500000000000000000000000000}, {n:"Glow", e:"🌟", p:999999999999999999999999999}
+            ]},
+            c11: { n: "Impossible", cost: 1000000000000000000000000000, icon: "💀", items: [
+                {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
+            ]}
+        };
 
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
@@ -151,32 +152,14 @@
             let itemsHtml = '';
 
             if(id === 'c11') {
-                // Шанс на Вселенную теперь 0.1%, на Пустоту 99.9%
                 itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">99.9%</span></div>`;
                 itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 2px solid #00ffff;">🌌</div><span class="chance-label">0.1%</span></div>`;
             } else {
-                itemsHtml += `
-                    <div class="preview-item-wrapper">
-                        <div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div>
-                        <span class="chance-label">15%</span>
-                    </div>`;
-
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">15%</span></div>`;
                 itemsHtml += shopData[id].items.map((it, idx) => {
                     const r = getRarityData(idx, it.isUniverse);
-                    let ch = "";
-                    if (idx < 5) ch = "50%";
-                    else if (idx < 7) ch = "20%";
-                    else if (idx < 9) ch = "10%";
-                    else if (idx < 11) ch = "3%";
-                    else ch = "1%";
-                    
-                    return `
-                        <div class="preview-item-wrapper">
-                            <div class="preview-icon-box" style="border-bottom: 2px solid ${r.color};">
-                                ${it.e}
-                            </div>
-                            <span class="chance-label">${ch}</span>
-                        </div>`;
+                    let ch = (idx < 5) ? "50%" : (idx < 7) ? "20%" : (idx < 9) ? "10%" : (idx < 11) ? "3%" : "1%";
+                    return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid ${r.color};">${it.e}</div><span class="chance-label">${ch}</span></div>`;
                 }).join('');
             }
             box.innerHTML = itemsHtml;
@@ -201,9 +184,7 @@
         function calculateWinner(id) {
             const box = shopData[id];
             const luck = Math.random() * 100;
-            
             if (id === 'c11') {
-                // Шанс 0.1% (если выпало число от 0.0 до 0.1)
                 if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
                 return {...box.items[0], ...getRarityData(0, true), fail: false};
             } else {
