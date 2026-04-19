@@ -83,7 +83,7 @@ body {
     border: 2px solid #ffcc00;
     border-radius: 25px;
     padding: 20px 30px;
-    max-width: 800px; /* Вернули комфортную ширину */
+    max-width: 800px;
     width: 95%;
     text-align: center;
     position: relative;
@@ -105,19 +105,17 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
-    max-height: 400px; /* Ограничение высоты для активации прокрутки */
+    max-height: 400px;
     overflow-y: auto;
-    padding: 10px 15px 10px 5px; /* Отступ справа, чтобы скролл не лип к иконкам */
+    padding: 10px 15px 10px 5px;
     margin-top: 15px;
     background: rgba(0,0,0,0.2);
     border-radius: 15px;
-    
-    /* Скролл для Firefox */
     scrollbar-width: thin;
     scrollbar-color: #333 transparent;
 }
 
-/* Кастомный скролл для Chrome/Safari/Edge */
+/* Кастомный скролл */
 .case-grid::-webkit-scrollbar {
     width: 6px;
 }
@@ -131,7 +129,7 @@ body {
     transition: background 0.3s;
 }
 .case-grid::-webkit-scrollbar-thumb:hover {
-    background: #ffcc00; /* Золотой акцент при наведении */
+    background: #ffcc00;
 }
 
 .case-card {
@@ -183,12 +181,10 @@ body {
     will-change: transform;
 }
 
-./* Найти и заменить эти части в clicker.css */
-
 .reel-item-horizontal {
     min-width: 120px;
-    width: 120px; /* Фиксируем ширину */
-    flex-shrink: 0; /* ЗАПРЕЩАЕМ СЖАТИЕ */
+    width: 120px;
+    flex-shrink: 0;
     height: 100px;
     margin: 0 3px;
     background: #1a1a1a;
@@ -199,8 +195,6 @@ body {
     font-size: 3rem;
     border-bottom: 4px solid #333;
 }
-
-/* УБЕРИТЕ лишнюю } в самом конце файла, если она там есть */
 
 /* --- РЕДКОСТИ --- */
 .rarity-common { border-color: #26de81 !important; }
