@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="css/clicker.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+    <style>
+        * { font-weight: bold !important; }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -59,10 +62,9 @@
                         <p id="casino-msg">Choose your fate!</p>
                         <div class="case-grid" id="case-list"></div>
 
-                        <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-                            <h4 id="chance-title" style="color: #666; font-size: 0.8rem; margin-bottom: 2px;">POSSIBLE CONTENT:</h4>
-                            <span id="empty-info" class="empty-chance-text"></span>
-                            <div id="case-items-list" class="items-preview-grid" style="margin-top: 10px;"></div>
+                        <div id="case-preview-section" class="case-content-preview" style="display: none;">
+                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">LOOT TABLE & CHANCES:</h4>
+                            <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
                 </div>
@@ -145,20 +147,22 @@
 
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
-            const emptyLabel = document.getElementById('empty-info');
             document.getElementById('case-preview-section').style.display = 'block';
             
+            let itemsHtml = '';
             if(id === 'c11') {
-                emptyLabel.innerText = "❌ 99% CHANCE FOR EMPTY CASE";
-                box.innerHTML = `<div style="text-align:center;"><div class="preview-item rarity-universe" style="border-bottom: 3px solid #00ffff; background:#1a1a1a; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.5rem; margin:auto;">🌌</div><span class="chance-label">1%</span></div>`;
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border: 1px solid #ff4757;">💨</div><span class="chance-label">99%</span></div>`;
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
             } else {
-                emptyLabel.innerText = "❌ 50% CHANCE FOR EMPTY CASE";
-                box.innerHTML = shopData[id].items.map((it, idx) => {
+                // Добавляем Пустоту как первый предмет в предпросмотре
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border: 1px solid #ff4757;">💨</div><span class="chance-label">50%</span></div>`;
+                itemsHtml += shopData[id].items.map((it, idx) => {
                     const r = getRarityData(idx, it.isUniverse);
                     let ch = "0.5%"; if(idx < 5) ch = "5%"; if(idx >= 5 && idx < 7) ch = "2.5%"; if(idx >= 7 && idx < 9) ch = "1.5%";
-                    return `<div style="text-align:center;"><div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div><span class="chance-label">${ch}</span></div>`;
+                    return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid ${r.color};">${it.e}</div><span class="chance-label">${ch}</span></div>`;
                 }).join('');
             }
+            box.innerHTML = itemsHtml;
         }
 
         function generateCaseButtons() {
@@ -173,8 +177,7 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            const cost = shopData[id].cost;
-            if (coins < cost) { alert("Not enough ⭐!"); return; }
+            if (coins < shopData[id].cost) { alert("Not enough ⭐!"); return; }
             spin(id);
         }
 
