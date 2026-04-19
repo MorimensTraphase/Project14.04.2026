@@ -6,8 +6,11 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css">
+    <link rel="stylesheet" href="css/clicker.css?v=1.8">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
+    <style>
+        * { font-weight: bold !important; }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -28,6 +31,7 @@
         <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
+                <br><br>
                 <div class="stats-bar">
                     <h2>Balance: <span id="balance">0</span> ⭐</h2>
                 </div>
@@ -35,7 +39,7 @@
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
                     <div class="button-group" style="margin-top:20px;">
-                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Back</a>
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
                         <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000;">🎰 Open Cases</button>
                     </div>
                 </div>
@@ -59,7 +63,7 @@
                         <div class="case-grid" id="case-list"></div>
 
                         <div id="case-preview-section" class="case-content-preview" style="display: none;">
-                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">LOOT TABLE:</h4>
+                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">LOOT TABLE & CHANCES:</h4>
                             <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
@@ -68,69 +72,67 @@
         </main>
     </div>
 
-    <script>
+  <script>
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
 
         const shopData = {
-            c1: { n: "Stationery", cost: 50, icon: "📦", items: [{n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:15}, {n:"Eraser", e:"🧼", p:25}, {n:"Pen", e:"🖊️", p:35}, {n:"Brush", e:"🖌️", p:42}, {n:"Pencil", e:"✏️", p:50}, {n:"Folder", e:"📁", p:65}, {n:"Book", e:"📖", p:150}, {n:"Bag", e:"🎒", p:300}, {n:"Clock", e:"⏰", p:600}, {n:"Lamp", e:"💡", p:1500}, {n:"Gold Pen", e:"🖋️", p:4000}]},
-            c2: { n: "Resource", cost: 500, icon: "⚒️", items: [{n:"Sand", e:"⏳", p:50}, {n:"Iron Ore", e:"🧱", p:150}, {n:"Oil", e:"🛢️", p:250}, {n:"Coal", e:"⬛", p:350}, {n:"Iron", e:"⛓️", p:450}, {n:"Copper", e:"🥉", p:500}, {n:"Silver", e:"🥈", p:700}, {n:"Gold", e:"🥇", p:1500}, {n:"Ruby", e:"🔻", p:3500}, {n:"Emerald", e:"❇️", p:7500}, {n:"Diamond", e:"💎", p:20000}, {n:"Crown", e:"👑", p:50000}]},
-            c3: { n: "Electronics", cost: 5000, icon: "📱", items: [{n:"Cable", e:"🔌", p:500}, {n:"Mouse", e:"🖱️", p:1500}, {n:"Keys", e:"⌨️", p:2500}, {n:"Disc", e:"💿", p:3500}, {n:"Camera", e:"📷", p:4500}, {n:"Phone", e:"📱", p:5000}, {n:"Tablet", e:"📟", p:7500}, {n:"Monitor", e:"🖥️", p:20000}, {n:"Laptop", e:"💻", p:50000}, {n:"Server", e:"🏢", p:125000}, {n:"Drone", e:"🚁", p:300000}, {n:"AI Cube", e:"🧊", p:750000}]},
-            c4: { n: "Transport", cost: 40000, icon: "🚗", items: [{n:"Wheel", e:"🎡", p:4000}, {n:"Bike", e:"🚲", p:12000}, {n:"Scooter", e:"🛴", p:22000}, {n:"Moped", e:"🛵", p:30000}, {n:"Cart", e:"🛒", p:36000}, {n:"Car", e:"🚗", p:40000}, {n:"SUV", e:"🚙", p:60000}, {n:"Truck", e:"🚚", p:160000}, {n:"Bus", e:"🚌", p:400000}, {n:"Train", e:"🚆", p:1000000}, {n:"Plane", e:"🛩️", p:2800000}, {n:"Hypercar", e:"🏎️", p:8000000}]},
-            c5: { n: "Property", cost: 250000, icon: "🏠", items: [{n:"Fence", e:"🚧", p:25000}, {n:"Shed", e:"🏚️", p:87500}, {n:"Room", e:"🚪", p:150000}, {n:"Tent", e:"⛺", p:200000}, {n:"House", e:"🏠", p:235000}, {n:"Villa", e:"🏡", p:250000}, {n:"Hotel", e:"🏨", p:375000}, {n:"Office", e:"🏢", p:1000000}, {n:"Bank", e:"🏦", p:2500000}, {n:"Castle", e:"🏰", p:6250000}, {n:"Island", e:"🏝️", p:17500000}, {n:"City", e:"🏙️", p:50000000}]},
-            c6: { n: "Aviation", cost: 1500000, icon: "🚁", items: [{n:"Propeller", e:"⚙️", p:150000}, {n:"Glider", e:"🪂", p:525000}, {n:"Copter", e:"🚁", p:900000}, {n:"Jet", e:"✈️", p:1200000}, {n:"Airliner", e:"🛫", p:1425000}, {n:"Stealth", e:"🛸", p:1500000}, {n:"Rocket", e:"🚀", p:2250000}, {n:"Shuttle", e:"🛰️", p:6000000}, {n:"Station", e:"🚉", p:15000000}, {n:"Base", e:"🌑", p:37500000}, {n:"Portal", e:"🌀", p:105000000}, {n:"DeathStar", e:"🪐", p:300000000}]},
-            c7: { n: "Magic", cost: 10000000, icon: "🔮", items: [{n:"Dust", e:"✨", p:1000000}, {n:"Herb", e:"🌿", p:3500000}, {n:"Potion", e:"🧪", p:6000000}, {n:"Scroll", e:"📜", p:8000000}, {n:"Staff", e:"🦯", p:9500000}, {n:"Crystal", e:"🔮", p:10000000}, {n:"Amulet", e:"📿", p:15000000}, {n:"Sword", e:"⚔️", p:40000000}, {n:"Shield", e:"🛡️", p:100000000}, {n:"Grimoire", e:"📙", p:250000000}, {n:"Dragon", e:"🐲", p:700000000}, {n:"HolyGrail", e:"🏆", p:2500000000}]},
-            c8: { n: "Galaxy", cost: 100000000, icon: "🌌", items: [{n:"Meteor", e:"☄️", p:10000000}, {n:"Moon", e:"🌙", p:35000000}, {n:"Mars", e:"🔴", p:60000000}, {n:"Saturn", e:"🪐", p:80000000}, {n:"Sun", e:"☀️", p:95000000}, {n:"Pulsar", e:"⚡", p:100000000}, {n:"BlackHole", e:"🕳️", p:150000000}, {n:"Nebula", e:"☁️", p:400000000}, {n:"Constel", e:"🌠", p:1000000000}, {n:"Galaxy", e:"🌀", p:2500000000}, {n:"Cluster", e:"🎆", p:7500000000}, {n:"Cosmos", e:"🌌", p:25000000000}]},
-            c9: { n: "Mythical", cost: 2000000000, icon: "🔱", items: [{n:"Relic", e:"🏺", p:200000000}, {n:"Artifact", e:"🗿", p:700000000}, {n:"Eye", e:"👁️", p:1200000000}, {n:"Heart", e:"❤️", p:1600000000}, {n:"Thunder", e:"🌩️", p:1900000000}, {n:"Kraken", e:"🐙", p:2000000000}, {n:"Phoenix", e:"🔥", p:3000000000}, {n:"Titan", e:"🗿", p:8000000000}, {n:"Soul", e:"👻", p:20000000000}, {n:"Godly", e:"😇", p:50000000000}, {n:"Origin", e:"🔘", p:150000000000}, {n:"Creator", e:"👑", p:500000000000}]},
-            c10: { n: "Ultimate", cost: 50000000000, icon: "💎", items: [{n:"Light", e:"🌈", p:5000000000}, {n:"Time", e:"⏳", p:17500000000}, {n:"Void", e:"🕳️", p:30000000000}, {n:"Antimat", e:"⚛️", p:40000000000}, {n:"Binary", e:"🔢", p:47500000000}, {n:"Quantum", e:"🔬", p:50000000000}, {n:"Glitch", e:"👾", p:75000000000}, {n:"Matrix", e:"📺", p:200000000000}, {n:"Infinit", e:"♾️", p:500000000000}, {n:"Eternity", e:"🕰️", p:1250000000000}, {n:"Victory", e:"🚩", p:3750000000000}, {n:"Glow", e:"🌟", p:12500000000000}]},
-            c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [{n:"Universe", e:"🌌", p: Infinity, isUniverse: true}]},
-            c12: { n: "Gradient Elite", cost: 10000000000000, icon: "🎨", items: [
-                {n:"Plasma Soul", e:"💠", p:12000000000000, g:"linear-gradient(45deg, #00dbde, #fc00ff)"},
-                {n:"Supernova", e:"💥", p:15000000000000, g:"linear-gradient(45deg, #f83600, #f9d423)"},
-                {n:"Deep Matrix", e:"🧬", p:20000000000000, g:"linear-gradient(45deg, #0ba360, #3cba92)"},
-                {n:"Ether Crystal", e:"💎", p:25000000000000, g:"linear-gradient(45deg, #00c6fb, #005bea)"},
-                {n:"Golden Singularity", e:"🔆", p:35000000000000, g:"linear-gradient(45deg, #fccb90, #d57eeb)"},
-                {n:"Cyber Core", e:"🌀", p:50000000000000, g:"linear-gradient(45deg, #30cfd0, #330867)"},
-                {n:"Astral Gate", e:"⛩️", p:75000000000000, g:"linear-gradient(45deg, #a18cd1, #fbc2eb)"},
-                {n:"Dark Matter", e:"🖤", p:100000000000000, g:"linear-gradient(45deg, #232526, #414345)"},
-                {n:"God Ray", e:"🔱", p:250000000000000, g:"linear-gradient(45deg, #ee9ae5, #5961f9)"},
-                {n:"Infinity Key", e:"🗝️", p:500000000000000, g:"linear-gradient(45deg, #434343, #000000)"}
-            ]}
-        };
-
-        function getRarityData(idx, item = {}) {
-            if (item.isUniverse || item.g) {
-                const grad = item.g || "linear-gradient(45deg, #00ffff, #005bea)";
-                return { 
-                    class: 'rarity-universe', 
-                    color: 'white', 
-                    prefix: item.g ? '✨ ELITE: ' : '🌌 DIVINE: ',
-                    style: `border: 2px solid transparent; border-image: ${grad} 1; box-shadow: inset 0 0 20px rgba(255,255,255,0.1);`
-                };
-            }
-            if (idx >= 11) return { class: 'rarity-legendary', color: '#ffcc00', prefix: '⚡ LEGENDARY: ' };
-            if (idx >= 9)  return { class: 'rarity-mythic', color: '#ff4757', prefix: '🔥 MYTHIC: ' };
-            if (idx >= 7)  return { class: 'rarity-epic', color: '#a55eea', prefix: '🟣 EPIC: ' };
-            if (idx >= 5)  return { class: 'rarity-rare', color: '#45aaf2', prefix: '🔵 RARE: ' };
-            return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
-        }
-
-        function render() {
-            document.getElementById('balance').innerText = coins.toLocaleString();
-            document.getElementById('items-list').innerHTML = inventory.map((item, i) => {
-                const isElite = item.isUniverse || item.g;
-                const borderStyle = isElite ? "" : `border-bottom: 4px solid ${item.color || '#333'};`;
-                return `
-                    <div class="item-card ${item.class || ''}" style="${item.style || ''} ${borderStyle}">
-                        <span style="font-size:3rem;">${item.e}</span>
-                        <strong style="display:block;">${item.n}</strong>
-                        <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
-                        <button class="btn-sell" onclick="sell(${i})">Sell</button>
-                    </div>`;
-            }).join('');
-        }
-
+    c1: { n: "Stationery", cost: 50, icon: "📦", items: [
+        {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:15}, {n:"Eraser", e:"🧼", p:25}, {n:"Pen", e:"🖊️", p:35}, {n:"Brush", e:"🖌️", p:42},
+        {n:"Pencil", e:"✏️", p:50}, {n:"Folder", e:"📁", p:65},
+        {n:"Book", e:"📖", p:150}, {n:"Bag", e:"🎒", p:300}, {n:"Clock", e:"⏰", p:600}, {n:"Lamp", e:"💡", p:1500}, {n:"Gold Pen", e:"🖋️", p:4000}
+    ]},
+    c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
+        {n:"Sand", e:"⏳", p:50}, {n:"Iron Ore", e:"🧱", p:150}, {n:"Oil", e:"🛢️", p:250}, {n:"Coal", e:"⬛", p:350}, {n:"Iron", e:"⛓️", p:450},
+        {n:"Copper", e:"🥉", p:500}, {n:"Silver", e:"🥈", p:700},
+        {n:"Gold", e:"🥇", p:1500}, {n:"Ruby", e:"🔻", p:3500}, {n:"Emerald", e:"❇️", p:7500}, {n:"Diamond", e:"💎", p:20000}, {n:"Crown", e:"👑", p:50000}
+    ]},
+    c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
+        {n:"Cable", e:"🔌", p:500}, {n:"Mouse", e:"🖱️", p:1500}, {n:"Keys", e:"⌨️", p:2500}, {n:"Disc", e:"💿", p:3500}, {n:"Camera", e:"📷", p:4500},
+        {n:"Phone", e:"📱", p:5000}, {n:"Tablet", e:"📟", p:7500},
+        {n:"Monitor", e:"🖥️", p:20000}, {n:"Laptop", e:"💻", p:50000}, {n:"Server", e:"🏢", p:125000}, {n:"Drone", e:"🚁", p:300000}, {n:"AI Cube", e:"🧊", p:750000}
+    ]},
+    c4: { n: "Transport", cost: 40000, icon: "🚗", items: [
+        {n:"Wheel", e:"🎡", p:4000}, {n:"Bike", e:"🚲", p:12000}, {n:"Scooter", e:"🛴", p:22000}, {n:"Moped", e:"🛵", p:30000}, {n:"Cart", e:"🛒", p:36000},
+        {n:"Car", e:"🚗", p:40000}, {n:"SUV", e:"🚙", p:60000},
+        {n:"Truck", e:"🚚", p:160000}, {n:"Bus", e:"🚌", p:400000}, {n:"Train", e:"🚆", p:1000000}, {n:"Plane", e:"🛩️", p:2800000}, {n:"Hypercar", e:"🏎️", p:8000000}
+    ]},
+    c5: { n: "Property", cost: 250000, icon: "🏠", items: [
+        {n:"Fence", e:"🚧", p:25000}, {n:"Shed", e:"🏚️", p:87500}, {n:"Room", e:"🚪", p:150000}, {n:"Tent", e:"⛺", p:200000}, {n:"House", e:"🏠", p:235000},
+        {n:"Villa", e:"🏡", p:250000}, {n:"Hotel", e:"🏨", p:375000},
+        {n:"Office", e:"🏢", p:1000000}, {n:"Bank", e:"🏦", p:2500000}, {n:"Castle", e:"🏰", p:6250000}, {n:"Island", e:"🏝️", p:17500000}, {n:"City", e:"🏙️", p:50000000}
+    ]},
+    c6: { n: "Aviation", cost: 1500000, icon: "🚁", items: [
+        {n:"Propeller", e:"⚙️", p:150000}, {n:"Glider", e:"🪂", p:525000}, {n:"Copter", e:"🚁", p:900000}, {n:"Jet", e:"✈️", p:1200000}, {n:"Airliner", e:"🛫", p:1425000},
+        {n:"Stealth", e:"🛸", p:1500000}, {n:"Rocket", e:"🚀", p:2250000},
+        {n:"Shuttle", e:"🛰️", p:6000000}, {n:"Station", e:"🚉", p:15000000}, {n:"Base", e:"🌑", p:37500000}, {n:"Portal", e:"🌀", p:105000000}, {n:"DeathStar", e:"🪐", p:300000000}
+    ]},
+    c7: { n: "Magic", cost: 10000000, icon: "🔮", items: [
+        {n:"Dust", e:"✨", p:1000000}, {n:"Herb", e:"🌿", p:3500000}, {n:"Potion", e:"🧪", p:6000000}, {n:"Scroll", e:"📜", p:8000000}, {n:"Staff", e:"🦯", p:9500000},
+        {n:"Crystal", e:"🔮", p:10000000}, {n:"Amulet", e:"📿", p:15000000},
+        {n:"Sword", e:"⚔️", p:40000000}, {n:"Shield", e:"🛡️", p:100000000}, {n:"Grimoire", e:"📙", p:250000000}, {n:"Dragon", e:"🐲", p:700000000}, {n:"HolyGrail", e:"🏆", p:2500000000}
+    ]},
+    c8: { n: "Galaxy", cost: 100000000, icon: "🌌", items: [
+        {n:"Meteor", e:"☄️", p:10000000}, {n:"Moon", e:"🌙", p:35000000}, {n:"Mars", e:"🔴", p:60000000}, {n:"Saturn", e:"🪐", p:80000000}, {n:"Sun", e:"☀️", p:95000000},
+        {n:"Pulsar", e:"⚡", p:100000000}, {n:"BlackHole", e:"🕳️", p:150000000},
+        {n:"Nebula", e:"☁️", p:400000000}, {n:"Constel", e:"🌠", p:1000000000}, {n:"Galaxy", e:"🌀", p:2500000000}, {n:"Cluster", e:"🎆", p:7500000000}, {n:"Cosmos", e:"🌌", p:25000000000}
+    ]},
+    c9: { n: "Mythical", cost: 2000000000, icon: "🔱", items: [
+        {n:"Relic", e:"🏺", p:200000000}, {n:"Artifact", e:"🗿", p:700000000}, {n:"Eye", e:"👁️", p:1200000000}, {n:"Heart", e:"❤️", p:1600000000}, {n:"Thunder", e:"🌩️", p:1900000000},
+        {n:"Kraken", e:"🐙", p:2000000000}, {n:"Phoenix", e:"🔥", p:3000000000},
+        {n:"Titan", e:"🗿", p:8000000000}, {n:"Soul", e:"👻", p:20000000000}, {n:"Godly", e:"😇", p:50000000000}, {n:"Origin", e:"🔘", p:150000000000}, {n:"Creator", e:"👑", p:500000000000}
+    ]},
+    c10: { n: "Ultimate", cost: 50000000000, icon: "💎", items: [
+        {n:"Light", e:"🌈", p:5000000000}, {n:"Time", e:"⏳", p:17500000000}, {n:"Void", e:"🕳️", p:30000000000}, {n:"Antimat", e:"⚛️", p:40000000000}, {n:"Binary", e:"🔢", p:47500000000},
+        {n:"Quantum", e:"🔬", p:50000000000}, {n:"Glitch", e:"👾", p:75000000000},
+        {n:"Matrix", e:"📺", p:200000000000}, {n:"Infinit", e:"♾️", p:500000000000}, {n:"Eternity", e:"🕰️", p:1250000000000}, {n:"Victory", e:"🚩", p:3750000000000}, {n:"Glow", e:"🌟", p:12500000000000}
+    ]},
+    c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
+        {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
+    ]}
+};
+        // Логика функций остается прежней (mine, save, load, render и т.д.)
         function mine() { coins++; render(); save(); }
         function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
@@ -144,6 +146,33 @@
             el.style.display = (el.style.display === 'none') ? 'flex' : 'none';
         }
 
+        function getRarityData(idx, isUniverse = false) {
+            if (isUniverse) return { class: 'rarity-universe', color: '#00ffff', prefix: '🌌 DIVINE: ' };
+            if (idx >= 11) return { class: 'rarity-legendary', color: '#ffcc00', prefix: '⚡ LEGENDARY: ' };
+            if (idx >= 9)  return { class: 'rarity-mythic', color: '#ff4757', prefix: '🔥 MYTHIC: ' };
+            if (idx >= 7)  return { class: 'rarity-epic', color: '#a55eea', prefix: '🟣 EPIC: ' };
+            if (idx >= 5)  return { class: 'rarity-rare', color: '#45aaf2', prefix: '🔵 RARE: ' };
+            return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
+        }
+
+        function showPreview(id) {
+            const box = document.getElementById('case-items-list');
+            document.getElementById('case-preview-section').style.display = 'block';
+            let itemsHtml = '';
+            if(id === 'c11') {
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">99%</span></div>`;
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 2px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
+            } else {
+                itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div><span class="chance-label">15%</span></div>`;
+                itemsHtml += shopData[id].items.map((it, idx) => {
+                    const r = getRarityData(idx, it.isUniverse);
+                    let ch = (idx < 5) ? "50%" : (idx < 7) ? "20%" : (idx < 9) ? "10%" : (idx < 11) ? "3%" : "1%";
+                    return `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 2px solid ${r.color};">${it.e}</div><span class="chance-label">${ch}</span></div>`;
+                }).join('');
+            }
+            box.innerHTML = itemsHtml;
+        }
+
         function generateCaseButtons() {
             document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
                 <div class="case-card" onclick="handleOpen('${id}')" onmouseover="showPreview('${id}')">
@@ -152,17 +181,6 @@
                     <span class="case-price">${shopData[id].cost.toLocaleString()} ⭐</span>
                 </div>
             `).join('');
-        }
-
-        function showPreview(id) {
-            const box = document.getElementById('case-items-list');
-            document.getElementById('case-preview-section').style.display = 'block';
-            box.innerHTML = shopData[id].items.map((it, idx) => {
-                const r = getRarityData(idx, it);
-                const isElite = it.isUniverse || it.g;
-                const borderS = isElite ? "" : `border-bottom: 2px solid ${r.color}`;
-                return `<div class="preview-item-wrapper"><div class="preview-icon-box ${r.class}" style="${r.style || ''} ${borderS}">${it.e}</div></div>`;
-            }).join('');
         }
 
         function handleOpen(id) {
@@ -176,11 +194,14 @@
             const luck = Math.random() * 100;
             if (id === 'c11') {
                 if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
-                return {...box.items[0], ...getRarityData(0, box.items[0]), fail: false};
+                return {...box.items[0], ...getRarityData(0, true), fail: false};
             } else {
-                let itemIdx = (luck <= 1) ? 11 : (luck <= 5) ? 9 : (luck <= 15) ? 7 : (luck <= 35) ? 5 : 0;
-                const item = box.items[itemIdx] || box.items[0];
-                return {...item, ...getRarityData(itemIdx, item), fail: false};
+                if (luck <= 1) return {...box.items[11], ...getRarityData(11), fail: false};
+                if (luck <= 4) return {...box.items[9 + Math.floor(Math.random() * 2)], ...getRarityData(9), fail: false};
+                if (luck <= 14) return {...box.items[7 + Math.floor(Math.random() * 2)], ...getRarityData(7), fail: false};
+                if (luck <= 34) return {...box.items[5 + Math.floor(Math.random() * 2)], ...getRarityData(5), fail: false};
+                if (luck <= 84) return {...box.items[Math.floor(Math.random() * 5)], ...getRarityData(0), fail: false};
+                return {n: "Empty", e: "💨", p: 0, fail: true};
             }
         }
 
@@ -189,35 +210,36 @@
             isSpinning = true;
             render();
             const reel = document.getElementById('reel');
+            const card = document.getElementById('casino-card');
+            const msg = document.getElementById('casino-msg');
             const result = calculateWinner(id);
+
             let tape = '';
             for(let i=0; i<65; i++) {
                 let rIdx = Math.floor(Math.random() * shopData[id].items.length);
                 let rItem = shopData[id].items[rIdx];
-                let rRare = getRarityData(rIdx, rItem);
-                const borderS = (rItem.isUniverse || rItem.g) ? "" : `border-bottom: 4px solid ${rRare.color}`;
-                tape += `<div class="reel-item-horizontal ${rRare.class}" style="${rRare.style || ''} ${borderS}">${rItem.e}</div>`;
+                let rRare = getRarityData(rIdx, rItem.isUniverse);
+                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
             }
             reel.innerHTML = tape;
             reel.style.transition = 'none';
             reel.style.transform = 'translateX(0)';
 
-            const target = reel.querySelectorAll('.reel-item-horizontal')[55];
-            target.innerText = result.e;
-            target.className = `reel-item-horizontal ${result.class || ''}`;
-            const isEliteRes = result.isUniverse || result.g;
-            target.style.cssText = (result.style || '') + (isEliteRes ? "" : `border-bottom: 4px solid ${result.color}`);
+            const items = reel.querySelectorAll('.reel-item-horizontal');
+            items[55].innerText = result.e;
+            items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
+                const itemWidth = 126; 
+                const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
-                reel.style.transform = `translateX(-${55 * 126 - 150}px)`;
+                reel.style.transform = `translateX(-${stopPos}px)`;
             }, 50);
 
             setTimeout(() => {
                 isSpinning = false;
-                const msg = document.getElementById('casino-msg');
                 if (result.fail) {
-                    msg.innerText = "Empty... 💨";
+                    msg.innerText = "Empty Case... 💨";
                     msg.style.color = "#ff4757";
                 } else {
                     inventory.push(result);
@@ -233,6 +255,18 @@
             coins += inventory[i].p;
             inventory.splice(i, 1);
             render(); save();
+        }
+
+        function render() {
+            document.getElementById('balance').innerText = coins.toLocaleString();
+            document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
+                <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
+                    <span style="font-size:3rem;">${item.e}</span>
+                    <strong style="display:block;">${item.n}</strong>
+                    <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
+                    <button class="btn-sell" onclick="sell(${i})">Sell</button>
+                </div>
+            `).join('');
         }
 
         window.onload = load;
