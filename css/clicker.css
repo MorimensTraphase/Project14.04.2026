@@ -345,3 +345,106 @@ body {
 .achievement-info span {
     font-size: 1.1rem;
 }
+
+/* --- СТИЛИ ИСТОРИИ ДРОПА --- */
+
+/* Контейнер для всей секции */
+.inventory-section h3 {
+    margin-bottom: 10px;
+    color: #888;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Сама лента скролла */
+#drop-history {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    min-height: 70px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Плавный скролл для мобилок */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Индивидуальная карточка в истории */
+.history-item {
+    background: #151515;
+    border-radius: 10px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    border-left: 4px solid #333; /* По умолчанию серый */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    
+    /* Анимация прилета слева */
+    animation: slideInHistory 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+/* Иконка предмета в истории */
+.history-item span:first-child {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+
+/* Текст названия в истории */
+.history-item span:last-child {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Красивый скроллбар */
+#drop-history::-webkit-scrollbar {
+    height: 5px;
+}
+
+#drop-history::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#drop-history::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#drop-history::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Анимация появления */
+@keyframes slideInHistory {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Свечение для легендарок и юниверса в истории */
+.history-item[style*="#ffcc00"] { /* Legendary */
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
+    background: linear-gradient(90deg, #1a1a1a, #2a2510);
+}
+
+.history-item[style*="#00ffff"] { /* Universe */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    background: linear-gradient(90deg, #1a1a1a, #0a2a2a);
+    animation: slideInHistory 0.4s forwards, pulseUniverse 2s infinite;
+}
+
+@keyframes pulseUniverse {
+    0% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+}
