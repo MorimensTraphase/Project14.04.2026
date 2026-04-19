@@ -150,14 +150,24 @@
     document.getElementById('case-preview-section').style.display = 'block';
     
     let itemsHtml = '';
+    
+    // Определяем параметры для иконки пустоты
+    const emptyChance = (id === 'c11') ? '99%' : '50%';
+    
+    // Сначала добавляем иконку Пустоты (теперь она выглядит как обычный предмет)
+    itemsHtml += `
+        <div class="preview-item-wrapper">
+            <div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div>
+            <span class="chance-label">${emptyChance}</span>
+        </div>`;
+
     if(id === 'c11') {
-        // Иконка пустоты для последнего кейса
-        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div><span class="chance-label">99%</span></div>`;
-        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div><span class="chance-label">1%</span></div>`;
+        itemsHtml += `
+            <div class="preview-item-wrapper">
+                <div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div>
+                <span class="chance-label">1%</span>
+            </div>`;
     } else {
-        // Иконка пустоты для обычных кейсов (50%)
-        itemsHtml += `<div class="preview-item-wrapper"><div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div><span class="chance-label">50%</span></div>`;
-        
         itemsHtml += shopData[id].items.map((it, idx) => {
             const r = getRarityData(idx, it.isUniverse);
             let ch = "0.5%"; 
