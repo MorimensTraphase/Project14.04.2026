@@ -63,52 +63,54 @@
     </div>
 
     <script>
-       const words = [
-    // --- ВЕЛИКОБРИТАНИЯ (UK) ---
-    { original: "LONDON", hint: "The capital city of the UK 🇬🇧" },
-    { original: "OXFORD", hint: "Famous for one of the oldest universities 🎓" },
-    { original: "THAMES", hint: "The famous river that flows through London 🌊" },
-    { original: "CASTLE", hint: "Windsor is the oldest and largest occupied one 🏰" },
-    { original: "DOUBLE", hint: "The famous red bus is a ... decker 🚌" },
-    { original: "ABBEY", hint: "Westminster ... - where kings are crowned 👑" },
-    { original: "SCOTLAND", hint: "Home of the Loch Ness Monster 🦕" },
-    { original: "STONEHENGE", hint: "Prehistoric monument of standing stones 🗿" },
-    { original: "BIGBEN", hint: "The nickname for the Great Bell in London 🕰️" },
-    { original: "CHELSEA", hint: "A famous football club and area in London ⚽" },
-    { original: "BRISTOL", hint: "A city known for its maritime history and Banksy 🎨" },
-    { original: "SHAKESPEARE", hint: "The most famous British playwright 🎭" },
-    { original: "BEATLES", hint: "The legendary rock band from Liverpool 🎸" },
-    { original: "PUZZLE", hint: "Something you're solving right now! 🧩" },
+        const words = [
+            // --- ВЕЛИКОБРИТАНИЯ (UK) ---
+            { original: "LONDON", hint: "The capital city of the UK 🇬🇧" },
+            { original: "OXFORD", hint: "Famous for one of the oldest universities 🎓" },
+            { original: "THAMES", hint: "The famous river that flows through London 🌊" },
+            { original: "CASTLE", hint: "Windsor is the oldest and largest occupied one 🏰" },
+            { original: "DOUBLE", hint: "The famous red bus is a ... decker 🚌" },
+            { original: "ABBEY", hint: "Westminster ... - where kings are crowned 👑" },
+            { original: "SCOTLAND", hint: "Home of the Loch Ness Monster 🦕" },
+            { original: "STONEHENGE", hint: "Prehistoric monument of standing stones 🗿" },
+            { original: "BIGBEN", hint: "The nickname for the Great Bell in London 🕰️" },
+            { original: "CHELSEA", hint: "A famous football club and area in London ⚽" },
+            { original: "BRISTOL", hint: "A city known for its maritime history and Banksy 🎨" },
+            { original: "SHAKESPEARE", hint: "The most famous British playwright 🎭" },
+            { original: "BEATLES", hint: "The legendary rock band from Liverpool 🎸" },
+            { original: "PUZZLE", hint: "Something you're solving right now! 🧩" },
 
-    // --- ПОЛЬША (PL) ---
-    { original: "WARSAW", hint: "The capital city of Poland 🇵🇱" },
-    { original: "KRAKOW", hint: "The ancient royal capital of Poland 🏰" },
-    { original: "PIEROGI", hint: "Famous Polish dumplings 🥟" },
-    { original: "GDANSK", hint: "A beautiful port city on the Baltic Sea ⚓" },
-    { original: "TATRA", hint: "The highest mountain range in Poland 🏔️" },
-    { original: "ZLOTY", hint: "The official currency of Poland 💰" },
-    { original: "BISON", hint: "The heavy animal living in Bialowieza Forest 🦬" },
-    { original: "AMBER", hint: "The 'Gold of the Baltic' 💎" },
-    { original: "VISTULA", hint: "The longest river in Poland 🌊" },
-    { original: "WAWEL", hint: "The royal castle in Krakow 🐉" },
-    { original: "CHOPIN", hint: "Poland's most famous composer and pianist 🎹" },
-    { original: "MAZUREK", hint: "A traditional Polish sweet cake 🍰" },
-    { original: "COPERNICUS", hint: "The astronomer who stopped the Sun ☀️" },
-    { original: "WROCLAW", hint: "The city of many bridges and gnomes 🧙‍♂️" },
-    { original: "BALTIC", hint: "The sea located to the north of Poland 🏖️" }
-];
+            // --- ПОЛЬША (PL) ---
+            { original: "WARSAW", hint: "The capital city of Poland 🇵🇱" },
+            { original: "KRAKOW", hint: "The ancient royal capital of Poland 🏰" },
+            { original: "PIEROGI", hint: "Famous Polish dumplings 🥟" },
+            { original: "GDANSK", hint: "A beautiful port city on the Baltic Sea ⚓" },
+            { original: "TATRA", hint: "The highest mountain range in Poland 🏔️" },
+            { original: "ZLOTY", hint: "The official currency of Poland 💰" },
+            { original: "BISON", hint: "The heavy animal living in Bialowieza Forest 🦬" },
+            { original: "AMBER", hint: "The 'Gold of the Baltic' 💎" },
+            { original: "VISTULA", hint: "The longest river in Poland 🌊" },
+            { original: "WAWEL", hint: "The royal castle in Krakow 🐉" },
+            { original: "CHOPIN", hint: "Poland's most famous composer and pianist 🎹" },
+            { original: "MAZUREK", hint: "A traditional Polish sweet cake 🍰" },
+            { original: "COPERNICUS", hint: "The astronomer who stopped the Sun ☀️" },
+            { original: "WROCLAW", hint: "The city of many bridges and gnomes 🧙‍♂️" },
+            { original: "BALTIC", hint: "The sea located to the north of Poland 🏖️" }
+        ];
 
         let currentIndex = 0;
         let score = 0;
         let shuffledWords = [];
 
         function initGame() {
-            shuffledWords = [...wordsData].sort(() => Math.random() - 0.5);
+            // Использовано верное имя массива 'words'
+            shuffledWords = [...words].sort(() => Math.random() - 0.5);
             document.getElementById("total-words").innerText = shuffledWords.length;
             showWord();
         }
 
         function scramble(word) {
+            if (word.length <= 1) return word;
             let s = word.split('').sort(() => Math.random() - 0.5).join('');
             return (s === word) ? scramble(word) : s;
         }
@@ -117,31 +119,36 @@
             if (currentIndex < shuffledWords.length) {
                 const currentData = shuffledWords[currentIndex];
                 document.getElementById("current-index").innerText = currentIndex + 1;
-                document.getElementById("scrambled-word").innerText = scramble(currentData.word);
+                // Используем .original вместо .word
+                document.getElementById("scrambled-word").innerText = scramble(currentData.original);
                 document.getElementById("hint").innerText = "Hint: " + currentData.hint;
                 document.getElementById("user-guess").value = "";
                 document.getElementById("message").innerText = "";
+                document.getElementById("user-guess").focus();
             } else {
                 showFinalResults();
             }
         }
 
         function submitAnswer() {
-            const userGuess = document.getElementById("user-guess").value.toUpperCase().trim();
-            const correctAnswer = shuffledWords[currentIndex].word;
+            const inputField = document.getElementById("user-guess");
+            const userGuess = inputField.value.toUpperCase().trim();
+            const correctAnswer = shuffledWords[currentIndex].original;
             const msg = document.getElementById("message");
+
+            if (userGuess === "") return; // Игнорируем пустой ввод
 
             if (userGuess === correctAnswer) {
                 score++;
                 msg.innerText = "Correct! ✨";
                 msg.style.color = "#2ecc71";
                 currentIndex++;
-                setTimeout(showWord, 500); // Оптимальная задержка
+                setTimeout(showWord, 600);
             } else {
                 msg.innerText = "Wrong! It was " + correctAnswer;
                 msg.style.color = "#e74c3c";
                 currentIndex++;
-                setTimeout(showWord, 1200); // Чуть дольше при ошибке
+                setTimeout(showWord, 1500);
             }
         }
 
