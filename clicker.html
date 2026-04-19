@@ -60,8 +60,9 @@
                         <div class="case-grid" id="case-list"></div>
 
                         <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-                            <h4 id="chance-title" style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT (50% DROP CHANCE):</h4>
-                            <div id="case-items-list" class="items-preview-grid"></div>
+                            <h4 id="chance-title" style="color: #666; font-size: 0.8rem; margin-bottom: 2px;">POSSIBLE CONTENT:</h4>
+                            <span id="empty-info" class="empty-chance-text"></span>
+                            <div id="case-items-list" class="items-preview-grid" style="margin-top: 10px;"></div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +81,7 @@
                 {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:250}, {n:"Bag", e:"🎒", p:500}, {n:"Clock", e:"⏰", p:1200}, {n:"Lamp", e:"💡", p:3000}, {n:"Gold Pen", e:"🖋️", p:10000}
             ]},
             c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
-                {n:"Sand", e:"⌛", p:50}, {n:"Stone", e:"🪨", p:120}, {n:"Wood", e:"🪵", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
+                {n:"Sand", e:"⌛", p:50}, {n:"Iron Ore", e:"🧱", p:120}, {n:"Oil", e:"🛢️", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
                 {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
             ]},
             c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
@@ -142,17 +143,16 @@
             return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
         }
 
-        // Пункт 3: Добавление шансов под предметы
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
-            const title = document.getElementById('chance-title');
+            const emptyLabel = document.getElementById('empty-info');
             document.getElementById('case-preview-section').style.display = 'block';
             
             if(id === 'c11') {
-                title.innerText = "99% EMPTY | 1% UNIVERSE";
+                emptyLabel.innerText = "❌ 99% CHANCE FOR EMPTY CASE";
                 box.innerHTML = `<div style="text-align:center;"><div class="preview-item rarity-universe" style="border-bottom: 3px solid #00ffff; background:#1a1a1a; width:50px; height:50px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.5rem; margin:auto;">🌌</div><span class="chance-label">1%</span></div>`;
             } else {
-                title.innerText = "POSSIBLE CONTENT (50% DROP CHANCE):";
+                emptyLabel.innerText = "❌ 50% CHANCE FOR EMPTY CASE";
                 box.innerHTML = shopData[id].items.map((it, idx) => {
                     const r = getRarityData(idx, it.isUniverse);
                     let ch = "0.5%"; if(idx < 5) ch = "5%"; if(idx >= 5 && idx < 7) ch = "2.5%"; if(idx >= 7 && idx < 9) ch = "1.5%";
@@ -181,7 +181,6 @@
         function calculateWinner(id) {
             const box = shopData[id];
             const luck = Math.random() * 100;
-            // Пункт 4: Логика для последнего кейса
             if (id === 'c11') {
                 if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
                 return {...box.items[0], ...getRarityData(0, true), fail: false};
@@ -218,7 +217,7 @@
             items[55].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 126; // 120px ширина + 6px маргины (3+3)
+                const itemWidth = 126; 
                 const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
                 reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
