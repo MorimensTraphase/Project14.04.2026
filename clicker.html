@@ -34,8 +34,8 @@
 
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
-                    <div class="button-group">
-                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none;">← Back</a>
+                    <div class="button-group" style="margin-top:20px;">
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back</a>
                         <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold;">🎰 Open Cases</button>
                     </div>
                 </div>
@@ -55,12 +55,12 @@
                             <div id="reel" class="reel-horizontal"></div>
                         </div>
 
-                        <p id="casino-msg" style="font-size: 1rem; margin: 5px 0; font-weight: bold;">Choose your fate!</p>
+                        <p id="casino-msg" style="font-size: 1.1rem; margin: 5px 0; font-weight: bold; min-height: 1.5rem;">Choose your fate!</p>
                         
                         <div class="case-grid" id="case-list"></div>
 
                         <div id="case-preview-section" class="case-content-preview" style="display: none;">
-                            <h4 id="chance-title" style="color: #666; font-size: 0.65rem; margin-bottom: 5px;">CONTENT & CHANCES:</h4>
+                            <h4 style="color: #666; font-size: 0.65rem; margin-bottom: 5px; font-weight: bold;">CHANCES & CONTENT:</h4>
                             <div id="case-items-list" class="items-preview-grid"></div>
                         </div>
                     </div>
@@ -121,7 +121,10 @@
         };
 
         function mine() { coins++; render(); save(); }
-        function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
+        function save() { 
+            localStorage.setItem('tycoon_v3', coins); 
+            localStorage.setItem('inv_v3', JSON.stringify(inventory)); 
+        }
         function load() {
             coins = parseInt(localStorage.getItem('tycoon_v3')) || 0;
             inventory = JSON.parse(localStorage.getItem('inv_v3')) || [];
@@ -145,7 +148,6 @@
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
             document.getElementById('case-preview-section').style.display = 'block';
-            
             let html = '';
             const emptyChance = (id === 'c11') ? 99 : 50;
             html += `<div style="text-align:center;"><div style="background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem; border-bottom:2px solid #666;">💨</div><span style="font-size:0.6rem; color:#888; font-weight:bold;">${emptyChance}%</span></div>`;
@@ -153,7 +155,7 @@
             shopData[id].items.forEach((it, idx) => {
                 const r = getRarityData(idx, it.isUniverse);
                 let chance = (id === 'c11') ? 1 : (idx >= 11 ? 1 : idx >= 9 ? 5 : idx >= 7 ? 7.5 : idx >= 5 ? 12.5 : 24);
-                html += `<div style="text-align:center;"><div class="preview-item" style="border-bottom: 2px solid ${r.color}; background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem;">${it.e}</div><span style="font-size:0.6rem; color:${r.color}; font-weight:bold;">${chance}%</span></div>`;
+                html += `<div style="text-align:center;"><div style="border-bottom: 2px solid ${r.color}; background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem;">${it.e}</div><span style="font-size:0.6rem; color:${r.color}; font-weight:bold;">${chance}%</span></div>`;
             });
             box.innerHTML = html;
         }
@@ -198,7 +200,7 @@
             const result = calculateWinner(id);
 
             let tape = '';
-            for(let i=0; i<65; i++) {
+            for(let i=0; i<80; i++) {
                 let rIdx = Math.floor(Math.random() * shopData[id].items.length);
                 let rItem = shopData[id].items[rIdx];
                 let rRare = getRarityData(rIdx, rItem.isUniverse);
@@ -208,24 +210,32 @@
             reel.style.transition = 'none';
             reel.style.transform = 'translateX(0)';
 
+            const winIdx = 60;
             const items = reel.querySelectorAll('.reel-item-horizontal');
-            items[55].innerText = result.e;
-            items[55].className = `reel-item-horizontal ${result.class || ''}`;
+            items[winIdx].innerText = result.e;
+            items[winIdx].className = `reel-item-horizontal ${result.class || ''}`;
 
             setTimeout(() => {
-                const itemWidth = 94; 
-                const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
-                reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
+                const itemWidth = 90; 
+                const itemFullWidth = itemWidth + 10; // 90px + 10px (отступы)
+                
+                const stopPos = (winIdx * itemFullWidth) - (card.offsetWidth / 2) + (itemFullWidth / 2);
+                
+                reel.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)';
                 reel.style.transform = `translateX(-${stopPos}px)`;
             }, 50);
 
             setTimeout(() => {
                 isSpinning = false;
-                // ТЕКСТ ВЫПАДЕНИЯ ТЕПЕРЬ ЖИРНЫЙ (BOLD)
                 msg.style.fontWeight = "bold"; 
-                msg.innerText = result.fail ? "Empty Case... 💨" : `${result.prefix}${result.n.toUpperCase()}!`;
-                msg.style.color = result.fail ? "#ff4757" : result.color;
-                if (!result.fail) inventory.push(result);
+                if (result.fail) {
+                    msg.innerText = "Empty Case... 💨";
+                    msg.style.color = "#ff4757";
+                } else {
+                    inventory.push(result);
+                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
+                    msg.style.color = result.color;
+                }
                 render(); save();
             }, 4100);
         }
@@ -243,7 +253,8 @@
                 <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
                     <span style="font-size:2.5rem;">${item.e}</span>
                     <strong style="display:block; font-size: 0.8rem;">${item.n}</strong>
-                    <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
+                    <small style="color: #00ed9a; font-weight:bold;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
+                    <br>
                     <button class="btn-sell" onclick="sell(${i})">Sell</button>
                 </div>
             `).join('');
