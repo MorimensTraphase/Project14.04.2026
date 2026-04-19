@@ -185,21 +185,57 @@
         }
 
         function spin(id) {
-            coins -= shopData[id].cost;
-            isSpinning = true;
-            render();
-            const reel = document.getElementById('reel');
-            const card = document.getElementById('casino-card');
-            const msg = document.getElementById('casino-msg');
-            const result = calculateWinner(id);
+    coins -= shopData[id].cost;
+    isSpinning = true;
+    render();
+    
+    const reel = document.getElementById('reel');
+    const container = document.querySelector('.roulette-wrapper'); // Берем обертку
+    const msg = document.getElementById('casino-msg');
+    const result = calculateWinner(id);
 
-            let tape = '';
-            for(let i=0; i<65; i++) {
-                let rIdx = Math.floor(Math.random() * shopData[id].items.length);
-                let rItem = shopData[id].items[rIdx];
-                let rRare = getRarityData(rIdx, rItem.isUniverse);
-                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
-            }
+    let tape = '';
+    for(let i=0; i<65; i++) {
+        let rIdx = Math.floor(Math.random() * shopData[id].items.length);
+        let rItem = shopData[id].items[rIdx];
+        let rRare = getRarityData(rIdx, rItem.isUniverse);
+        tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
+    }
+    reel.innerHTML = tape;
+    
+    // Сброс анимации
+    reel.style.transition = 'none';
+    reel.style.transform = 'translateX(0)';
+
+    // Устанавливаем выигрышный предмет на 55-ю позицию
+    const items = reel.querySelectorAll('.reel-item-horizontal');
+    items[55].innerHTML = result.e;
+    items[55].className = `reel-item-horizontal ${result.class || ''}`;
+
+    setTimeout(() => {
+        // РАСЧЕТ: (Ширина предмета 120 + маржи 6) * индекс - (половина контейнера) + (половина предмета)
+        const itemFullWidth = 126; 
+        const centerOffset = container.offsetWidth / 2;
+        const stopPos = (55 * itemFullWidth) - centerOffset + (itemFullWidth / 2);
+        
+        reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
+        reel.style.transform = `translateX(-${stopPos}px)`;
+    }, 50);
+
+    setTimeout(() => {
+        isSpinning = false;
+        if (result.fail) {
+            msg.innerText = "Empty Case... 💨";
+            msg.style.color = "#ff4757";
+        } else {
+            inventory.push(result);
+            msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
+            msg.style.color = result.color;
+        }
+        render(); 
+        save();
+    }, 4100);
+}
             reel.innerHTML = tape;
             reel.style.transition = 'none';
             reel.style.transform = 'translateX(0)';
