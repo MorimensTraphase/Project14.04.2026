@@ -63,22 +63,40 @@
     </div>
 
     <script>
-        const wordsData = [
-    // Твои текущие 7 слов
-    { word: "LONDON", hint: "Capital of the UK 🇬🇧" },
-    { word: "WARSAW", hint: "Capital of Poland 🇵🇱" },
-    { word: "PIEROGI", hint: "Famous Polish dumplings 🥟" },
-    { word: "BIGBEN", hint: "Iconic clock tower in London 🕰️" },
-    { word: "KRAKOW", hint: "Ancient royal city in Poland 🏰" },
-    { word: "THAMES", hint: "The river flowing through London 🌊" },
-    { word: "BISON", hint: "The king of the Białowieża Forest 🦬" },
-    
-    // Новые 5 слов для коллекции
-    { word: "DOVER", hint: "City famous for its white cliffs ⚪" },
-    { word: "BALTIC", hint: "The sea located to the north of Poland 🌊" },
-    { word: "CASTLE", hint: "Windsor or Wawel? Both are this! 🏰" },
-    { word: "DRAGON", hint: "The legendary beast of Krakow 🐉" },
-    { word: "DOUBLE", hint: "Type of famous red bus in London 🚌" }
+       const words = [
+    // --- ВЕЛИКОБРИТАНИЯ (UK) ---
+    { original: "LONDON", hint: "The capital city of the UK 🇬🇧" },
+    { original: "OXFORD", hint: "Famous for one of the oldest universities 🎓" },
+    { original: "THAMES", hint: "The famous river that flows through London 🌊" },
+    { original: "CASTLE", hint: "Windsor is the oldest and largest occupied one 🏰" },
+    { original: "DOUBLE", hint: "The famous red bus is a ... decker 🚌" },
+    { original: "ABBEY", hint: "Westminster ... - where kings are crowned 👑" },
+    { original: "SCOTLAND", hint: "Home of the Loch Ness Monster 🦕" },
+    { original: "CARDIFF", hint: "The capital city of Wales 🏴󠁧󠁢󠁷󠁬󠁳󠁿" },
+    { original: "STONEHENGE", hint: "Prehistoric monument of standing stones 🗿" },
+    { original: "BIGBEN", hint: "The nickname for the Great Bell in London 🕰️" },
+    { original: "CHELSEA", hint: "A famous football club and area in London ⚽" },
+    { original: "BRISTOL", hint: "A city known for its maritime history and Banksy 🎨" },
+    { original: "SHAKESPEARE", hint: "The most famous British playwright 🎭" },
+    { original: "BEATLES", hint: "The legendary rock band from Liverpool 🎸" },
+    { original: "PUZZLE", hint: "Something you're solving right now! 🧩" },
+
+    // --- ПОЛЬША (PL) ---
+    { original: "WARSAW", hint: "The capital city of Poland 🇵🇱" },
+    { original: "KRAKOW", hint: "The ancient royal capital of Poland 🏰" },
+    { original: "PIEROGI", hint: "Famous Polish dumplings 🥟" },
+    { original: "GDANSK", hint: "A beautiful port city on the Baltic Sea ⚓" },
+    { original: "TATRA", hint: "The highest mountain range in Poland 🏔️" },
+    { original: "ZLOTY", hint: "The official currency of Poland 💰" },
+    { original: "BISON", hint: "The heavy animal living in Bialowieza Forest 🦬" },
+    { original: "AMBER", hint: "The 'Gold of the Baltic' 💎" },
+    { original: "VISTULA", hint: "The longest river in Poland 🌊" },
+    { original: "WAWEL", hint: "The royal castle in Krakow 🐉" },
+    { original: "CHOPIN", hint: "Poland's most famous composer and pianist 🎹" },
+    { original: "MAZUREK", hint: "A traditional Polish sweet cake 🍰" },
+    { original: "COPERNICUS", hint: "The astronomer who stopped the Sun ☀️" },
+    { original: "WROCLAW", hint: "The city of many bridges and gnomes 🧙‍♂️" },
+    { original: "BALTIC", hint: "The sea located to the north of Poland 🏖️" }
 ];
 
         let currentIndex = 0;
