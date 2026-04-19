@@ -189,14 +189,28 @@
     }
 
     function sell(i) {
-        if (inventory[i].isUniverse || inventory[i].p >= UNIVERSE_PRICE) { 
-            alert("Cannot sell the Universe! It is beyond value."); 
-            return; 
-        }
-        coins += inventory[i].p;
-        inventory.splice(i, 1);
-        render(); save();
+    const item = inventory[i];
+
+    if (item.isUniverse || item.p >= UNIVERSE_PRICE) { 
+        alert("Cannot sell the Universe! It is beyond value."); 
+        return; 
     }
+
+    // --- ПРОВЕРКА АЧИВОК ЗА ПРОДАЖУ ---
+    if (item.p >= 1000000000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1t'));
+    } else if (item.p >= 1000000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1b'));
+    } else if (item.p >= 1000000) {
+        showAchievement(achievementsList.find(a => a.id === 'sell_1m'));
+    }
+    // ---------------------------------
+
+    coins += item.p;
+    inventory.splice(i, 1);
+    render(); 
+    save();
+}
 
     // --- КАЗИНО ---
     function generateCaseButtons() {
