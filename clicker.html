@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Casino Tycoon</title>
+    <title>Casino Tycoon - Elite Edition</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.9">
+    <link rel="stylesheet" href="css/clicker.css?v=2.0">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
-    <style>
-        * { font-weight: bold !important; }
-    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -31,7 +28,6 @@
         <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
-                <br><br>
                 <div class="stats-bar">
                     <h2>Balance: <span id="balance">0</span> ⭐</h2>
                 </div>
@@ -72,18 +68,16 @@
         </main>
     </div>
 
-  <script>
+    <script>
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
 
         const shopData = {
-    c1: { n: "Stationery", cost: 50, icon: "📦", items: [
-        {n:"Paper", e:"📄", p:10}, {n:"Clip", e:"📎", p:20}, {n:"Eraser", e:"🧼", p:30}, {n:"Pen", e:"🖊️", p:40}, {n:"Brush", e:"🖌️", p:50},
-        {n:"Pencil", e:"✏️", p:60}, {n:"Folder", e:"📁", p:70},
-        {n:"Book", e:"📖", p:150}, {n:"Bag", e:"🎒", p:300}, {n:"Clock", e:"⏰", p:600}, {n:"Lamp", e:"💡", p:1500}, {n:"Gold Pen", e:"🖋️", p:4000}
-    ]},
-    c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
+            c1: { n: "Stationery", cost: 50, icon: "📦", items: [
+                {n:"Paper", e:"📄", p:5}, {n:"Clip", e:"📎", p:15}, {n:"Eraser", e:"🧼", p:25}, {n:"Pen", e:"🖊️", p:35}, {n:"Brush", e:"🖌️", p:40}, {n:"Pencil", e:"✏️", p:50}, {n:"Folder", e:"📁", p:65}, {n:"Book", e:"📖", p:150}, {n:"Bag", e:"🎒", p:300}, {n:"Clock", e:"⏰", p:600}, {n:"Lamp", e:"💡", p:1500}, {n:"Gold Pen", e:"🖋️", p:4000}
+            ]},
+            c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
                 {n:"Sand", e:"⏳", p:50}, {n:"Iron Ore", e:"🧱", p:150}, {n:"Oil", e:"🛢️", p:250}, {n:"Coal", e:"⬛", p:350}, {n:"Iron", e:"⛓️", p:450}, {n:"Copper", e:"🥉", p:500}, {n:"Silver", e:"🥈", p:700}, {n:"Gold", e:"🥇", p:1500}, {n:"Ruby", e:"🔻", p:3500}, {n:"Emerald", e:"❇️", p:7500}, {n:"Diamond", e:"💎", p:20000}, {n:"Crown", e:"👑", p:50000}
             ]},
             c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
