@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.1">
+    <link rel="stylesheet" href="css/clicker1.css">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
 </head>
 <body>
@@ -28,6 +28,7 @@
         <main class="container">
             <section class="game-section">
                 <h1>Casino Tycoon</h1>
+                <br><br>
                 <div class="stats-bar">
                     <h2>Balance: <span id="balance">0</span> ⭐</h2>
                 </div>
@@ -35,7 +36,7 @@
                 <div class="clicker-container">
                     <div id="coin" class="main-coin" onclick="mine()">⭐</div>
                     <div class="button-group" style="margin-top:20px;">
-                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back</a>
+                        <a href="games.html" class="action-button btn-reset" style="text-decoration: none; display: inline-block;">← Back to Menu</a>
                         <button class="action-button" onclick="toggleCasino()" style="background: #ffcc00; color: #000; font-weight: bold;">🎰 Open Cases</button>
                     </div>
                 </div>
@@ -48,20 +49,27 @@
                 <div id="casino-overlay" class="casino-overlay" style="display: none;">
                     <div class="casino-content" id="casino-card">
                         <button class="close-btn" onclick="toggleCasino()">×</button>
-                        <h2 style="color: #ffcc00; font-size: 1.2rem; margin: 5px 0;">Case Opening</h2>
+                        <h2 style="color: #ffcc00;">Case Opening</h2>
                         
+                        <div class="multi-open-selector" style="margin: 15px 0; display: flex; justify-content: center; gap: 10px; align-items: center;">
+                            <span style="color: #888; font-size: 0.9rem;">Open:</span>
+                            <button class="multi-btn active" id="m1" onclick="setMulti(1)">x1</button>
+                            <button class="multi-btn" id="m2" onclick="setMulti(2)">x2</button>
+                            <button class="multi-btn" id="m5" onclick="setMulti(5)">x5</button>
+                            <button class="multi-btn" id="m10" onclick="setMulti(10)">x10</button>
+                        </div>
+
                         <div class="roulette-wrapper">
                             <div class="selector"></div>
                             <div id="reel" class="reel-horizontal"></div>
                         </div>
 
-                        <p id="casino-msg" style="font-size: 1.1rem; margin: 5px 0; font-weight: bold; min-height: 1.5rem;">Choose your fate!</p>
-                        
+                        <p id="casino-msg">Choose your fate!</p>
                         <div class="case-grid" id="case-list"></div>
 
-                        <div id="case-preview-section" class="case-content-preview" style="display: none;">
-                            <h4 style="color: #666; font-size: 0.65rem; margin-bottom: 5px; font-weight: bold;">CHANCES & CONTENT:</h4>
-                            <div id="case-items-list" class="items-preview-grid"></div>
+                        <div id="case-preview-section" class="case-content-preview" style="display: none; margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
+                            <h4 style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">POSSIBLE CONTENT:</h4>
+                            <div id="case-items-list" class="items-preview-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"></div>
                         </div>
                     </div>
                 </div>
@@ -73,6 +81,7 @@
         let coins = 0;
         let inventory = [];
         let isSpinning = false;
+        let openMultiplier = 1;
 
         const shopData = {
             c1: { n: "Stationery", cost: 50, icon: "📦", items: [
@@ -80,7 +89,7 @@
                 {n:"Folder", e:"📁", p:100}, {n:"Book", e:"📖", p:250}, {n:"Bag", e:"🎒", p:500}, {n:"Clock", e:"⏰", p:1200}, {n:"Lamp", e:"💡", p:3000}, {n:"Gold Pen", e:"🖋️", p:10000}
             ]},
             c2: { n: "Resource", cost: 500, icon: "⚒️", items: [
-                {n:"Sand", e:"⌛", p:50}, {n:"Concrete", e:"🧱", p:120}, {n:"Steel", e:"🔩", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
+                {n:"Sand", e:"⌛", p:50}, {n:"Stone", e:"🪨", p:120}, {n:"Wood", e:"🪵", p:250}, {n:"Coal", e:"⬛", p:500}, {n:"Iron", e:"⛓️", p:1000}, {n:"Copper", e:"🥉", p:2000},
                 {n:"Silver", e:"🥈", p:4500}, {n:"Gold", e:"🥇", p:10000}, {n:"Ruby", e:"🔻", p:25000}, {n:"Emerald", e:"❇️", p:60000}, {n:"Diamond", e:"💎", p:150000}, {n:"Crown", e:"👑", p:500000}
             ]},
             c3: { n: "Electronics", cost: 5000, icon: "📱", items: [
@@ -116,15 +125,19 @@
                 {n:"Glitch", e:"👾", p:2000000000000}, {n:"Matrix", e:"📺", p:6000000000000}, {n:"Infinit", e:"♾️", p:15000000000000}, {n:"Eternity", e:"🕰️", p:40000000000000}, {n:"Victory", e:"🚩", p:100000000000000}, {n:"Glow", e:"🌟", p:999999999999999}
             ]},
             c11: { n: "Impossible", cost: 1000000000000, icon: "💀", items: [
+                {n:"Trash", e:"🗑️", p:1}, 
                 {n:"Universe", e:"🌌", p: Infinity, isUniverse: true}
             ]}
         };
 
-        function mine() { coins++; render(); save(); }
-        function save() { 
-            localStorage.setItem('tycoon_v3', coins); 
-            localStorage.setItem('inv_v3', JSON.stringify(inventory)); 
+        function setMulti(num) {
+            openMultiplier = num;
+            document.querySelectorAll('.multi-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m' + num).classList.add('active');
         }
+
+        function mine() { coins++; render(); save(); }
+        function save() { localStorage.setItem('tycoon_v3', coins); localStorage.setItem('inv_v3', JSON.stringify(inventory)); }
         function load() {
             coins = parseInt(localStorage.getItem('tycoon_v3')) || 0;
             inventory = JSON.parse(localStorage.getItem('inv_v3')) || [];
@@ -148,16 +161,10 @@
         function showPreview(id) {
             const box = document.getElementById('case-items-list');
             document.getElementById('case-preview-section').style.display = 'block';
-            let html = '';
-            const emptyChance = (id === 'c11') ? 99 : 50;
-            html += `<div style="text-align:center;"><div style="background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem; border-bottom:2px solid #666;">💨</div><span style="font-size:0.6rem; color:#888; font-weight:bold;">${emptyChance}%</span></div>`;
-
-            shopData[id].items.forEach((it, idx) => {
+            box.innerHTML = shopData[id].items.map((it, idx) => {
                 const r = getRarityData(idx, it.isUniverse);
-                let chance = (id === 'c11') ? 1 : (idx >= 11 ? 1 : idx >= 9 ? 5 : idx >= 7 ? 7.5 : idx >= 5 ? 12.5 : 24);
-                html += `<div style="text-align:center;"><div style="border-bottom: 2px solid ${r.color}; background:#1a1a1a; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.9rem;">${it.e}</div><span style="font-size:0.6rem; color:${r.color}; font-weight:bold;">${chance}%</span></div>`;
-            });
-            box.innerHTML = html;
+                return `<div class="preview-item" style="border-bottom: 3px solid ${r.color}; background:#1a1a1a; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:1.2rem;">${it.e}</div>`;
+            }).join('');
         }
 
         function generateCaseButtons() {
@@ -172,8 +179,14 @@
 
         function handleOpen(id) {
             if (isSpinning) return;
-            if (coins < shopData[id].cost) { alert("Not enough ⭐!"); return; }
-            spin(id);
+            const cost = shopData[id].cost * openMultiplier;
+            if (coins < cost) { alert("Not enough ⭐!"); return; }
+
+            if (openMultiplier === 1) {
+                spin(id);
+            } else {
+                multiSpin(id);
+            }
         }
 
         function calculateWinner(id) {
@@ -181,7 +194,10 @@
             const luck = Math.random() * 100;
             if (id === 'c11') {
                 if (luck < 99) return {n: "Empty", e: "💨", p: 0, fail: true};
-                return {...box.items[0], ...getRarityData(0, true), fail: false};
+                const subLuck = Math.random() * 100;
+                let isU = subLuck >= 99;
+                let item = isU ? box.items[1] : box.items[0];
+                return {...item, ...getRarityData(isU ? 11 : 0, isU), fail: false};
             } else {
                 if (luck < 50) return {n: "Empty", e: "💨", p: 0, fail: true};
                 const r = Math.random() * 100;
@@ -190,63 +206,65 @@
             }
         }
 
-        function spin(id) {
-    if (isSpinning) return;
-    coins -= shopData[id].cost;
-    isSpinning = true;
-    render();
-    
-    const reel = document.getElementById('reel');
-    const card = document.getElementById('casino-card');
-    const msg = document.getElementById('casino-msg');
-    const result = calculateWinner(id);
-
-    // Создаем ленту
-    let tape = '';
-    const totalItems = 80; // Длинная лента для плавности
-    for(let i = 0; i < totalItems; i++) {
-        let rIdx = Math.floor(Math.random() * shopData[id].items.length);
-        let rItem = shopData[id].items[rIdx];
-        let rRare = getRarityData(rIdx, rItem.isUniverse);
-        tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
-    }
-    reel.innerHTML = tape;
-    
-    // Сброс позиции
-    reel.style.transition = 'none';
-    reel.style.transform = 'translateX(0)';
-
-    // Определяем целевой индекс (например, 65-й элемент)
-    const winIdx = 65;
-    const items = reel.querySelectorAll('.reel-item-horizontal');
-    items[winIdx].innerText = result.e;
-    items[winIdx].className = `reel-item-horizontal ${result.class || ''}`;
-
-    setTimeout(() => {
-        // РАСЧЕТ: 120px (ширина) + 10px (суммарный margin 5+5) = 130px
-        const itemStep = 130; 
-        
-        // Центрирование: сдвигаем так, чтобы центр winIdx совпал с центром окна
-        const centerOffset = (card.offsetWidth / 2) - (itemStep / 2);
-        const stopPos = (winIdx * itemStep) - centerOffset;
-        
-        reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
-        reel.style.transform = `translateX(-${stopPos}px)`;
-    }, 50);
-
-    setTimeout(() => {
-        isSpinning = false;
-        if (result.fail) {
-            msg.innerText = "Empty Case... 💨";
-            msg.style.color = "#ff4757";
-        } else {
-            inventory.push(result);
-            msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
-            msg.style.color = result.color;
+        function multiSpin(id) {
+            coins -= (shopData[id].cost * openMultiplier);
+            let wins = [];
+            for(let i=0; i<openMultiplier; i++) {
+                let res = calculateWinner(id);
+                if(!res.fail) {
+                    inventory.push(res);
+                    wins.push(res.e);
+                }
+            }
+            document.getElementById('casino-msg').innerText = wins.length > 0 ? `Won: ${wins.join(' ')}` : "All empty... 💨";
+            render(); save();
         }
-        render(); save();
-    }, 4100);
-}
+
+        function spin(id) {
+            coins -= shopData[id].cost;
+            isSpinning = true;
+            render();
+            const reel = document.getElementById('reel');
+            const card = document.getElementById('casino-card');
+            const msg = document.getElementById('casino-msg');
+            const result = calculateWinner(id);
+
+            let tape = '';
+            for(let i=0; i<65; i++) {
+                let rIdx = Math.floor(Math.random() * shopData[id].items.length);
+                let rItem = shopData[id].items[rIdx];
+                let rRare = getRarityData(rIdx, rItem.isUniverse);
+                tape += `<div class="reel-item-horizontal ${rRare.class}">${rItem.e}</div>`;
+            }
+            reel.innerHTML = tape;
+            reel.style.transition = 'none';
+            reel.style.transform = 'translateX(0)';
+
+            const items = reel.querySelectorAll('.reel-item-horizontal');
+            items[55].innerText = result.e;
+            items[55].className = `reel-item-horizontal ${result.class || ''}`;
+
+            setTimeout(() => {
+                const itemWidth = 118; // 100px ширина + 8px отступы
+                const stopPos = (55 * itemWidth) - (card.offsetWidth / 2) + (itemWidth / 2);
+                reel.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)';
+                reel.style.transform = `translateX(-${stopPos}px)`;
+            }, 50);
+
+            setTimeout(() => {
+                isSpinning = false;
+                if (result.fail) {
+                    msg.innerText = "Empty Case... 💨";
+                    msg.style.color = "#ff4757";
+                } else {
+                    inventory.push(result);
+                    msg.innerText = `${result.prefix}${result.n.toUpperCase()}!`;
+                    msg.style.color = result.color;
+                }
+                render(); save();
+            }, 4100);
+        }
+
         function sell(i) {
             if (inventory[i].p === Infinity) { alert("Cannot sell the Universe!"); return; }
             coins += inventory[i].p;
@@ -258,10 +276,9 @@
             document.getElementById('balance').innerText = coins.toLocaleString();
             document.getElementById('items-list').innerHTML = inventory.map((item, i) => `
                 <div class="item-card ${item.class || ''}" style="border-bottom: 4px solid ${item.color || '#333'}">
-                    <span style="font-size:2.5rem;">${item.e}</span>
-                    <strong style="display:block; font-size: 0.8rem;">${item.n}</strong>
-                    <small style="color: #00ed9a; font-weight:bold;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
-                    <br>
+                    <span style="font-size:3rem;">${item.e}</span>
+                    <strong style="display:block;">${item.n}</strong>
+                    <small style="color: #00ed9a;">${item.p === Infinity ? '∞' : item.p.toLocaleString()} ⭐</small>
                     <button class="btn-sell" onclick="sell(${i})">Sell</button>
                 </div>
             `).join('');

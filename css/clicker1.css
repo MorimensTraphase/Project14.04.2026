@@ -1,0 +1,329 @@
+/* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+body { 
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0a;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- ЗОНА КЛИКЕРА --- */
+.clicker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.main-coin {
+    font-size: 8rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s;
+    filter: drop-shadow(0 0 25px rgba(0, 237, 154, 0.4));
+    margin: 30px 0;
+}
+
+.main-coin:active {
+    transform: scale(0.85);
+}
+
+/* --- ИНВЕНТАРЬ --- */
+.inventory-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(0, 237, 154, 0.1);
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.item-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #333;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-card:hover {
+    transform: translateY(-3px);
+}
+
+.btn-sell {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+/* --- КАЗИНО (OVERLAY) --- */
+.casino-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+}
+
+.casino-content {
+    background: #111;
+    border: 2px solid #ffcc00;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 800px;
+    width: 95%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
+}
+
+/* --- РУЛЕТКА --- */
+.roulette-wrapper {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    background: #050505;
+    border: 2px solid #222;
+    overflow: hidden;
+    margin: 20px 0;
+    border-radius: 12px;
+}
+
+.selector {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #ffcc00;
+    z-index: 100;
+    box-shadow: 0 0 15px #ffcc00;
+    transform: translateX(-50%);
+}
+
+.reel-horizontal {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    will-change: transform;
+}
+
+.reel-item-horizontal {
+    min-width: 120px;
+    max-width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    background: #1a1a1a;
+    margin: 0 3px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border-bottom: 4px solid #444;
+}
+
+/* --- СЕТКА КЕЙСОВ (ИСПРАВЛЕННАЯ) --- */
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 15px;
+    margin-top: 20px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+
+.case-card {
+    background: linear-gradient(145deg, #222, #111);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.case-card:hover {
+    transform: translateY(-4px);
+    border-color: #ffcc00;
+    background: #2a2a2a;
+}
+
+.case-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+.case-name { font-weight: bold; color: #eee; display: block; margin-bottom: 4px; }
+.case-price { color: #00ed9a; font-weight: bold; font-size: 0.9rem; }
+
+/* --- РЕДКОСТИ (ЦВЕТА) --- */
+
+/* Common - Зеленый */
+.rarity-common { border-bottom-color: #26de81 !important; }
+
+/* Rare - Синий */
+.rarity-rare { border-bottom-color: #45aaf2 !important; }
+
+/* Epic - Фиолетовый */
+.rarity-epic { border-bottom-color: #a55eea !important; }
+
+/* Mythic - Красный */
+.rarity-mythic { border-bottom-color: #ff4757 !important; }
+
+/* Legendary - Золотой */
+.rarity-legendary { 
+    border-bottom-color: #ffcc00 !important; 
+    animation: goldGlow 2s infinite alternate;
+}
+
+/* Universe - Divine */
+.rarity-universe {
+    background: linear-gradient(135deg, #0f0022, #2a0055, #000033) !important;
+    border: 2px solid #00ffff !important;
+    border-bottom-color: #00ffff !important;
+    animation: universeShift 5s ease infinite;
+}
+
+/* --- АНИМАЦИИ --- */
+@keyframes goldGlow {
+    from { box-shadow: 0 0 5px rgba(255, 204, 0, 0.2); }
+    to { box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
+}
+
+@keyframes universeShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.win-flash { animation: flash 0.6s ease-out; }
+@keyframes flash {
+    0% { background: rgba(255, 255, 255, 0.3); }
+    100% { background: transparent; }
+}
+
+.shake { animation: shake 0.4s ease-in-out; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* СКРОЛЛБАР */
+.case-grid::-webkit-scrollbar { width: 6px; }
+.case-grid::-webkit-scrollbar-track { background: transparent; }
+.case-grid::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.case-grid::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: none; border: none;
+    color: #666; font-size: 2rem;
+    cursor: pointer;
+}
+.close-btn:hover { color: #fff; }
+/* --- СТИЛИ ДЛЯ МУЛЬТИКЕЙСОВ --- */
+.multi-open-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.multi-label {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.multi-btn {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #eee;
+    padding: 6px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+.multi-btn:hover {
+    background: #252525;
+    border-color: #ffcc00;
+}
+
+.multi-btn.active {
+    background: #ffcc00;
+    color: #000;
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+}
+
+/* --- СТИЛИ ПРЕДПРОСМОТРА ПРЕДМЕТОВ --- */
+.case-content-preview {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #222;
+}
+
+.preview-title {
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.items-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.preview-item {
+    width: 48px;
+    height: 48px;
+    background: #050505;
+    border: 1px solid #222;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    border-bottom: 3px solid #444; /* Цвет будет меняться в JS */
+    transition: transform 0.2s;
+}
+
+.preview-item:hover {
+    transform: scale(1.1);
+}
+
+.cases-title {
+    color: #ffcc00;
+    margin-top: 0;
+} 
