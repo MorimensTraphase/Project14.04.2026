@@ -145,16 +145,14 @@
             return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
         }
 
-        function showPreview(id) {
+       function showPreview(id) {
     const box = document.getElementById('case-items-list');
     document.getElementById('case-preview-section').style.display = 'block';
     
     let itemsHtml = '';
-    
-    // Определяем параметры для иконки пустоты
     const emptyChance = (id === 'c11') ? '99%' : '50%';
     
-    // Сначала добавляем иконку Пустоты (теперь она выглядит как обычный предмет)
+    // Иконка Пустоты 💨
     itemsHtml += `
         <div class="preview-item-wrapper">
             <div class="preview-icon-box" style="border-bottom: 3px solid #ff4757;">💨</div>
@@ -186,7 +184,6 @@
     }
     box.innerHTML = itemsHtml;
 }
-
         function generateCaseButtons() {
             document.getElementById('case-list').innerHTML = Object.keys(shopData).map(id => `
                 <div class="case-card" onclick="handleOpen('${id}')" onmouseover="showPreview('${id}')">
