@@ -204,7 +204,7 @@
             
             if (id === 'c11') {
                 // Шанс 0.1% (если выпало число от 0.0 до 0.1)
-                if (luck < 99.9) return {n: "Empty", e: "💨", p: 0, fail: true};
+                if (luck < 1) return {n: "Empty", e: "💨", p: 0, fail: true};
                 return {...box.items[0], ...getRarityData(0, true), fail: false};
             } else {
                 if (luck <= 1) return {...box.items[11], ...getRarityData(11), fail: false};
