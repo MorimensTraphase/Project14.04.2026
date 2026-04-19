@@ -6,7 +6,7 @@
     <title>Casino Tycoon</title>
     <link rel="stylesheet" href="css/games.css"> 
     <link rel="stylesheet" href="css/video.css">
-    <link rel="stylesheet" href="css/clicker.css?v=1.2">
+    <link rel="stylesheet" href="css/clicker.css?v=1.3">
     <link rel="icon" href="ico.ico?v=2" type="image/x-icon">
     <style>
         * { font-weight: bold !important; }
@@ -145,24 +145,24 @@
             return { class: 'rarity-common', color: '#26de81', prefix: '🟢 COMMON: ' };
         }
 
-  function showPreview(id) {
+ function showPreview(id) {
     const box = document.getElementById('case-items-list');
     document.getElementById('case-preview-section').style.display = 'block';
     
     let itemsHtml = '';
     const emptyChance = (id === 'c11') ? '99%' : '50%';
     
-    // Иконка Пустоты с серым цветом (вместо красного мифика)
+    // Иконка Пустоты с нейтральной серой полоской
     itemsHtml += `
         <div class="preview-item-wrapper">
-            <div class="preview-icon-box" style="border-bottom: 3px solid #444;">💨</div>
+            <div class="preview-icon-box" style="border-bottom: 2px solid #444;">💨</div>
             <span class="chance-label">${emptyChance}</span>
         </div>`;
 
     if(id === 'c11') {
         itemsHtml += `
             <div class="preview-item-wrapper">
-                <div class="preview-icon-box rarity-universe" style="border-bottom: 3px solid #00ffff;">🌌</div>
+                <div class="preview-icon-box rarity-universe" style="border-bottom: 2px solid #00ffff;">🌌</div>
                 <span class="chance-label">1%</span>
             </div>`;
     } else {
@@ -175,7 +175,7 @@
             
             return `
                 <div class="preview-item-wrapper">
-                    <div class="preview-icon-box" style="border-bottom: 3px solid ${r.color};">
+                    <div class="preview-icon-box" style="border-bottom: 2px solid ${r.color};">
                         ${it.e}
                     </div>
                     <span class="chance-label">${ch}</span>
